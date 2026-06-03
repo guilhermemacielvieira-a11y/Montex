@@ -3534,6 +3534,48 @@ function renderSecaoMedicoesDashboard(obra) {
 }
 
 // ==================== DASHBOARD ====================
+// ==================== PRODUTIVIDADE (helper executivo) ====================
+function calcularProdutividadeObra(obra) {
+    const DIA = 86400000;
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    const keyDia = (d) => { const x = new Date(d); x.setHours(0,0,0,0); return x.toISOString().slice(0,10); };
+
+    // Série diária (14 dias) de PESO expedido, a partir do histórico de processos
+    const mapaDia = {};
+    obra.pecas.forEach(p => (p.historico || []).forEach(h => {
+        if (h.processo === 'EXPEDIDO' && h.data) mapaDia[keyDia(h.data)] = (mapaDia[keyDia(h.data)] || 0) + (p.peso || 0);
+    }));
+    const serie = [];
+    for (let i = 13; i >= 0; i--) {
+        const d = new Date(hoje.getTime() - i * DIA);
+        serie.push({
+            label: d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+            peso: mapaDia[keyDia(d)] || 0
+        });
+    }
+
+    // Ritmo (t/dia): média dos últimos 30 dias sobre dias com movimentação
+    let pesoExp30 = 0; const diasAtivos = new Set();
+    obra.pecas.forEach(p => (p.historico || []).forEach(h => {
+        if (h.processo === 'EXPEDIDO' && h.data && (hoje.getTime() - new Date(h.data).getTime()) <= 30 * DIA) {
+            pesoExp30 += (p.peso || 0); diasAtivos.add(keyDia(h.data));
+        }
+    }));
+    const ritmoKgDia = diasAtivos.size > 0 ? pesoExp30 / diasAtivos.size : 0;
+
+    // t/homem-dia: produção da equipe (producaoEquipe) ÷ homens-dia, últimos 30 dias
+    let pesoEquipe30 = 0; const homensDia = new Set();
+    obra.pecas.forEach(p => (p.producaoEquipe || []).forEach(r => {
+        if (r.data && (hoje.getTime() - new Date(r.data).getTime()) <= 30 * DIA) {
+            pesoEquipe30 += (p.peso || 0) * ((r.qtd || 1) / (p.qtd || 1));
+            homensDia.add(r.funcionarioId + '|' + keyDia(r.data));
+        }
+    }));
+    const tHomemDia = homensDia.size > 0 ? pesoEquipe30 / homensDia.size : 0;
+
+    return { serie, ritmoKgDia, tHomemDia, diasAtivos: diasAtivos.size, homensDia: homensDia.size };
+}
+
 function renderDashboard(c, obra) {
     if (!obra) {
         c.innerHTML = `
@@ -3554,315 +3596,286 @@ function renderDashboard(c, obra) {
     const resumo = calcularResumo(obra.pecas);
     const totais = calcularTotais(obra.pecas);
     const pesoTotal = obra.pecas.reduce((a, p) => a + (p.peso || 0), 0);
-    
-    // Calcular progresso geral
-    const expedidos = totais.porProcesso['EXPEDIDO'] || 0;
-    const emProducao = (totais.porProcesso['CORTE']||0) + (totais.porProcesso['FABRICACAO']||0) + (totais.porProcesso['SOLDA']||0) + (totais.porProcesso['PINTURA']||0);
-    const aguardando = totais.porProcesso['AGUARDANDO'] || 0;
-    const pctGeral = totais.total > 0 ? (expedidos / totais.total * 100) : 0;
-    
-    // Dados para gráficos
-    const dadosCategorias = resumo.map(r => ({
-        categoria: r.categoria,
-        total: r.total,
-        peso: r.peso,
-        expedidos: r.porProcesso['EXPEDIDO'] || 0,
-        emProducao: (r.porProcesso['CORTE']||0) + (r.porProcesso['FABRICACAO']||0) + (r.porProcesso['SOLDA']||0) + (r.porProcesso['PINTURA']||0),
-        aguardando: r.porProcesso['AGUARDANDO'] || 0,
-        cor: getCategoriaInfo(r.categoria).cor,
-        icon: getCategoriaInfo(r.categoria).icon
-    }));
-    
+
+    // ---- Físico (ponderado por PESO) ----
+    const pesoPorProc = {};
+    PROCESSOS.forEach(p => pesoPorProc[p.id] = 0);
+    obra.pecas.forEach(p => pesoPorProc[p.processo || 'AGUARDANDO'] += (p.peso || 0));
+    const pesoExpedido = pesoPorProc['EXPEDIDO'] || 0;
+    const pesoAguardando = pesoPorProc['AGUARDANDO'] || 0;
+    const pesoEmProducao = (pesoPorProc['CORTE']||0) + (pesoPorProc['FABRICACAO']||0) + (pesoPorProc['SOLDA']||0) + (pesoPorProc['PINTURA']||0);
+    const pesoFabricado = pesoEmProducao + pesoExpedido;
+    const pctFisico = pesoTotal > 0 ? (pesoExpedido / pesoTotal * 100) : 0;
+    const pesoRestante = pesoTotal - pesoExpedido;
+
+    // ---- Financeiro (preços) ----
+    const fin = obra.financeiro || {};
+    const valorKg = fin.valorKg || 2.50;
+    const orcamento = (fin.orcamento && fin.orcamento > 0) ? fin.orcamento : pesoTotal * valorKg;
+    const medicoes = obra.medicoes || [];
+    const totalMedido = medicoes.reduce((a, m) => a + (m.valor || 0), 0);
+    const recebido = medicoes.filter(m => m.status === 'PAGO').reduce((a, m) => a + (m.valor || 0), 0);
+    const aReceber = medicoes.filter(m => m.status === 'PENDENTE').reduce((a, m) => a + (m.valor || 0), 0);
+    const vencido = medicoes.filter(m => m.status === 'VENCIDO').reduce((a, m) => a + (m.valor || 0), 0);
+    const valorFabricado = pesoFabricado * valorKg;
+    const aFaturar = Math.max(0, valorFabricado - totalMedido);
+    const saldoContrato = Math.max(0, orcamento - totalMedido);
+    const pctFaturado = orcamento > 0 ? (totalMedido / orcamento * 100) : 0;
+
+    // ---- Produtividade ----
+    const prod = calcularProdutividadeObra(obra);
+    const ritmoTDia = prod.ritmoKgDia / 1000;
+    const tHomemDia = prod.tHomemDia / 1000;
+
+    // ---- Prazo projetado ----
+    let prazoTxt = '—', prazoCor = 'slate', prazoSub = 'sem ritmo registrado';
+    if (prod.ritmoKgDia > 0 && pesoRestante > 0) {
+        const diasRest = Math.ceil(pesoRestante / prod.ritmoKgDia);
+        const dataProj = new Date(Date.now() + diasRest * 86400000);
+        prazoTxt = dataProj.toLocaleDateString('pt-BR');
+        prazoSub = diasRest + ' dia(s) no ritmo atual';
+        if (obra.dataPrevisao) {
+            const deltaDias = Math.round((dataProj - new Date(obra.dataPrevisao)) / 86400000);
+            if (deltaDias > 0) { prazoCor = 'red'; prazoSub = '+' + deltaDias + 'd vs previsão'; }
+            else { prazoCor = 'emerald'; prazoSub = Math.abs(deltaDias) + 'd de folga'; }
+        }
+    } else if (pesoRestante <= 0 && pesoTotal > 0) {
+        prazoTxt = 'Concluído'; prazoCor = 'emerald'; prazoSub = '100% expedido';
+    }
+
+    // ---- Alertas ----
+    const alertas = [];
+    if (vencido > 0) alertas.push({ icon: '🔴', txt: 'Medições vencidas: ' + formatMoeda(vencido) });
+    if (prazoCor === 'red') alertas.push({ icon: '🟠', txt: 'Atraso projetado: ' + prazoSub });
+    const procProd = [
+        { nome: 'Corte', peso: pesoPorProc['CORTE'] || 0 },
+        { nome: 'Fabricação', peso: pesoPorProc['FABRICACAO'] || 0 },
+        { nome: 'Solda', peso: pesoPorProc['SOLDA'] || 0 },
+        { nome: 'Pintura', peso: pesoPorProc['PINTURA'] || 0 }
+    ].sort((a, b) => b.peso - a.peso);
+    if (pesoEmProducao > 0 && procProd[0].peso / pesoEmProducao > 0.4)
+        alertas.push({ icon: '🟠', txt: 'Gargalo em ' + procProd[0].nome + ': ' + formatPeso(procProd[0].peso) + ' parado(s)' });
+    const soma7 = prod.serie.slice(7).reduce((a, s) => a + s.peso, 0);
+    const somaPrev7 = prod.serie.slice(0, 7).reduce((a, s) => a + s.peso, 0);
+    if (somaPrev7 > 0 && soma7 < somaPrev7 * 0.8)
+        alertas.push({ icon: '🟡', txt: 'Ritmo em queda vs semana anterior' });
+    if (aFaturar > 0)
+        alertas.push({ icon: '🟡', txt: formatMoeda(aFaturar) + ' fabricados aguardando medição' });
+
+    // ---- Dados por categoria (em PESO) ----
+    const dadosCategorias = resumo.map(r => {
+        const pecasCat = obra.pecas.filter(p => p.categoria === r.categoria);
+        const peso = pecasCat.reduce((a, p) => a + (p.peso || 0), 0);
+        const pesoExp = pecasCat.filter(p => p.processo === 'EXPEDIDO').reduce((a, p) => a + (p.peso || 0), 0);
+        const pesoProd = pecasCat.filter(p => ['CORTE', 'FABRICACAO', 'SOLDA', 'PINTURA'].includes(p.processo)).reduce((a, p) => a + (p.peso || 0), 0);
+        const info = getCategoriaInfo(r.categoria);
+        return { categoria: r.categoria, peso, pesoExp, pesoProd, cor: info.cor, icon: info.icon };
+    });
+
+    // ---- Cards ----
+    const semaforoMap = { red: 'text-red-400', orange: 'text-amber-400', emerald: 'text-emerald-400', slate: 'text-slate-100' };
+    const kpisProducao = [
+        { label: 'Avanço Físico', valor: pctFisico.toFixed(0) + '%', sub: formatPeso(pesoExpedido) + ' / ' + formatPeso(pesoTotal), bar: pctFisico, barCor: '#10b981', icon: '📈' },
+        { label: 'Ritmo', valor: ritmoTDia.toFixed(1) + ' t/dia', sub: prod.diasAtivos + ' dia(s) ativos (30d)', spark: true, icon: '⚡' },
+        { label: 't / homem-dia', valor: tHomemDia.toFixed(2) + ' t', sub: prod.homensDia + ' homem-dia (30d)', icon: '👷' },
+        { label: 'Prazo Projetado', valor: prazoTxt, sub: prazoSub, semaforo: prazoCor, icon: '📅' }
+    ];
+    const kpisPrecos = [
+        { label: 'Valor Fabricado', valor: formatMoeda(valorFabricado), sub: formatPeso(pesoFabricado) + ' × ' + formatMoeda(valorKg) + '/kg', stack: [{v: totalMedido, c: '#06b6d4'}, {v: aFaturar, c: '#3b82f6'}], total: valorFabricado, icon: '🏭' },
+        { label: 'A Faturar', valor: formatMoeda(aFaturar), sub: 'pronto p/ medição', destaque: true, icon: '💰' },
+        { label: 'A Receber / Vencido', valor: formatMoeda(aReceber), sub: vencido > 0 ? formatMoeda(vencido) + ' vencido' : 'sem vencidos', subCor: vencido > 0 ? 'text-red-400' : 'text-slate-400', stack: [{v: recebido, c: '#10b981'}, {v: aReceber, c: '#f59e0b'}, {v: vencido, c: '#ef4444'}], total: recebido + aReceber + vencido, icon: '📥' },
+        { label: 'Saldo de Contrato', valor: formatMoeda(saldoContrato), sub: pctFaturado.toFixed(0) + '% faturado', bar: pctFaturado, barCor: '#06b6d4', icon: '📊' }
+    ];
+    const cardKpi = (k) => `
+        <div class="bg-slate-800/50 rounded-xl p-3 border border-slate-700 ${k.destaque ? 'ring-1 ring-emerald-500/40' : ''}">
+            <div class="flex items-center justify-between mb-1">
+                <p class="text-[10px] text-slate-400 uppercase tracking-wide">${k.label}</p>
+                <span class="text-sm">${k.icon}</span>
+            </div>
+            <p class="text-xl font-bold ${k.semaforo ? semaforoMap[k.semaforo] : (k.destaque ? 'text-emerald-400' : 'text-white')}">${k.valor}</p>
+            <p class="text-[10px] ${k.subCor || 'text-slate-400'} mt-0.5 truncate">${k.sub}</p>
+            ${k.bar !== undefined ? `<div class="h-1.5 bg-slate-700 rounded-full overflow-hidden mt-2"><div class="h-full rounded-full" style="width:${Math.min(k.bar, 100)}%;background:${k.barCor}"></div></div>` : ''}
+            ${k.stack ? `<div class="h-1.5 bg-slate-700 rounded-full overflow-hidden mt-2 flex">${k.stack.map(s => `<div class="h-full" style="width:${k.total > 0 ? (s.v / k.total * 100) : 0}%;background:${s.c}"></div>`).join('')}</div>` : ''}
+            ${k.spark ? `<div class="h-8 mt-1"><canvas id="spark-ritmo"></canvas></div>` : ''}
+        </div>`;
+
     c.innerHTML = `
         <div class="space-y-4 fade-in">
-            <!-- KPIs Principais -->
-            <div class="grid grid-cols-6 gap-3">
-                ${[
-                    { label: 'Total Peças', valor: totais.total, icon: '📦', cor: 'from-slate-600 to-slate-700' },
-                    { label: 'Peso Total', valor: formatPeso(pesoTotal), icon: '⚖️', cor: 'from-blue-600 to-blue-700' },
-                    { label: 'Aguardando', valor: aguardando, icon: '⏳', cor: 'from-slate-500 to-slate-600' },
-                    { label: 'Em Produção', valor: emProducao, icon: '🔧', cor: 'from-amber-500 to-amber-600' },
-                    { label: 'Expedidos', valor: expedidos, icon: '✅', cor: 'from-emerald-500 to-emerald-600' },
-                    { label: 'Progresso', valor: `${pctGeral.toFixed(0)}%`, icon: '📈', cor: 'from-cyan-500 to-cyan-600' }
-                ].map(k => `
-                    <div class="bg-gradient-to-br ${k.cor} rounded-xl p-4 card-hover">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">${k.icon}</span>
-                            <div>
-                                <p class="text-xs text-white/70 uppercase">${k.label}</p>
-                                <p class="text-xl font-bold">${k.valor}</p>
-                            </div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-            
-            <!-- Gráficos Principais -->
-            <div class="grid grid-cols-3 gap-4">
-                <!-- Gráfico de Barras - Status por Categoria -->
-                <div class="col-span-2 bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <h3 class="text-sm font-semibold text-slate-400 mb-4 uppercase">📊 Status de Produção por Categoria</h3>
-                    <div class="h-64">
-                        <canvas id="chart-status-categoria"></canvas>
-                    </div>
+            <!-- ====== FAIXA 1: VISÃO GERAL ====== -->
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">1 · Visão Geral</h3>
+                    <div class="flex-1 h-px bg-slate-700"></div>
                 </div>
-                
-                <!-- Gauge de Progresso + Resumo -->
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700 flex flex-col">
-                    <h3 class="text-sm font-semibold text-slate-400 mb-4 uppercase">🎯 Progresso Geral</h3>
-                    <div class="flex-1 flex flex-col items-center justify-center">
-                        <div class="relative">
-                            <canvas id="chart-gauge-dash" width="160" height="90"></canvas>
-                            <div class="absolute inset-0 flex items-center justify-center pt-4">
-                                <div class="text-center">
-                                    <p class="text-3xl font-bold text-emerald-400">${pctGeral.toFixed(0)}%</p>
-                                    <p class="text-[10px] text-slate-400">concluído</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2 mt-4 w-full text-center">
-                            <div class="bg-slate-700/50 rounded-lg p-2">
-                                <p class="text-lg font-bold text-slate-400">${aguardando}</p>
-                                <p class="text-[10px] text-slate-500">Aguard.</p>
-                            </div>
-                            <div class="bg-amber-500/20 rounded-lg p-2">
-                                <p class="text-lg font-bold text-amber-400">${emProducao}</p>
-                                <p class="text-[10px] text-slate-500">Produção</p>
-                            </div>
-                            <div class="bg-emerald-500/20 rounded-lg p-2">
-                                <p class="text-lg font-bold text-emerald-400">${expedidos}</p>
-                                <p class="text-[10px] text-slate-500">Expedido</p>
-                            </div>
-                        </div>
+                <div class="grid grid-cols-1 2xl:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[10px] text-blue-400 font-semibold uppercase mb-1.5">🔧 Produção</p>
+                        <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">${kpisProducao.map(cardKpi).join('')}</div>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-emerald-400 font-semibold uppercase mb-1.5">💰 Preços</p>
+                        <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">${kpisPrecos.map(cardKpi).join('')}</div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Segunda Linha de Gráficos -->
-            <div class="grid grid-cols-3 gap-4">
-                <!-- Gráfico de Barras Horizontais - Peso por Categoria -->
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <h3 class="text-sm font-semibold text-slate-400 mb-4 uppercase">⚖️ Peso por Categoria (t)</h3>
-                    <div class="h-52">
-                        <canvas id="chart-peso-categoria"></canvas>
-                    </div>
+
+            <!-- ====== FAIXA 2: ALERTAS ====== -->
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">2 · Alertas</h3>
+                    <div class="flex-1 h-px bg-slate-700"></div>
                 </div>
-                
-                <!-- Gráfico de Rosca - Distribuição de Processos -->
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <h3 class="text-sm font-semibold text-slate-400 mb-4 uppercase">🔄 Distribuição por Processo</h3>
-                    <div class="h-52 flex items-center justify-center">
-                        <canvas id="chart-processos"></canvas>
-                    </div>
+                <div class="flex flex-wrap gap-2">
+                    ${alertas.length === 0
+                        ? `<span class="text-sm text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-3 py-1.5">🟢 Nenhum alerta — operação saudável</span>`
+                        : alertas.map(a => `<span class="text-sm bg-slate-800/70 border border-slate-700 rounded-lg px-3 py-1.5">${a.icon} ${a.txt}</span>`).join('')}
                 </div>
-                
-                <!-- Lista de Categorias com Progresso -->
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-sm font-semibold text-slate-400 uppercase">📋 Por Categoria</h3>
-                        <button onclick="navegar('producao')" class="text-xs text-blue-400 hover:text-blue-300">Ver tudo →</button>
+            </div>
+
+            <!-- ====== FAIXA 3: TENDÊNCIA ====== -->
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">3 · Tendência</h3>
+                    <div class="flex-1 h-px bg-slate-700"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2 bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="text-sm font-semibold text-slate-400 uppercase">⚡ Produtividade Diária (t/dia)</h4>
+                            <button onclick="navegar('financeiro')" class="text-xs text-blue-400 hover:text-blue-300">Curva S completa →</button>
+                        </div>
+                        <div class="h-56"><canvas id="chart-produtividade"></canvas></div>
                     </div>
-                    <div class="space-y-2 max-h-52 overflow-y-auto">
-                        ${dadosCategorias.map(d => {
-                            const pctExp = d.total > 0 ? (d.expedidos / d.total * 100) : 0;
-                            const pctProd = d.total > 0 ? (d.emProducao / d.total * 100) : 0;
-                            return `
-                                <div class="bg-slate-900/50 rounded-lg p-2">
-                                    <div class="flex items-center justify-between text-xs mb-1">
-                                        <span class="flex items-center gap-1">
-                                            <span>${d.icon}</span>
-                                            <span class="font-medium">${d.categoria}</span>
-                                        </span>
-                                        <span class="text-slate-400">${d.expedidos}/${d.total}</span>
-                                    </div>
-                                    <div class="h-2 bg-slate-700 rounded-full overflow-hidden flex">
-                                        <div class="h-full bg-emerald-500" style="width:${pctExp}%"></div>
-                                        <div class="h-full bg-amber-500" style="width:${pctProd}%"></div>
+                    <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700 flex flex-col">
+                        <h4 class="text-sm font-semibold text-slate-400 mb-2 uppercase">🎯 Avanço Físico</h4>
+                        <div class="flex-1 flex flex-col items-center justify-center">
+                            <div class="relative">
+                                <canvas id="chart-gauge-dash" width="160" height="90"></canvas>
+                                <div class="absolute inset-0 flex items-center justify-center pt-4">
+                                    <div class="text-center">
+                                        <p class="text-3xl font-bold text-emerald-400">${pctFisico.toFixed(0)}%</p>
+                                        <p class="text-[10px] text-slate-400">expedido</p>
                                     </div>
                                 </div>
-                            `;
-                        }).join('')}
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 mt-4 w-full text-center">
+                                <div class="bg-slate-700/50 rounded-lg p-2"><p class="text-sm font-bold text-slate-300">${formatPeso(pesoAguardando)}</p><p class="text-[10px] text-slate-500">Aguard.</p></div>
+                                <div class="bg-amber-500/20 rounded-lg p-2"><p class="text-sm font-bold text-amber-400">${formatPeso(pesoEmProducao)}</p><p class="text-[10px] text-slate-500">Produção</p></div>
+                                <div class="bg-emerald-500/20 rounded-lg p-2"><p class="text-sm font-bold text-emerald-400">${formatPeso(pesoExpedido)}</p><p class="text-[10px] text-slate-500">Expedido</p></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- SEÇÃO DE MEDIÇÕES -->
+
+            <!-- ====== FAIXA 4: DETALHAMENTO ====== -->
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">4 · Detalhamento</h3>
+                    <div class="flex-1 h-px bg-slate-700"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                        <h4 class="text-sm font-semibold text-slate-400 mb-4 uppercase">🔄 WIP por Processo (t)</h4>
+                        <div class="h-56"><canvas id="chart-wip-processo"></canvas></div>
+                    </div>
+                    <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                        <h4 class="text-sm font-semibold text-slate-400 mb-4 uppercase">💧 Cascata de Preços</h4>
+                        <div class="h-56"><canvas id="chart-cascata"></canvas></div>
+                    </div>
+                    <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-sm font-semibold text-slate-400 uppercase">📋 Por Categoria</h4>
+                            <button onclick="navegar('producao')" class="text-xs text-blue-400 hover:text-blue-300">Ver tudo →</button>
+                        </div>
+                        <div class="space-y-2 max-h-52 overflow-y-auto">
+                            ${dadosCategorias.map(d => {
+                                const pctExpP = d.peso > 0 ? (d.pesoExp / d.peso * 100) : 0;
+                                const pctProdP = d.peso > 0 ? (d.pesoProd / d.peso * 100) : 0;
+                                return `
+                                    <div class="bg-slate-900/50 rounded-lg p-2">
+                                        <div class="flex items-center justify-between text-xs mb-1">
+                                            <span class="flex items-center gap-1"><span>${d.icon}</span><span class="font-medium">${d.categoria}</span></span>
+                                            <span class="text-slate-400">${formatPeso(d.pesoExp)} / ${formatPeso(d.peso)}</span>
+                                        </div>
+                                        <div class="h-2 bg-slate-700 rounded-full overflow-hidden flex">
+                                            <div class="h-full bg-emerald-500" style="width:${pctExpP}%"></div>
+                                            <div class="h-full bg-amber-500" style="width:${pctProdP}%"></div>
+                                        </div>
+                                    </div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medições + Ações Rápidas -->
             ${renderSecaoMedicoesDashboard(obra)}
-            
-            <!-- Ações Rápidas -->
             <div class="grid grid-cols-4 gap-3">
-                <button onclick="abrirImportacao()" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover">
-                    <span class="text-2xl">📥</span>
-                    <p class="font-semibold mt-2">Importar Excel</p>
-                    <p class="text-xs text-slate-400">Romaneio padrão</p>
-                </button>
-                <button onclick="navegar('kanban')" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover">
-                    <span class="text-2xl">📋</span>
-                    <p class="font-semibold mt-2">Kanban</p>
-                    <p class="text-xs text-slate-400">Visualizar fluxo</p>
-                </button>
-                <button onclick="navegar('diario')" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover">
-                    <span class="text-2xl">📝</span>
-                    <p class="font-semibold mt-2">Diário</p>
-                    <p class="text-xs text-slate-400">Acompanhamento</p>
-                </button>
-                <button onclick="abrirExportacao()" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover">
-                    <span class="text-2xl">📤</span>
-                    <p class="font-semibold mt-2">Exportar</p>
-                    <p class="text-xs text-slate-400">PDF / Excel</p>
-                </button>
+                <button onclick="abrirImportacao()" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover"><span class="text-2xl">📥</span><p class="font-semibold mt-2">Importar Excel</p><p class="text-xs text-slate-400">Romaneio padrão</p></button>
+                <button onclick="navegar('kanban')" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover"><span class="text-2xl">📋</span><p class="font-semibold mt-2">Kanban</p><p class="text-xs text-slate-400">Visualizar fluxo</p></button>
+                <button onclick="navegar('diario')" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover"><span class="text-2xl">📝</span><p class="font-semibold mt-2">Diário</p><p class="text-xs text-slate-400">Acompanhamento</p></button>
+                <button onclick="abrirExportacao()" class="bg-slate-800/50 hover:bg-slate-700/50 rounded-xl p-4 border border-slate-700 transition-all text-left card-hover"><span class="text-2xl">📤</span><p class="font-semibold mt-2">Exportar</p><p class="text-xs text-slate-400">PDF / Excel</p></button>
             </div>
         </div>
     `;
-    
-    // Criar gráficos
+
+    // ==================== GRÁFICOS ====================
     setTimeout(() => {
-        // Gráfico de Barras - Status por Categoria
-        const ctxStatus = document.getElementById('chart-status-categoria');
-        if (ctxStatus && dadosCategorias.length > 0) {
-            charts.statusCat = new Chart(ctxStatus, {
-                type: 'bar',
-                data: {
-                    labels: dadosCategorias.map(d => d.categoria),
-                    datasets: [
-                        {
-                            label: 'Expedido',
-                            data: dadosCategorias.map(d => d.expedidos),
-                            backgroundColor: '#10b981',
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Em Produção',
-                            data: dadosCategorias.map(d => d.emProducao),
-                            backgroundColor: '#f59e0b',
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Aguardando',
-                            data: dadosCategorias.map(d => d.aguardando),
-                            backgroundColor: '#64748b',
-                            borderRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            stacked: true,
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8', font: { size: 10 } }
-                        },
-                        y: {
-                            stacked: true,
-                            grid: { color: '#334155' },
-                            ticks: { color: '#94a3b8' }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#94a3b8', boxWidth: 12, padding: 15, font: { size: 11 } }
-                        }
-                    }
-                }
+        // Sparkline do ritmo (dentro do card)
+        const ctxSpark = document.getElementById('spark-ritmo');
+        if (ctxSpark) {
+            charts.spark = new Chart(ctxSpark, {
+                type: 'line',
+                data: { labels: prod.serie.map(s => s.label), datasets: [{ data: prod.serie.map(s => s.peso / 1000), borderColor: '#fbbf24', borderWidth: 2, fill: true, backgroundColor: 'rgba(251,191,36,0.15)', tension: 0.35, pointRadius: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } }
             });
         }
-        
-        // Gauge semicircular
+        // Gauge de avanço físico
         const ctxGauge = document.getElementById('chart-gauge-dash');
         if (ctxGauge) {
             charts.gaugeDash = new Chart(ctxGauge, {
                 type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [pctGeral, 100 - pctGeral],
-                        backgroundColor: ['#10b981', '#1e293b'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: false,
-                    cutout: '75%',
-                    rotation: -90,
-                    circumference: 180,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } }
-                }
+                data: { datasets: [{ data: [pctFisico, 100 - pctFisico], backgroundColor: ['#10b981', '#1e293b'], borderWidth: 0 }] },
+                options: { responsive: false, cutout: '75%', rotation: -90, circumference: 180, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
             });
         }
-        
-        // Gráfico de Barras Horizontais - Peso
-        const ctxPeso = document.getElementById('chart-peso-categoria');
-        if (ctxPeso && dadosCategorias.length > 0) {
-            charts.pesoCat = new Chart(ctxPeso, {
+        // Produtividade diária (barras + média móvel 7d)
+        const ctxProd = document.getElementById('chart-produtividade');
+        if (ctxProd) {
+            const dados = prod.serie.map(s => s.peso / 1000);
+            const mm = dados.map((_, i) => { const w = dados.slice(Math.max(0, i - 6), i + 1); return w.reduce((a, b) => a + b, 0) / w.length; });
+            charts.produtividade = new Chart(ctxProd, {
+                data: { labels: prod.serie.map(s => s.label), datasets: [
+                    { type: 'bar', label: 't/dia', data: dados, backgroundColor: '#3b82f6', borderRadius: 3 },
+                    { type: 'line', label: 'Média 7d', data: mm, borderColor: '#fbbf24', borderWidth: 2, tension: 0.35, pointRadius: 0 }
+                ] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 12, padding: 12, font: { size: 10 } } } }, scales: { x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: v => v.toFixed(1) + 't' } } } }
+            });
+        }
+        // WIP por processo (barras horizontais em toneladas)
+        const ctxWip = document.getElementById('chart-wip-processo');
+        if (ctxWip) {
+            const procs = PROCESSOS.filter(p => p.id !== 'EXPEDIDO');
+            charts.wip = new Chart(ctxWip, {
                 type: 'bar',
-                data: {
-                    labels: dadosCategorias.map(d => d.categoria),
-                    datasets: [{
-                        label: 'Peso (t)',
-                        data: dadosCategorias.map(d => d.peso / 1000),
-                        backgroundColor: dadosCategorias.map(d => d.cor),
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            grid: { color: '#334155' },
-                            ticks: { 
-                                color: '#94a3b8',
-                                callback: (v) => v.toFixed(1) + 't'
-                            }
-                        },
-                        y: {
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8', font: { size: 9 } }
-                        }
-                    },
-                    plugins: { legend: { display: false } }
-                }
+                data: { labels: procs.map(p => p.nome), datasets: [{ data: procs.map(p => (pesoPorProc[p.id] || 0) / 1000), backgroundColor: procs.map(p => p.cor), borderRadius: 4 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: v => v.toFixed(1) + 't' } }, y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } } } }
             });
         }
-        
-        // Gráfico de Rosca - Processos
-        const ctxProc = document.getElementById('chart-processos');
-        if (ctxProc) {
-            const processosData = PROCESSOS.map(p => ({
-                nome: p.nome,
-                qtd: totais.porProcesso[p.id] || 0,
-                cor: p.cor
-            })).filter(p => p.qtd > 0);
-            
-            charts.processos = new Chart(ctxProc, {
-                type: 'doughnut',
-                data: {
-                    labels: processosData.map(p => p.nome),
-                    datasets: [{
-                        data: processosData.map(p => p.qtd),
-                        backgroundColor: processosData.map(p => p.cor),
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '50%',
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: { 
-                                color: '#94a3b8', 
-                                boxWidth: 10, 
-                                padding: 8,
-                                font: { size: 10 }
-                            }
-                        }
-                    }
-                }
+        // Cascata de preços (orçamento → fabricado → medido → recebido)
+        const ctxCasc = document.getElementById('chart-cascata');
+        if (ctxCasc) {
+            const passos = [
+                { l: 'Orçamento', v: orcamento, c: '#64748b' },
+                { l: 'Fabricado', v: valorFabricado, c: '#3b82f6' },
+                { l: 'Medido', v: totalMedido, c: '#06b6d4' },
+                { l: 'Recebido', v: recebido, c: '#10b981' }
+            ];
+            charts.cascata = new Chart(ctxCasc, {
+                type: 'bar',
+                data: { labels: passos.map(p => p.l), datasets: [{ data: passos.map(p => p.v), backgroundColor: passos.map(p => p.c), borderRadius: 4 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => formatMoeda(ctx.raw) } } }, scales: { x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: v => v >= 1e6 ? (v / 1e6).toFixed(1) + 'mi' : (v / 1e3).toFixed(0) + 'k' } }, y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } } } }
             });
         }
     }, 50);
