@@ -1702,23 +1702,15 @@ function renderFinanceiro(c, obra) {
         // Curva S
         const ctxCurva = document.getElementById('chart-curva-s');
         if (ctxCurva) {
-            const pontos = 6;
-            const planejado = [], realizadoFisico = [], realizadoFinanceiro = [];
-            for (let i = 0; i < pontos; i++) {
-                const fator = i / (pontos - 1);
-                planejado.push(Math.round(fator * 100));
-                realizadoFisico.push(Math.round(fator * pctFisico));
-                realizadoFinanceiro.push(Math.round(fator * pctFinanceiro));
-            }
-            
+            const cs = calcularCurvaS(obra, pesoTotal, orcamentoCalculado);
             charts.curvaS = new Chart(ctxCurva, {
                 type: 'line',
                 data: {
-                    labels: ['Início', 'Fase 1', 'Fase 2', 'Fase 3', 'Fase 4', 'Atual'],
+                    labels: cs.labels,
                     datasets: [
-                        { label: 'Planejado', data: planejado, borderColor: '#3b82f6', borderWidth: 2, borderDash: [5, 5], fill: false, tension: 0.4, pointRadius: 2 },
-                        { label: 'Físico', data: realizadoFisico, borderColor: '#10b981', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 3 },
-                        { label: 'Financeiro', data: realizadoFinanceiro, borderColor: '#f59e0b', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 2 }
+                        { label: 'Planejado', data: cs.planejado, borderColor: '#3b82f6', borderWidth: 2, borderDash: [5, 5], fill: false, tension: 0.4, pointRadius: 2 },
+                        { label: 'Físico', data: cs.fisico, borderColor: '#10b981', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 3, spanGaps: false },
+                        { label: 'Financeiro', data: cs.financeiro, borderColor: '#f59e0b', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 2, spanGaps: false }
                     ]
                 },
                 options: {
@@ -1757,6 +1749,60 @@ function renderFinanceiro(c, obra) {
             });
         }
     }, 50);
+}
+
+// ==================== CURVA S (real, temporal) ====================
+// Baseline planejada (S de smoothstep entre dataInicio e dataFim) x realizado acumulado
+function calcularCurvaS(obra, pesoTotal, orcamentoTotal) {
+    const fin = obra.financeiro || {};
+    const start = (fin.dataInicio || obra.dataInicio) ? new Date(fin.dataInicio || obra.dataInicio) : null;
+    let end = (fin.dataFim || obra.dataPrevisao) ? new Date(fin.dataFim || obra.dataPrevisao) : null;
+
+    // Eventos reais
+    const expEvents = [];
+    obra.pecas.forEach(p => (p.historico || []).forEach(h => {
+        if (h.processo === 'EXPEDIDO' && h.data) expEvents.push({ d: new Date(h.data), peso: p.peso || 0 });
+    }));
+    const medEvents = (obra.medicoes || [])
+        .map(m => ({ d: new Date(m.dataInclusao || m.dataVencimento), val: m.valor || 0 }))
+        .filter(e => !isNaN(e.d));
+    expEvents.sort((a, b) => a.d - b.d);
+    medEvents.sort((a, b) => a.d - b.d);
+
+    const allDates = [...expEvents.map(e => e.d), ...medEvents.map(e => e.d)];
+    const hoje = new Date();
+    let ini = start || (allDates.length ? new Date(Math.min(...allDates)) : new Date());
+    if (!end) end = allDates.length ? new Date(Math.max(...allDates)) : new Date(ini.getTime() + 86400000);
+    if (end <= ini) end = new Date(ini.getTime() + 86400000 * 30);
+
+    // Buckets mensais de ini até max(end, hoje)
+    const last = end > hoje ? end : hoje;
+    const meses = [];
+    let cur = new Date(ini.getFullYear(), ini.getMonth(), 1);
+    const lim = new Date(last.getFullYear(), last.getMonth(), 1);
+    while (cur <= lim && meses.length < 60) { meses.push(new Date(cur)); cur.setMonth(cur.getMonth() + 1); }
+    if (meses.length === 0) meses.push(new Date(ini));
+
+    const labels = meses.map(m => m.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }));
+    const totalMs = Math.max(end - ini, 1);
+    const mesAtual = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+
+    const planejado = [], fisico = [], financeiro = [];
+    let accPeso = 0, accVal = 0, ei = 0, mi = 0;
+    meses.forEach(m => {
+        const fimMes = new Date(m.getFullYear(), m.getMonth() + 1, 0, 23, 59, 59);
+        // Planejado: smoothstep (3t²-2t³) no fim do mês
+        const t = Math.min(1, Math.max(0, (fimMes - ini) / totalMs));
+        planejado.push(Math.round((3 * t * t - 2 * t * t * t) * 100));
+        // Realizado acumulado até o fim do mês
+        while (ei < expEvents.length && expEvents[ei].d <= fimMes) { accPeso += expEvents[ei].peso; ei++; }
+        while (mi < medEvents.length && medEvents[mi].d <= fimMes) { accVal += medEvents[mi].val; mi++; }
+        const futuro = m > mesAtual;
+        fisico.push(futuro ? null : Math.round(pesoTotal > 0 ? accPeso / pesoTotal * 100 : 0));
+        financeiro.push(futuro ? null : Math.round(orcamentoTotal > 0 ? accVal / orcamentoTotal * 100 : 0));
+    });
+
+    return { labels, planejado, fisico, financeiro, temReal: expEvents.length > 0 || medEvents.length > 0 };
 }
 
 // Formatar data para exibição
@@ -2487,18 +2533,24 @@ function abrirConfigFinanceiro() {
                 <button onclick="fecharConfigFinanceiro()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             <div class="space-y-4">
+                <div>
+                    <label class="text-slate-400 text-xs font-medium uppercase tracking-wide">Orçamento Total (R$)</label>
+                    <input type="number" id="inp-orcamento" value="${fin.orcamento || ''}" step="0.01" min="0"
+                           placeholder="0,00"
+                           class="w-full mt-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+                </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-slate-400 text-xs font-medium uppercase tracking-wide">Orçamento Total (R$)</label>
-                        <input type="number" id="inp-orcamento" value="${fin.orcamento || ''}" step="0.01" min="0"
-                               placeholder="0,00" 
-                               class="w-full mt-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+                        <label class="text-slate-400 text-xs font-medium uppercase tracking-wide">Venda (R$/kg)</label>
+                        <input type="number" id="inp-valor-kg" value="${fin.valorKg || 2.50}" step="0.01" min="0"
+                               placeholder="2.50"
+                               class="w-full mt-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"/>
                     </div>
                     <div>
-                        <label class="text-slate-400 text-xs font-medium uppercase tracking-wide">Valor por Kg (R$/kg)</label>
-                        <input type="number" id="inp-valor-kg" value="${fin.valorKg || 2.50}" step="0.01" min="0"
-                               placeholder="2.50" 
-                               class="w-full mt-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+                        <label class="text-slate-400 text-xs font-medium uppercase tracking-wide">Custo (R$/kg)</label>
+                        <input type="number" id="inp-custo-kg" value="${fin.custoKg || ''}" step="0.01" min="0"
+                               placeholder="ex: 1,80"
+                               class="w-full mt-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"/>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -2546,6 +2598,7 @@ function salvarConfigFinanceiro() {
     obra.financeiro = obra.financeiro || {};
     obra.financeiro.orcamento = parseFloat(document.getElementById('inp-orcamento').value) || 0;
     obra.financeiro.valorKg = parseFloat(document.getElementById('inp-valor-kg').value) || 2.50;
+    obra.financeiro.custoKg = parseFloat(document.getElementById('inp-custo-kg').value) || 0;
     obra.financeiro.dataInicio = document.getElementById('inp-data-inicio').value;
     obra.financeiro.dataFim = document.getElementById('inp-data-fim').value;
     
@@ -3621,6 +3674,11 @@ function renderDashboard(c, obra) {
     const aFaturar = Math.max(0, valorFabricado - totalMedido);
     const saldoContrato = Math.max(0, orcamento - totalMedido);
     const pctFaturado = orcamento > 0 ? (totalMedido / orcamento * 100) : 0;
+    // Margem real (custo de produção via custoKg)
+    const custoKg = fin.custoKg || 0;
+    const custoFabricado = pesoFabricado * custoKg;
+    const margemBruta = valorFabricado - custoFabricado;
+    const margemPct = valorFabricado > 0 ? (margemBruta / valorFabricado * 100) : 0;
 
     // ---- Produtividade ----
     const prod = calcularProdutividadeObra(obra);
@@ -3781,7 +3839,10 @@ function renderDashboard(c, obra) {
                     </div>
                     <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
                         <h4 class="text-sm font-semibold text-slate-400 mb-4 uppercase">💧 Cascata de Preços</h4>
-                        <div class="h-56"><canvas id="chart-cascata"></canvas></div>
+                        <div class="h-48"><canvas id="chart-cascata"></canvas></div>
+                        ${custoKg > 0
+                            ? `<p class="text-[11px] text-slate-400 mt-2 text-center">Custo ${formatMoeda(custoKg)}/kg · Margem bruta <span class="${margemBruta >= 0 ? 'text-emerald-400' : 'text-red-400'} font-bold">${formatMoeda(margemBruta)} (${margemPct.toFixed(0)}%)</span></p>`
+                            : `<p class="text-[11px] text-slate-500 mt-2 text-center">Defina o <b>Custo (R$/kg)</b> em Config p/ ver a margem real</p>`}
                     </div>
                     <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
                         <div class="flex justify-between items-center mb-4">
@@ -3872,6 +3933,7 @@ function renderDashboard(c, obra) {
                 { l: 'Medido', v: totalMedido, c: '#06b6d4' },
                 { l: 'Recebido', v: recebido, c: '#10b981' }
             ];
+            if (custoKg > 0) passos.push({ l: 'Custo', v: custoFabricado, c: '#ef4444' });
             charts.cascata = new Chart(ctxCasc, {
                 type: 'bar',
                 data: { labels: passos.map(p => p.l), datasets: [{ data: passos.map(p => p.v), backgroundColor: passos.map(p => p.c), borderRadius: 4 }] },
