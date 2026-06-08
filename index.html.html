@@ -362,6 +362,21 @@ const fecharModal = (id) => document.getElementById(id).classList.add('hidden');
 const getCategoriaInfo = (cat) => CATEGORIAS[cat] || CATEGORIAS['OUTROS'];
 const getProcessoInfo = (proc) => PROCESSOS.find(p => p.id === proc) || PROCESSOS[0];
 
+// Medição vencida: status VENCIDO, ou PENDENTE com vencimento já passado (predicado único)
+const isVencida = (m) => m.status === 'VENCIDO' ||
+    (m.status === 'PENDENTE' && m.dataVencimento && m.dataVencimento < new Date().toISOString().slice(0, 10));
+
+// Data de expedição de uma peça (1ª entrada EXPEDIDO no histórico) — só p/ peças ATUALMENTE expedidas.
+// Conta cada peça uma única vez (evita dupla contagem por reexpedição) e mantém coerência com o status atual.
+const getDataExpedicao = (p) => {
+    if ((p.processo || '') !== 'EXPEDIDO') return null;
+    const datas = (p.historico || [])
+        .filter(h => h.processo === 'EXPEDIDO' && h.data)
+        .map(h => new Date(h.data).getTime())
+        .filter(t => !isNaN(t));
+    return datas.length ? new Date(Math.min(...datas)) : null;
+};
+
 const formatPeso = (kg) => {
     if (kg >= 1000) return `${(kg/1000).toFixed(2)}t`;
     return `${kg}kg`;
@@ -1760,9 +1775,7 @@ function calcularCurvaS(obra, pesoTotal, orcamentoTotal) {
 
     // Eventos reais
     const expEvents = [];
-    obra.pecas.forEach(p => (p.historico || []).forEach(h => {
-        if (h.processo === 'EXPEDIDO' && h.data) expEvents.push({ d: new Date(h.data), peso: p.peso || 0 });
-    }));
+    obra.pecas.forEach(p => { const d = getDataExpedicao(p); if (d) expEvents.push({ d, peso: p.peso || 0 }); });
     const medEvents = (obra.medicoes || [])
         .map(m => ({ d: new Date(m.dataInclusao || m.dataVencimento), val: m.valor || 0 }))
         .filter(e => !isNaN(e.d));
@@ -3593,11 +3606,9 @@ function calcularProdutividadeObra(obra) {
     const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
     const keyDia = (d) => { const x = new Date(d); x.setHours(0,0,0,0); return x.toISOString().slice(0,10); };
 
-    // Série diária (14 dias) de PESO expedido, a partir do histórico de processos
+    // Série diária (14 dias) de PESO expedido — cada peça contada 1x na sua data de expedição
     const mapaDia = {};
-    obra.pecas.forEach(p => (p.historico || []).forEach(h => {
-        if (h.processo === 'EXPEDIDO' && h.data) mapaDia[keyDia(h.data)] = (mapaDia[keyDia(h.data)] || 0) + (p.peso || 0);
-    }));
+    obra.pecas.forEach(p => { const d = getDataExpedicao(p); if (d) mapaDia[keyDia(d)] = (mapaDia[keyDia(d)] || 0) + (p.peso || 0); });
     const serie = [];
     for (let i = 13; i >= 0; i--) {
         const d = new Date(hoje.getTime() - i * DIA);
@@ -3607,14 +3618,22 @@ function calcularProdutividadeObra(obra) {
         });
     }
 
-    // Ritmo (t/dia): média dos últimos 30 dias sobre dias com movimentação
-    let pesoExp30 = 0; const diasAtivos = new Set();
-    obra.pecas.forEach(p => (p.historico || []).forEach(h => {
-        if (h.processo === 'EXPEDIDO' && h.data && (hoje.getTime() - new Date(h.data).getTime()) <= 30 * DIA) {
-            pesoExp30 += (p.peso || 0); diasAtivos.add(keyDia(h.data));
+    // Ritmo dos últimos 30 dias. Duas taxas:
+    //  - ritmoKgDia: produtividade por DIA ATIVO (quanto rende quando se trabalha) → KPI
+    //  - ritmoKgDiaCal: média por DIA-CALENDÁRIO desde o início da expedição (considera ociosidade) → projeção de prazo
+    let pesoExp30 = 0; const diasAtivos = new Set(); let minData30 = null;
+    obra.pecas.forEach(p => {
+        const d = getDataExpedicao(p);
+        if (d && (hoje.getTime() - d.getTime()) <= 30 * DIA) {
+            pesoExp30 += (p.peso || 0); diasAtivos.add(keyDia(d));
+            if (!minData30 || d < minData30) minData30 = d;
         }
-    }));
+    });
     const ritmoKgDia = diasAtivos.size > 0 ? pesoExp30 / diasAtivos.size : 0;
+    const spanDias = minData30
+        ? Math.min(30, Math.max(1, Math.round((hoje.getTime() - new Date(minData30.getFullYear(), minData30.getMonth(), minData30.getDate()).getTime()) / DIA) + 1))
+        : 1;
+    const ritmoKgDiaCal = pesoExp30 / spanDias;
 
     // t/homem-dia: produção da equipe (producaoEquipe) ÷ homens-dia, últimos 30 dias
     let pesoEquipe30 = 0; const homensDia = new Set();
@@ -3626,7 +3645,7 @@ function calcularProdutividadeObra(obra) {
     }));
     const tHomemDia = homensDia.size > 0 ? pesoEquipe30 / homensDia.size : 0;
 
-    return { serie, ritmoKgDia, tHomemDia, diasAtivos: diasAtivos.size, homensDia: homensDia.size };
+    return { serie, ritmoKgDia, ritmoKgDiaCal, tHomemDia, diasAtivos: diasAtivos.size, homensDia: homensDia.size };
 }
 
 function renderDashboard(c, obra) {
@@ -3668,8 +3687,8 @@ function renderDashboard(c, obra) {
     const medicoes = obra.medicoes || [];
     const totalMedido = medicoes.reduce((a, m) => a + (m.valor || 0), 0);
     const recebido = medicoes.filter(m => m.status === 'PAGO').reduce((a, m) => a + (m.valor || 0), 0);
-    const aReceber = medicoes.filter(m => m.status === 'PENDENTE').reduce((a, m) => a + (m.valor || 0), 0);
-    const vencido = medicoes.filter(m => m.status === 'VENCIDO').reduce((a, m) => a + (m.valor || 0), 0);
+    const vencido = medicoes.filter(isVencida).reduce((a, m) => a + (m.valor || 0), 0);
+    const aReceber = medicoes.filter(m => m.status === 'PENDENTE' && !isVencida(m)).reduce((a, m) => a + (m.valor || 0), 0);
     const valorFabricado = pesoFabricado * valorKg;
     const aFaturar = Math.max(0, valorFabricado - totalMedido);
     const saldoContrato = Math.max(0, orcamento - totalMedido);
@@ -3687,13 +3706,14 @@ function renderDashboard(c, obra) {
 
     // ---- Prazo projetado ----
     let prazoTxt = '—', prazoCor = 'slate', prazoSub = 'sem ritmo registrado';
-    if (prod.ritmoKgDia > 0 && pesoRestante > 0) {
-        const diasRest = Math.ceil(pesoRestante / prod.ritmoKgDia);
+    const dataPrevista = fin.dataFim || obra.dataPrevisao;
+    if (prod.ritmoKgDiaCal > 0 && pesoRestante > 0) {
+        const diasRest = Math.ceil(pesoRestante / prod.ritmoKgDiaCal);
         const dataProj = new Date(Date.now() + diasRest * 86400000);
         prazoTxt = dataProj.toLocaleDateString('pt-BR');
         prazoSub = diasRest + ' dia(s) no ritmo atual';
-        if (obra.dataPrevisao) {
-            const deltaDias = Math.round((dataProj - new Date(obra.dataPrevisao)) / 86400000);
+        if (dataPrevista) {
+            const deltaDias = Math.round((dataProj - new Date(dataPrevista)) / 86400000);
             if (deltaDias > 0) { prazoCor = 'red'; prazoSub = '+' + deltaDias + 'd vs previsão'; }
             else { prazoCor = 'emerald'; prazoSub = Math.abs(deltaDias) + 'd de folga'; }
         }
