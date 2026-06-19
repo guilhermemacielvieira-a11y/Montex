@@ -1,0 +1,2 @@
+﻿ID;Categoria;Elemento_A;Elemento_B;Penetracao_m;Centro_X;Centro_Y;Centro_Z;Avaliacao
+CL2-001;MEPxEstrutura;IfcRoof:Cobertura-Piramidal-Onduline;IfcLightFixture:SPDA-CAPT-BOITE;0.05;240.0;175.0;19.6;Nao-conflito (captor SPDA fixado na cumeeira - atravessa a cobertura por projeto NBR 5419)
