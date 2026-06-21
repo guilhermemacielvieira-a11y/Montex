@@ -1,0 +1,53 @@
+﻿Categoria;Unidade;Material;Quantidade;N_Elementos
+Duto AVAC;m;Duto AVAC Galvanizado;0.0;48
+Eletrocalha/Bandeja;m;Bandeja Elétrica;0.0;48
+Eletrocalha/Bandeja;m;Bandeja Eletrica Galvanizada;0.0;2
+Janela/Esquadria;m2;Vidro Laminado 8mm;3027.6;542
+Laje;m3;(sem material);11318.48;187
+Laje;m3;Madeira Cumaru;6567.53;58
+Laje;m3;Grama Natural Esmeralda;230.0;3
+Laje;m3;Concreto Armado C25;16.19;38
+Laje;m3;Pavimento Univerde Permeavel;0.0;3
+Laje;m3;Termoplastico Branco;0.0;78
+Laje;m3;Asfalto Pista CBUQ;0.0;2
+Laje;m3;Piso Esportivo Poliuretano;0.0;1
+Laje;m3;Grama Sintetica Padel;0.0;1
+Laje;m3;Saibro Beach Tennis;0.0;2
+Laje;m3;Telha Ceramica Vila Gale;0.0;2
+Laje (area);m2;Madeira Cumaru;26098.14;58
+Laje (area);m2;(sem material);23665.11;187
+Laje (area);m2;Pavimento Univerde Permeavel;2175.0;3
+Laje (area);m2;Grama Natural Esmeralda;1925.0;3
+Laje (area);m2;Concreto Armado C25;825.04;38
+Laje (area);m2;Asfalto Pista CBUQ;796.0;2
+Laje (area);m2;Piso Esportivo Poliuretano;608.0;1
+Laje (area);m2;Telha Ceramica Vila Gale;459.72;2
+Laje (area);m2;Saibro Beach Tennis;256.0;2
+Laje (area);m2;Grama Sintetica Padel;200.0;1
+Laje (area);m2;Termoplastico Branco;39.0;78
+Parede (area);m2;ThermCold PIR 50mm sanduíche;12605.01;252
+Parede (area);m2;Drywall 75mm;9288.86;216
+Parede (area);m2;Alvenaria + Pedra Aparente;2849.22;12
+Parede (area);m2;Platibanda Concreto;602.35;48
+Parede (area);m2;(sem material);584.7;9
+Parede (area);m2;Concreto Armado C30;44.13;39
+Parede (area);m2;Alvenaria Rebocada;0.0;16
+Parede (volume);m3;Drywall 75mm;696.66;216
+Parede (volume);m3;ThermCold PIR 50mm sanduíche;676.02;252
+Parede (volume);m3;Alvenaria + Pedra Aparente;569.84;12
+Parede (volume);m3;(sem material);175.41;9
+Parede (volume);m3;Platibanda Concreto;60.24;48
+Parede (volume);m3;Concreto Armado C30;0.88;39
+Parede (volume);m3;Alvenaria Rebocada;0.0;16
+Pilar - Concreto/Aco;m3;Concreto Armado C25;178.17;289
+Pilar - Concreto/Aco;m3;Aço Estrutural ASTM A500 Gr.B;29.12;604
+Porta;m2;Porta Madeira Peroba;396.48;223
+Revestimento/Cobertura;m2;(sem material);21703.54;447
+Telhado;m2;Telha Cerâmica Vila Galé;0.0;1
+Telhado;m2;Onduline Sanduíche;0.0;2
+Telhado;m2;Laje Impermeabilizada Manta Asfáltica;0.0;28
+Tubulacao;m;Tubo PVC Hidráulica;0.0;192
+Tubulacao;m;Tubo PVC Esgoto;0.0;116
+Tubulacao;m;Captor Franklin / Cordoalha SPDA;0.0;16
+Tubulacao;m;Tubo Aco SCH40 Gas;0.0;2
+Viga - Concreto/Aco;m3;Concreto Armado C25;818.87;492
