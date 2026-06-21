@@ -1,0 +1,33 @@
+﻿Servico;Cod_Ref;Descricao_Insumo;Un;Quantidade;Custo_Unit_BRL;Subtotal_BRL
+Estrutura de concreto armado;94965;Concreto FCK=25MPa, usinado, lancado/adensado;m3;1077.5;560;603386.14
+Estrutura de concreto armado;92270;Forma em chapa compensada resinada;m2;10261.7;98;1005643.56
+Estrutura de concreto armado;92791;Armacao aco CA-50/CA-60 (corte/dobra/montagem);kg;92355.0;13.2;1219086.28
+Estrutura de concreto armado;;SUBTOTAL Estrutura de concreto armado;m3;1026.2;;2828115.98
+Lajes de piso (deck/concreto+capa);CST-LAJE;Laje (estrutura+capa+regularizacao);m2;26436.6;300;7930980.0
+Lajes de piso (deck/concreto+capa);;SUBTOTAL Lajes de piso (deck/concreto+capa);m2;26436.6;;7930980.0
+Alvenaria de vedacao + revestimento;87474;Alvenaria bloco ceramico 14cm;m2;25974.3;78;2025993.01
+Alvenaria de vedacao + revestimento;87879;Chapisco + emboco/reboco (2 faces);m2;25974.3;92;2389632.78
+Alvenaria de vedacao + revestimento;88489;Pintura latex (2 faces, massa+2 demaos);m2;25974.3;38;987022.24
+Alvenaria de vedacao + revestimento;;SUBTOTAL Alvenaria de vedacao + revestimento;m2;25974.3;;5402648.04
+Esquadrias (aluminio+vidro);CST-ESQ;Esquadria aluminio com vidro laminado;m2;3027.6;950;2876220.0
+Esquadrias (aluminio+vidro);;SUBTOTAL Esquadrias (aluminio+vidro);m2;3027.6;;2876220.0
+Portas internas (madeira);90843;Porta madeira semi-oca + batente + ferragens;un;223.0;1300;289900.0
+Portas internas (madeira);;SUBTOTAL Portas internas (madeira);un;223;;289900.0
+Cobertura e revestimentos de teto/parede;CST-COB;Cobertura/revestimento (telha/forro/acab.);m2;21703.5;165;3581083.34
+Cobertura e revestimentos de teto/parede;;SUBTOTAL Cobertura e revestimentos de teto/parede;m2;21703.5;;3581083.34
+Instalacao hidrossanitaria/incendio;CST-HID;Tubulacao + conexoes + suportes;m;4200.1;95;399009.5
+Instalacao hidrossanitaria/incendio;;SUBTOTAL Instalacao hidrossanitaria/incendio;m;4200.1;;399009.5
+Instalacao AVAC (dutos);CST-AVAC;Duto galvanizado + isolamento + suportes;m;1120.3;240;268872.0
+Instalacao AVAC (dutos);;SUBTOTAL Instalacao AVAC (dutos);m;1120.3;;268872.0
+Instalacao eletrica (eletrocalhas/infra);CST-ELE;Eletrocalha + cabos + infra;m;1142.3;150;171345.0
+Instalacao eletrica (eletrocalhas/infra);;SUBTOTAL Instalacao eletrica (eletrocalhas/infra);m;1142.3;;171345.0
+Pavimentacao externa e urbanismo;CST-PAV;Pavimentos (concreto/asfalto/univerde/grama) medio;m2;30610.4;135;4132404.0
+Pavimentacao externa e urbanismo;;SUBTOTAL Pavimentacao externa e urbanismo;m2;30610.4;;4132404.0
+
+;;CUSTO DIRETO (servicos modelados);;;;27880577.85
+;;Fundacoes (estimado 8%);;;;2230446.23
+;;Complementacao de instalacoes (10%);;;;2788057.79
+;;Canteiro/administracao local (3%);;;;836417.34
+;;CUSTO DIRETO TOTAL;;;;33735499.2
+;;BDI (25%);;;;8433874.8
+;;TOTAL GERAL ESTIMADO (REFERENCIA);;;;42169374.0
