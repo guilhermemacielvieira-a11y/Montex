@@ -1,0 +1,15 @@
+﻿Disciplina;Servico;Unidade;Quantidade;N_Elementos
+Estrutura;Pilares - concreto/aco;m3;207.29;893
+Estrutura;Vigas - concreto/aco;m3;818.87;492
+Estrutura;Lajes - volume;m3;18132.2;375
+Estrutura;Lajes de piso - area;m2;26436.6;63
+Arquitetura;Paredes - area;m2;25974.3;592
+Arquitetura;Paredes - volume;m3;2179.1;592
+Arquitetura;Esquadrias/Janelas;m2;3027.6;542
+Arquitetura;Portas;un;223;223
+Cobertura;Telhado - superficie;m2;15694.0;31
+Acabamento;Revestimentos/Coberturas;m2;21703.5;447
+Urbanismo;Pavimentacao/site - area;m2;30610.4;312
+MEP;Tubulacao hidraulica/incendio;m;4200.1;326
+MEP;Dutos AVAC;m;1120.3;48
+MEP;Eletrocalhas/bandejas;m;1142.3;50
