@@ -1,0 +1,1100 @@
+[
+ {
+  "guid": "2Uo6M$n0n7mQFZLoedCU0k",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   135.0,
+   215.0
+  ],
+  "to": [
+   134.677,
+   215.134
+  ],
+  "offset": [
+   -0.323,
+   0.134
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "0yNAn_GpD5VRsP9FW0RsH5",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   135.0,
+   230.0
+  ],
+  "to": [
+   134.677,
+   230.134
+  ],
+  "offset": [
+   -0.323,
+   0.134
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "3fy8zkSX90YOlajQn_Hmg3",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   135.0,
+   245.0
+  ],
+  "to": [
+   134.677,
+   245.134
+  ],
+  "offset": [
+   -0.323,
+   0.134
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "2x6W8V3w57Rvo0tFSV2T4N",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   135.0,
+   260.0
+  ],
+  "to": [
+   134.677,
+   260.134
+  ],
+  "offset": [
+   -0.323,
+   0.134
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "0nwbrMftfD1havCJykOD4K",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   135.0,
+   275.0
+  ],
+  "to": [
+   135.134,
+   275.323
+  ],
+  "offset": [
+   0.134,
+   0.323
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "28Ms7W_1rCRAZjKUbF3tbw",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   215.0
+  ],
+  "to": [
+   149.866,
+   214.677
+  ],
+  "offset": [
+   -0.134,
+   -0.323
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "3wZvQFJwz4kAM8UgAoPxDA",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   230.0
+  ],
+  "to": [
+   149.584,
+   230.172
+  ],
+  "offset": [
+   -0.416,
+   0.172
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "21knbvcVr3Ew1ZTqAXFhJg",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   245.0
+  ],
+  "to": [
+   149.584,
+   245.172
+  ],
+  "offset": [
+   -0.416,
+   0.172
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "1i9Zq$oWLC5OxFjSKOWwxD",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   260.0
+  ],
+  "to": [
+   150.172,
+   260.416
+  ],
+  "offset": [
+   0.172,
+   0.416
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "0yuQ_$dbv2b9djRQt90VG8",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   275.0
+  ],
+  "to": [
+   150.134,
+   275.323
+  ],
+  "offset": [
+   0.134,
+   0.323
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "3VrA10f_99$uUx9eKdVCPj",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   165.0,
+   215.0
+  ],
+  "to": [
+   164.866,
+   214.677
+  ],
+  "offset": [
+   -0.134,
+   -0.323
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "3B_NSsg7HCggL_JlPoAtvb",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   165.0,
+   230.0
+  ],
+  "to": [
+   164.828,
+   229.584
+  ],
+  "offset": [
+   -0.172,
+   -0.416
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "2ZGSza3K55XwT2FtElGC_J",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   165.0,
+   245.0
+  ],
+  "to": [
+   165.5,
+   245.0
+  ],
+  "offset": [
+   0.5,
+   0.0
+  ],
+  "dist": 0.5
+ },
+ {
+  "guid": "2cqikmoVv6OBk68SxFes6O",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   165.0,
+   260.0
+  ],
+  "to": [
+   165.172,
+   260.416
+  ],
+  "offset": [
+   0.172,
+   0.416
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "0gMxeiQLz5Ewb03oDxxlIX",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   165.0,
+   275.0
+  ],
+  "to": [
+   165.134,
+   275.323
+  ],
+  "offset": [
+   0.134,
+   0.323
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "0N3KVBzBvC_PcwwYOsqgz1",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   215.0
+  ],
+  "to": [
+   179.866,
+   214.677
+  ],
+  "offset": [
+   -0.134,
+   -0.323
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "3MhKrIe$f6qfR3wy5jsQhh",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   230.0
+  ],
+  "to": [
+   180.45,
+   230.0
+  ],
+  "offset": [
+   0.45,
+   0.0
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "0IFKxQ609F2hIzjvvcVTd4",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   245.0
+  ],
+  "to": [
+   180.45,
+   245.0
+  ],
+  "offset": [
+   0.45,
+   0.0
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "19AY5Ylh1F8uLPJ98MNxu3",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   260.0
+  ],
+  "to": [
+   180.45,
+   260.0
+  ],
+  "offset": [
+   0.45,
+   0.0
+  ],
+  "dist": 0.45
+ },
+ {
+  "guid": "2bn2VSWDD9QftHetW3lkZA",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   275.0
+  ],
+  "to": [
+   180.134,
+   275.323
+  ],
+  "offset": [
+   0.134,
+   0.323
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "12KJRqNdnEe87e4_erulaD",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   195.0,
+   215.0
+  ],
+  "to": [
+   195.35,
+   215.0
+  ],
+  "offset": [
+   0.35,
+   0.0
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "0gFYXtUmL18hovT9nnJ6Lv",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   195.0,
+   230.0
+  ],
+  "to": [
+   195.35,
+   230.0
+  ],
+  "offset": [
+   0.35,
+   0.0
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "0lUBaVgKv5wxV2qDS9Bxlw",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   195.0,
+   245.0
+  ],
+  "to": [
+   195.35,
+   245.0
+  ],
+  "offset": [
+   0.35,
+   0.0
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "27Mc_87oLDRfAij43a5FgQ",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   195.0,
+   260.0
+  ],
+  "to": [
+   195.35,
+   260.0
+  ],
+  "offset": [
+   0.35,
+   0.0
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "1MHh7v3_9BrxCH6Qm7b5IP",
+  "type": "IfcAirTerminal",
+  "status": "MOVED",
+  "from": [
+   195.0,
+   275.0
+  ],
+  "to": [
+   195.35,
+   275.0
+  ],
+  "offset": [
+   0.35,
+   0.0
+  ],
+  "dist": 0.35
+ },
+ {
+  "guid": "1gTIXB8vb87goT$CKMKhra",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   140.0,
+   220.0
+  ],
+  "to": [
+   139.859,
+   220.141
+  ],
+  "offset": [
+   -0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "1NH5LCQCb788$gtewHaR2x",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   140.0,
+   230.0
+  ],
+  "to": [
+   139.859,
+   230.141
+  ],
+  "offset": [
+   -0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "1xQyrZUjnA_BIn4C4lZZQn",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   140.0,
+   240.0
+  ],
+  "to": [
+   139.859,
+   240.141
+  ],
+  "offset": [
+   -0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "2$GAoeLfX3gOD4p3lk3OB0",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   140.0,
+   250.0
+  ],
+  "to": [
+   139.859,
+   250.141
+  ],
+  "offset": [
+   -0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "0b9TjP02r0mO9h5Z06lZrh",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   140.0,
+   260.0
+  ],
+  "to": [
+   140.077,
+   260.185
+  ],
+  "offset": [
+   0.077,
+   0.185
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "1GwyAGmg51xQGa7v_hxzn3",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   140.0,
+   270.0
+  ],
+  "to": [
+   140.141,
+   270.141
+  ],
+  "offset": [
+   0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3t5yruhDLF3eLLm_ha5$KU",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   220.0
+  ],
+  "to": [
+   149.815,
+   220.077
+  ],
+  "offset": [
+   -0.185,
+   0.077
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "2r1sQ$1j53VuoBbDfZDRbk",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   230.0
+  ],
+  "to": [
+   149.815,
+   230.077
+  ],
+  "offset": [
+   -0.185,
+   0.077
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3MzXBa5xf0jRYDDHYHRNA_",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   240.0
+  ],
+  "to": [
+   149.815,
+   240.077
+  ],
+  "offset": [
+   -0.185,
+   0.077
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "03MYrBef98yP$o1OEDbEi$",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   250.0
+  ],
+  "to": [
+   149.815,
+   250.077
+  ],
+  "offset": [
+   -0.185,
+   0.077
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "0H9aGsK414RBTfXOwiFNTt",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   260.0
+  ],
+  "to": [
+   150.077,
+   260.185
+  ],
+  "offset": [
+   0.077,
+   0.185
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "0Iu0OxoQ51DRstdRC7n1Z6",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   150.0,
+   270.0
+  ],
+  "to": [
+   150.141,
+   270.141
+  ],
+  "offset": [
+   0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "08j6sWww99jvQOnskoWEc3",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   160.0,
+   220.0
+  ],
+  "to": [
+   159.859,
+   219.859
+  ],
+  "offset": [
+   -0.141,
+   -0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "1JcXhenor7SR$aOg1mW2mb",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   160.0,
+   230.0
+  ],
+  "to": [
+   159.923,
+   229.815
+  ],
+  "offset": [
+   -0.077,
+   -0.185
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3qG4iTtZb1vg5yq4VHka$X",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   160.0,
+   240.0
+  ],
+  "to": [
+   159.769,
+   240.096
+  ],
+  "offset": [
+   -0.231,
+   0.096
+  ],
+  "dist": 0.25
+ },
+ {
+  "guid": "3EeuYmHAzFQfZHD6ryPdEH",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   160.0,
+   250.0
+  ],
+  "to": [
+   160.096,
+   250.231
+  ],
+  "offset": [
+   0.096,
+   0.231
+  ],
+  "dist": 0.25
+ },
+ {
+  "guid": "0h8obAlmX7QAe1wISQW5ER",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   160.0,
+   260.0
+  ],
+  "to": [
+   160.077,
+   260.185
+  ],
+  "offset": [
+   0.077,
+   0.185
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3sJC6a9wr4APIiLsJ2Fkwz",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   160.0,
+   270.0
+  ],
+  "to": [
+   160.141,
+   270.141
+  ],
+  "offset": [
+   0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "1u05oQY$9FN8V73zkHTPt8",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   170.0,
+   220.0
+  ],
+  "to": [
+   169.859,
+   219.859
+  ],
+  "offset": [
+   -0.141,
+   -0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "2eC2Hr1ynENg236j_MeoK7",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   170.0,
+   230.0
+  ],
+  "to": [
+   169.923,
+   229.815
+  ],
+  "offset": [
+   -0.077,
+   -0.185
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3tvtWQaev3jOQUBYChfHQB",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   170.0,
+   240.0
+  ],
+  "to": [
+   170.25,
+   240.0
+  ],
+  "offset": [
+   0.25,
+   0.0
+  ],
+  "dist": 0.25
+ },
+ {
+  "guid": "32kR0FihP8Xh1kHlKMSeh5",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   170.0,
+   250.0
+  ],
+  "to": [
+   170.25,
+   250.0
+  ],
+  "offset": [
+   0.25,
+   0.0
+  ],
+  "dist": 0.25
+ },
+ {
+  "guid": "0hJyTD8oT2KfLvJPChEUt7",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   170.0,
+   260.0
+  ],
+  "to": [
+   170.077,
+   260.185
+  ],
+  "offset": [
+   0.077,
+   0.185
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3rHj3Lt3L67AICZ5VX7wup",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   170.0,
+   270.0
+  ],
+  "to": [
+   170.141,
+   270.141
+  ],
+  "offset": [
+   0.141,
+   0.141
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "1YuHs0lSr9kvbOL_I1oi$g",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   220.0
+  ],
+  "to": [
+   180.2,
+   220.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "14YZkR6SX5kxPls93wVlO4",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   230.0
+  ],
+  "to": [
+   180.2,
+   230.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3cGMceo4zD2gDkJo5Pf0mc",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   240.0
+  ],
+  "to": [
+   180.2,
+   240.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3QglBBJ9D4perXIIKFxGFF",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   250.0
+  ],
+  "to": [
+   180.2,
+   250.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3c7nuGRAD3d9xqUZU4M6X6",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   260.0
+  ],
+  "to": [
+   180.2,
+   260.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "3qeylz$Yb9$uzPZyWp9S_N",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   180.0,
+   270.0
+  ],
+  "to": [
+   180.2,
+   270.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "0WlPXsPb5BawNWlkg4d9VK",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   190.0,
+   220.0
+  ],
+  "to": [
+   190.2,
+   220.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "2MrofTgF10Xee4PybtqFSu",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   190.0,
+   230.0
+  ],
+  "to": [
+   190.2,
+   230.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "35_dkX5dPELeXSgJvpmGqB",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   190.0,
+   240.0
+  ],
+  "to": [
+   190.2,
+   240.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "1IGOtnz3rA_PcNEIsANac8",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   190.0,
+   250.0
+  ],
+  "to": [
+   190.2,
+   250.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "37o5sVRdT2jeuymxGP_tGo",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   190.0,
+   260.0
+  ],
+  "to": [
+   190.2,
+   260.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ },
+ {
+  "guid": "23eHedYhL4x8tKNEmO7P5D",
+  "type": "IfcFireSuppressionTerminal",
+  "status": "MOVED",
+  "from": [
+   190.0,
+   270.0
+  ],
+  "to": [
+   190.2,
+   270.0
+  ],
+  "offset": [
+   0.2,
+   0.0
+  ],
+  "dist": 0.2
+ }
+]
