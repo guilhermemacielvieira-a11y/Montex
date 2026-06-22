@@ -1,0 +1,10 @@
+source_dxf,edificio,pavimento,dxf_saida,model_origin_x,model_origin_y,transl_local_x,transl_local_y,linhas_orig,linhas_uteis,polilinhas
+02.dxf,Guarita,H1-Terreo,HVG_Guarita_underlay_georef.dxf,320.0,215.0,-525753.865,-9594677.206,62628,62451,11754
+05.dxf,Centro de Convencoes,CC-Terreo,HVG_CentroConvencoes_underlay_georef.dxf,290.0,270.0,-43.735,0.812,5633,5593,532
+06.dxf,Restaurante da Piscina,RP-Terreo,HVG_RestaurantePiscina_underlay_georef.dxf,70.0,225.0,-1574.462,-967.89,26444,26435,2285
+09.dxf,Clube NEP,NEP-Terreo,HVG_ClubeNEP_underlay_georef.dxf,40.0,300.0,-3822.182,-1386.46,5031,5031,499
+13.dxf,SPA,SPA-Terreo,HVG_SPA_underlay_georef.dxf,80.0,270.0,-299.003,249.474,39954,39750,2790
+04.dxf,Boite,BOITE-Terreo,HVG_Boite_underlay_georef.dxf,240.0,175.0,-314.468,111.565,32256,32256,2373
+BlocoPrincipal_R1_Proje_o_da_Cobertura.dxf,Bloco Principal,BP-Terreo,HVG_BlocoPrincipal_underlay_georef.dxf,165.0,245.0,-232789.049,-9422131.448,205390,204492,11777
+BlocoB_R1_Planta_1.dxf,Bloco B - Terreo/Subsolo,B13-Terreo,HVG_BlocoB_Terreo_underlay_georef.dxf,110.0,130.0,-3401.381,-1420.67,111451,111449,21330
+BlocoB_R2_UPLANTA_1_PAVIMENTO.dxf,Bloco B - 1 Pavimento,B13-Pav1,HVG_BlocoB_Pav1_underlay_georef.dxf,110.0,130.0,-3520.614,-1396.16,26529,26526,2507
