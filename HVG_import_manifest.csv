@@ -1,0 +1,12 @@
+arquivo_dxf;edificio;piso_archicad_sugerido;escala;observacao
+02.dxf;Guarita;Terreo;1:50;planta + cortes (limpo)
+05.dxf;Centro de Convencoes;Terreo;1:100;planta limpa (grid/sanitarios/PCD)
+06.dxf;Restaurante da Piscina;Terreo;1:100;planta limpa
+09.dxf;Clube NEP;Terreo;1:100;planta limpa
+13.dxf;SPA;Terreo;1:100;plantas + cortes
+04.dxf;Boite;Terreo;1:100;plantas + cortes
+03.dxf;Bloco Principal;(multi);1:100;DXF completo — usar regioes separadas abaixo
+BlocoPrincipal_R1_Proje_o_da_Cobertura.dxf;Bloco Principal;Terreo + Subsolo;1:100;2 plantas giradas ~45 (separar no Archicad)
+08.dxf;Bloco 24 Aptos B;(multi);1:100;DXF completo — usar regioes separadas abaixo
+BlocoB_R1_Planta_1.dxf;Bloco 24 Aptos B;Terreo/Subsolo;1:100;regiao principal
+BlocoB_R2_UPLANTA_1_PAVIMENTO.dxf;Bloco 24 Aptos B;1 Pavimento;1:100;planta 1 pavimento
