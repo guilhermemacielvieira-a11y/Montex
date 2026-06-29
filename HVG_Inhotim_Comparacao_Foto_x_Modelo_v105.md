@@ -127,8 +127,8 @@ Validação de integridade (v105):
 
 | # | Item | Foto (referência) | Modelo v105 | Severidade | Ação v106 |
 |---|------|-------------------|-------------|:----------:|-----------|
-| 1 | Cobertura do SPA | Tesouras de madeira inclinadas (p.14) | `FLAT_ROOF` laje | 🔴 Alta | Telhado inclinado + tesouras `IfcMember` |
-| 2 | Treliça da Recepção | Space‑frame metálico aparente (p.8) | 0 `IfcMember` no BP | 🔴 Alta | Treliça `IfcElementAssembly` |
+| 1 | Cobertura do SPA | Tesouras de madeira inclinadas (p.14) | `FLAT_ROOF` laje | 🔴 Alta | ✅ **Resolvido na v106** — telhado 2 águas + 7 tesouras de madeira |
+| 2 | Treliça da Recepção | Space‑frame metálico aparente (p.8) | 0 `IfcMember` no BP | 🔴 Alta | ✅ **Resolvido na v106** — treliça espacial (288 barras) |
 | 3 | Cobertura Bloco Principal | Hip baixa + beirais profundos (p.5–7) | `HIP_ROOF` "Piramidal" | 🟠 Média | Ajustar inclinação/beirais + renomear |
 | 4 | Coberturas de pavilhões | Inclinadas de telha | Algumas `FLAT_ROOF` | 🟠 Média | Revisar projeto de coberturas |
 | 5 | Brinquedos do parque aquático | Equipamento lúdico (p.12) | Ausente | 🟢 Baixa | `IfcFurniture` (opcional) |
