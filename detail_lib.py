@@ -74,3 +74,22 @@ def map_to_footprint(seg, bbox, inset=0.4):
         a = tf(s[:2]); b = tf(s[2:])
         out.append([round(a[0], 3), round(a[1], 3), round(b[0], 3), round(b[1], 3)])
     return out
+
+
+def make_transform(seg, bbox, inset=0.4):
+    """Retorna funcao tf(point)->[x,y] no modelo, mesma usada por map_to_footprint."""
+    import math
+    x0, x1, y0, y1 = bbox
+    x0 += inset; x1 -= inset; y0 += inset; y1 -= inset
+    th = math.radians(dominant_angle(seg))
+    R = np.array([[math.cos(-th), -math.sin(-th)], [math.sin(-th), math.cos(-th)]])
+    pts = np.vstack([seg[:, :2], seg[:, 2:]]); c = pts.mean(0)
+    rot = (R @ (pts - c).T).T; rmn, rmx = rot.min(0), rot.max(0)
+    Ex, Ey = (rmx - rmn); Wx, Wy = (x1 - x0), (y1 - y0)
+    swap = (Ex >= Ey) != (Wx >= Wy)
+    def tf(P):
+        q = (R @ (np.array(P) - c)) - rmn
+        if swap: q = np.array([q[1], q[0]]); ex, ey = Ey, Ex
+        else: ex, ey = Ex, Ey
+        return np.array([x0 + (q[0]/ex)*Wx, y0 + (q[1]/ey)*Wy])
+    return tf
