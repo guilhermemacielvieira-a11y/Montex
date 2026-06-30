@@ -1,3 +1,5 @@
 # scratch / OS
 .DS_Store
 __MACOSX/
+__pycache__/
+*.pyc

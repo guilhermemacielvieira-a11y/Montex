@@ -134,7 +134,7 @@ Validação de integridade (v105):
 | 5 | Brinquedos do parque aquático | Equipamento lúdico (p.12) | Ausente | 🟢 Baixa | `IfcFurniture` (opcional) |
 | 6 | Pista de carros infantil | Pista pintada + placas (p.13) | Ausente | 🟢 Baixa | Elemento dedicado (opcional) |
 | 7 | Contenção espacial residual | — | 4 roofs + 1 covering + 22 assemblies sem contenção | 🟢 Baixa | Atribuir a pavimento/site |
-| 8 | Proporção da planta do Bloco Principal | Retangular alongada (p.5–7) | Pegada ~quadrada 80×80 | 🟠 Média | ✅ **Resolvido na v109** — reestruturada para ~101×63 (1,6:1) |
+| 8 | Proporção da planta do Bloco Principal | Retangular alongada (p.5–7) | Pegada ~quadrada 80×80 | 🟠 Média | ✅ **Recalibrado na v110** pela planta oficial — ~58,7×57 + IfcGrid (v109 substituída) |
 
 ---
 
