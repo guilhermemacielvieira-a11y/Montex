@@ -5,7 +5,7 @@
 **Projeto:** Hotel Vila Galé Inhotim — Country Resort Hotel das Artes, Conference & SPA
 **Local:** Brumadinho — Minas Gerais — Brasil · **Georref.:** SIRGAS 2000 / UTM 23S (EPSG:31983)
 **Autoria do modelo:** Guilherme Maciel — Grupo Montex Ltda (CNPJ 10.798.894/0001‑60)
-**Modelo atual:** `HVG_MASTER_v122_APTOS_PAVIMENTOS.ifc` (IFC4) · **Data:** 30/06/2026
+**Modelo atual:** `HVG_MASTER_v125_ESPACOS_POLIGONAIS.ifc` (IFC4) · **Data:** 30/06/2026
 
 ---
 
@@ -46,6 +46,9 @@ Schema **IFC4** válido · GlobalIds únicos · georreferenciado.
 | v120 | Programa de ambientes do **SPA** (15 `IfcSpace`) |
 | v121 | **Portas** dos demais edifícios por detecção de vãos (62) |
 | v122 | Demais **pavimentos dos apartamentos** (subsolos / 1º pav — 1.856 paredes) |
+| v123 | **Nível de cobertura** dos apartamentos (terraços / platibandas) |
+| v124 | **Bar da Piscina** (Bar Molhado) nas piscinas exteriores |
+| **v125** | **Recorte poligonal dos `IfcSpace`** (Voronoi) — BP Subsolo/Térreo + SPA (70 espaços) |
 
 ---
 
