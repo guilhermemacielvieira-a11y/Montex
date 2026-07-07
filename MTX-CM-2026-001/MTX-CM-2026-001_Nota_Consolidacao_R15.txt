@@ -247,4 +247,52 @@ confiar do que um número específico). Os valores "4,40 m" e
 diretamente com a Perfilor antes de uso em projeto — não foram
 tratados como fechados nesta consolidação apesar do R15.4 os
 apresentar como "confirmados".
+
+--------------------------------------------------------------
+COMPOSIÇÃO DE REVESTIMENTO DA PAREDE — CONFIRMADO EM 07/07/2026
+(2 slides oficiais Grupo Montex, arquivados em
+fotos_obra_referencia/Foto6_* e Foto7_*)
+--------------------------------------------------------------
+Os 2 slides ("REVESTIMENTOS — Parede Interna" e "REVESTIMENTOS —
+Parede Externa") do próprio Grupo Montex, cada um com foto real de
+obra + esquema de 3 camadas, confirmam a composição de revestimento
+das paredes do sistema Parede-Pronta — informação que não estava
+explicitada com este nível de detalhe em nenhum documento anterior
+do pacote:
+
+  PAREDE INTERNA (divisória): simétrica —
+    placa de gesso | núcleo painel PIR 70mm | placa de gesso
+    Pintura e acabamento final aplicados nas DUAS faces.
+
+  PAREDE EXTERNA (fachada): assimétrica —
+    placa cimentícia (face externa) | núcleo painel PIR 70mm |
+    placa de gesso (face interna)
+    Pintura e acabamento final aplicados nas duas faces.
+
+Ou seja, o núcleo estrutural (painel PIR 70mm) é o mesmo dos dois
+lados — o que muda é o REVESTIMENTO aplicado sobre esse núcleo:
+gesso dos dois lados na parede interna; cimentícia fora + gesso
+dentro na parede externa (a face cimentícia é a que fica exposta ao
+tempo).
+
+RESSALVA — como isso se relaciona com o restante do pacote: os
+quadros de junção do Caderno de Juncões e Fixação (GM-01, JP-01/02/
+03/04, JUNTA M12) tratam o "painel PIR 70" como o elemento fixado/
+parafusado (a interface estrutural que importa para a fixação), e
+essa interface não muda com o revestimento aplicado por cima. As
+fotos de obra já arquivadas nesta sessão (Foto1/Foto2, painel sendo
+instalado com identificação "Termilor" visível) mostram o painel
+ANTES do revestimento cimentício/gesso ser aplicado sobre ele — não
+há contradição entre os documentos, apenas estágios diferentes da
+mesma parede. Nenhuma cota de fixação (torque, passo, fixador) muda
+em função desta informação; ela complementa a descrição de acabamento
+da parede, não a junção estrutural.
+
+Pendência em aberto: nenhum documento do pacote até agora especifica
+espessura, fixação (cola/parafuso/ambos) ou torque de instalação da
+placa cimentícia externa e da placa de gesso — informação de
+acabamento, não estrutural, mas que vale registrar no Apêndice C do
+Caderno de Junções e Fixação como item a confirmar com o fornecedor
+da placa, se algum documento de fixação de revestimento vier a ser
+necessário.
 ================================================================

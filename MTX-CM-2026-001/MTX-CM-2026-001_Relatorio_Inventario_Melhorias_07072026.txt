@@ -295,4 +295,30 @@ MTX-CM-2026-001_Caderno_Juncoes_Fixacao_R16_Profissional.pdf  [ATUALIZADO, 31 p�
   a geometria/dados da ilustração), com nova linha de chamada até o
   elemento correto. Verificado visualmente página a página no PDF
   final antes do commit.
+
+--------------------------------------------------------------
+ANEXO VISUAL REALISTA — FOTOS REAIS DA OBRA (07/07/2026)
+--------------------------------------------------------------
+MTX-CM-2026-001_Anexo_Renders_Realistas_Materiais.pdf  [CRIADO e
+REVISADO 2x]
+  Material complementar (não substitui o Caderno técnico) com as
+  mesmas 8 isométricas principais do R16, texturizadas com detalhe
+  extraído de 5 fotos reais de obra enviadas pelo cliente (painel
+  Termilor em instalação, módulo montado, interior forro/gesso).
+  V1 usava textura procedural sintética (ruído); corrigida para v2
+  (grão fotográfico real) e depois v4 (contraste/escala recalibrados)
+  após o cliente reportar que a mudança não era perceptível — v4
+  aplica a variação de luminância real da foto com contraste alto o
+  bastante para ser visível a olho nu, mantendo hue/saturação sempre
+  fiéis à cor original de cada peça (nunca há vazamento de cor) e a
+  nitidez de todos os callouts. Fotos-fonte arquivadas (comprimidas)
+  em fotos_obra_referencia/.
+
+MTX-CM-2026-001_Nota_Consolidacao_R15.txt  [ATUALIZADA]
+  Nova seção registra a composição de revestimento de parede
+  confirmada por 2 slides oficiais do Grupo Montex (Foto6/Foto7):
+  parede interna = gesso nas duas faces do núcleo PIR 70mm; parede
+  externa = placa cimentícia (fora) + PIR 70mm + gesso (dentro).
+  Dado de acabamento, não estrutural — não altera nenhuma cota de
+  fixação já documentada nos quadros de junção.
 ================================================================
