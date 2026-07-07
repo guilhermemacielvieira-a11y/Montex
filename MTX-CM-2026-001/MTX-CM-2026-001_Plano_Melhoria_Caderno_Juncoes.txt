@@ -1,7 +1,7 @@
 ================================================================
 MONTEX — CASA POPULAR BICAS 70 · PLANO DE MELHORIA
 Caderno de Junções (Parede-Pronta) · MTX-CM-2026-001 · 07/07/2026
-Status: PROPOSTA — nada neste documento foi aplicado ao PDF ainda
+Status: IMPLEMENTADO em 07/07/2026 — ver rodapé de atualização no final
 ================================================================
 
 ESCOPO DESTA ANÁLISE
@@ -159,4 +159,42 @@ PRIORIZAÇÃO SUGERIDA
 
 Nenhum destes pontos foi aplicado ao PDF. Aguardando decisão sobre
 quais implementar e em que ordem.
+================================================================
+
+--------------------------------------------------------------
+ATUALIZAÇÃO 07/07/2026 — TODOS OS 6 PONTOS IMPLEMENTADOS
+--------------------------------------------------------------
+A pendência do pé-direito (Ponto 3) foi encerrada nesta data: 2,85 m
+confirmado formalmente pelo responsável do projeto. Isso liberou a
+cota de altura das CHP-T, antes bloqueada.
+
+Ponto 1 (vistas complementares): adicionado um inset por prancha
+(p.2-6), cada um cruzado com fonte independente antes de desenhar —
+GM-01: planta do canal com parabolts M10 @600 (PIT-00). JP-01: corte
+vertical mostrando a junta contínua da base (GM-01) ao topo
+(guia-anel JP-04), ~2,79 m. JP-02: corte da CHP-C em L (90x70 #4,75),
+conforme Manual de Fabricação W pág. 8. JP-03: corte vertical das 7x
+CHP-T @400 (0,25 a 2,65 m do piso), conforme Manual de Fabricação W
+R15 pág. 9, com a linha do pé-direito 2,85 m confirmado marcada.
+Módulo A+B: planta com a ordem real de aperto dos 24x M12
+(centro→pontas), estendendo a mesma regra já ilustrada para 5 pontos.
+
+Ponto 2: nota cruzada para JP-04 adicionada na p.1.
+Ponto 3: cota de altura das CHP-T resolvida (ver Ponto 1, JP-03) —
+não ficou como pendência, o pé-direito foi confirmado.
+Ponto 4: quadro de nomenclatura IA/I (ERRATA_CAMPO_R15) replicado
+na p.5.
+Ponto 5: verificado no QA Fichas R14/R15 — "torquímetro" é exigido
+em todas as fixações, mas só a Junta M12 (p.6) tem o texto "torquímetro
+COM SELO DE AFERIÇÃO" explícito. Tratado como tiering intencional
+(única união estrutural entre módulos) e documentado como nota na p.1,
+não uniformizado sem base.
+Ponto 6: linha de checklist "Kit-mestre conferido... gap ~825 un em
+aberto" adicionada ao PIT de cada prancha (p.2-6).
+
+Método: todo texto/cota nova foi cruzado com pelo menos um documento
+de origem do próprio pacote (Manual de Fabricação W, Plano de
+Montagem V3, Romaneio R15, QA Fichas) antes de desenhar — nenhum
+valor foi inventado. Arquivo final salvo em
+MTX-CM-2026-001_Caderno_Juncoes_R14.pdf (mesmo nome, 6 páginas).
 ================================================================

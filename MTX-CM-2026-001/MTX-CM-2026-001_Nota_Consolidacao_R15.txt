@@ -104,13 +104,17 @@ PENDÊNCIAS — REQUEREM DECISÃO DE ENGENHARIA/PROJETISTA, NÃO DADO
 Estes itens NÃO foram e NÃO podem ser encerrados por correção de
 planilha. Ficam registrados para que a série não comece sem eles:
 
-1. CONFIRMAÇÃO FORMAL DO PÉ-DIREITO (2,85 m vs 3,60 m). O Parecer de
-   Consolidação R13 registrou essa divergência como pendente de
-   decisão do projetista. O Modelo_BIM_R14.ifc já descreve o modelo
-   de 3,60 m como "SUPERADO" nos metadados, mas nenhum documento
-   revisado traz confirmação formal e assinada do encerramento dessa
-   pendência. Recomendação: obter essa confirmação por escrito do
-   projetista responsável antes da R16.
+1. [ENCERRADA EM 07/07/2026] CONFIRMAÇÃO FORMAL DO PÉ-DIREITO (2,85 m
+   vs 3,60 m). O Parecer de Consolidação R13 registrou essa
+   divergência como pendente de decisão do projetista. O
+   Modelo_BIM_R14.ifc já descrevia o modelo de 3,60 m como "SUPERADO"
+   nos metadados; o projetista responsável confirmou nesta data que
+   2,85 m é a cota definitiva, encerrando a pendência. Usado desde já
+   como referência na Vista Complementar da p.5 do Caderno de Junções
+   (cota de altura das CHP-T). Ainda pendente: atualizar formalmente
+   o Modelo_BIM_R14.ifc (que já marcava 3,60 m como superado, mas não
+   traz 2,85 m como valor confirmado nos metadados) na próxima revisão
+   do BIM.
 
 2. CONDICIONANTE C1 (ART + DATec SINAT nº 10) — segue pendente,
    como o próprio Termo de Emissão R14 já registra corretamente.
