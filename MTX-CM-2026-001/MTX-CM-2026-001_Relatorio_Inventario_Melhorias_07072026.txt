@@ -167,14 +167,31 @@ PENDÊNCIAS QUE CONTINUAM ABERTAS (não encerradas nesta sessão)
 ================================================================
 Ver detalhes na Nota de Consolidação R15:
   2. Condicionante C1 (ART + DATec SINAT nº 10) — bloqueia produção
-     em série, não o piloto.
-  3. Gap de ~825 un no kit de fixadores (declarado vs. discriminado)
-     — sem dado de origem para fechar sem inventar número.
-  4. Chapas de espera CHP-T/CHP-C não modeladas no Modelo_BIM_R14.ifc
-     — requer atualização do BIM por quem tem acesso ao software de
-     autoria. Passou a incluir também: atualizar o pé-direito para
-     2,85 m nos metadados (agora confirmado, mas ainda não escrito
-     no IFC).
+     em série, não o piloto. Continua aberta, não é decisão de dado.
   5. Verificação direta no banco Supabase (módulo ERP, pp_kits) —
      fora do pacote entregue, não auditado.
+
+RESOLVIDAS/ATUALIZADAS APÓS O RELATÓRIO INICIAL (mesma sessão,
+07/07/2026):
+  3. [RECONCILIADO] Gap de ~825 un no kit de fixadores. As famílias
+     PF-4, PF-5, PF-1M e os itens de cimentícia/capuz já estavam
+     quantificados em Plano_Montagem_Parafusada_R14.pdf (pág. 2 e 5)
+     mas não tinham sido cruzados com a aba 07_Kit_Fixadores do
+     Romaneio_Fabricacao_R15.xlsx. Subtotal corrigido: 2.893 un
+     (~5% do total README ~2.760 un — diferença normal de
+     arredondamento). Atualizado: Romaneio_Fabricacao_R15.xlsx,
+     Orcamento_REV15.xlsx, Caderno_Juncoes_R14.pdf (PITs), Nota de
+     Consolidação R15.
+  4. [PARCIALMENTE RESOLVIDO] Chapas CHP-T/CHP-C no
+     Modelo_BIM_R14.ifc. Adicionadas 35 chapas CHP-T (IA1/IA2 contra
+     F1; I1/I2/I3 contra JUNTA-B), posições extraídas da geometria
+     existente do modelo, geometria validada sem erros. Também
+     confirmado nos metadados: pé-direito 2,85 m formalizado no IFC.
+     Continuam pendentes (requerem confirmação de quem tem acesso ao
+     software de autoria, não resolvíveis com segurança só por
+     coordenadas): a chapa da parede IAN (condição geométrica
+     ambígua — parece se conectar a IA1/IA2, não a uma fachada) e as
+     chapas CHP-C de canto (planta com escalonamento entre módulos A
+     e B torna arriscado identificar automaticamente os cantos reais
+     de 90°).
 ================================================================

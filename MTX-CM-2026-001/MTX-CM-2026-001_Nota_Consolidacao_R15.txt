@@ -135,10 +135,24 @@ planilha. Ficam registrados para que a série não comece sem eles:
    usado nas quantidades de origem (PF-1M ~90, PF-5 ~220 etc.), não
    um gap de dado novo. Nenhum número foi inventado.
 
-4. CHAPAS DE ESPERA CHP-T/CHP-C NÃO MODELADAS NO IFC. Qualquer
-   clash-check ou quantitativo automático a partir do BIM R14
-   subestima essas peças. Requer atualização do modelo BIM por quem
-   tem acesso ao software de autoria.
+4. [PARCIALMENTE ENCERRADA EM 07/07/2026] CHAPAS DE ESPERA CHP-T/
+   CHP-C NÃO MODELADAS NO IFC. Adicionadas 35 chapas CHP-T (7 por
+   parede @400, 0,25-2,65 m do piso, conforme Manual de Fabricação W
+   R15 pág. 9) nas junções JP-03 de IA1 e IA2 (contra a fachada F1) e
+   de I1, I2 e I3 (contra o painel JUNTA-B) — posições X,Y extraídas
+   da própria geometria do modelo (eixo de cada parede), não
+   inventadas. Geometria validada sem erros (ifcopenshell).
+   NÃO modeladas nesta rodada, permanecem pendentes:
+     - Parede IAN: a geometria mostra que ela se conecta a IA1/IA2
+       (não a uma fachada), sugerindo uma condição de canto ou T
+       diferente das demais — precisa de confirmação visual da
+       planta arquitetônica antes de posicionar a chapa corretamente.
+     - Chapas CHP-C (cantos, junção JP-02): a planta de baixa tem
+       recortes/escalonamentos entre os módulos A e B (F3-A a x=11,357
+       vs F3-B a x=9,257; F4-A a x=2,143 vs F4-B a x=0,043) que tornam
+       arriscado identificar automaticamente quais encontros de
+       fachada são realmente cantos de 90° sem a planta arquitetônica
+       - requer confirmação de quem tem acesso ao software de autoria.
 
 5. VERIFICAÇÃO DIRETA NO BANCO SUPABASE (módulo ERP, tabela
    pp_kits). O código-fonte do módulo de front-end não hardcoda
