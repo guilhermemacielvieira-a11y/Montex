@@ -264,4 +264,35 @@ MTX-CM-2026-001_Caderno_Juncoes_Fixacao_R16_Profissional.pdf  [CRIADO]
   de "JUNÇÕES") para evitar um bug de codificação de fonte que
   corrompia travessões — os quadros e vistas isométricas originais
   (imagens) mantêm a acentuação normal.
+
+--------------------------------------------------------------
+COMPLEMENTO R16 (07/07/2026) — DETALHAMENTO DE FORRO E COBERTURA
+--------------------------------------------------------------
+MTX-CM-2026-001_Caderno_Juncoes_Fixacao_R16_Profissional.pdf  [ATUALIZADO, 31 páginas]
+  A pedido do usuário ("detalhar com mais clareza e imagens a junção
+  do forro com estrutura montada, e depois da cobertura"), acrescenta
+  4 vistas isométricas novas, cada uma com página de texto própria
+  (leitura numerada dos callouts + tabela de detalhe por conexão):
+  - PF-4-A — Forro × estrutura montada, conjunto completo (5
+    callouts: quadro da parede, painel PIR, cantoneira+travessa,
+    forro gesso+F-530, folga até a cobertura).
+  - PF-4-B — Zoom no ponto cantoneira × travessa (3 callouts), o
+    ponto de fixação mais repetido de todo o forro.
+  - PF-5-A — Pilha vertical completa da cobertura, parede → guia-anel
+    → consolo → terça → telha (5 níveis, cada um com seu fixador).
+  - PF-5-B — Cumeeira desmontável na linha da Junta A+B (detalhe D-02
+    de Plano_Cobertura_Forro_R2.pdf): o capuz de cumeeira como única
+    peça que cruza a junta entre módulos.
+  Nenhuma cota de engenharia nova — só maior clareza visual das
+  junções já documentadas nas seções PF-4/PF-5.
+
+  Correção de qualidade feita antes da entrega: 2 das 4 novas
+  ilustrações tinham defeito de marcador (callout parcialmente
+  escondido atrás do painel em PF-4-A; callout ausente por completo
+  em PF-5-B — ambos resultado do z-buffer do matplotlib 3D colocando
+  o texto atrás de um polígono opaco). Corrigido redesenhando os 2
+  marcadores como overlay 2D sobre o PNG já renderizado (sem alterar
+  a geometria/dados da ilustração), com nova linha de chamada até o
+  elemento correto. Verificado visualmente página a página no PDF
+  final antes do commit.
 ================================================================
