@@ -1,0 +1,180 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · RELATÓRIO E INVENTÁRIO DE MELHORIAS
+MTX-CM-2026-001 · consolidado em 07/07/2026
+Branch: claude/mtx-cm-2026-001-inventory-v80q8q
+================================================================
+
+SUMÁRIO EXECUTIVO
+--------------------------------------------------------------
+Nesta sessão (07/07/2026): (1) importado o pacote completo R14+R15
+do lote piloto (55 arquivos); (2) corrigidos 3 defeitos de exportação
+no Caderno Mestre (R14 e R15); (3) analisado e implementado um plano
+de 6 melhorias no Caderno de Junções; (4) encerrada formalmente a
+pendência do pé-direito (2,85 m); (5) extraída e documentada
+referência técnica real do fabricante ArcelorMittal Perfilor. Nenhum
+valor de cota, carga ou peso foi inventado em nenhum documento — todo
+dado novo foi cruzado com pelo menos uma fonte independente do
+próprio pacote antes de ser usado.
+
+5 commits nesta branch: 0fbaba5 (import) · 2295a6c (Mestre) ·
+38ee933 (plano) · e18be8a (Juncoes) · 4c8c2dd (referência Perfilor).
+
+================================================================
+INVENTÁRIO POR DOCUMENTO
+================================================================
+
+--------------------------------------------------------------
+DOCUMENTOS COM CONTEÚDO CORRIGIDO/MELHORADO NESTA SESSÃO
+--------------------------------------------------------------
+
+MTX-CM-2026-001_CADERNO_MESTRE_R14.pdf  [CORRIGIDO]
+MTX-CM-2026-001_CADERNO_MESTRE_R15.pdf  [CORRIGIDO — mesmas 3 correções]
+  p.7  — parágrafo "INVESTIMENTO REVISADO" (R$32k...R$175k): defeito
+         de exportação que apagava espaços/"R$" ao redor de "$"
+         corrigido. Reconstrução validada contra
+         R5_ParedePronta_Viabilidade.pdf p.4 (mesmo texto, mesmo
+         defeito, mesmos números — confirma que o dado nunca esteve
+         errado, só a exportação).
+  p.21 — caixa "REGRA: gabarito aferido..." cobria o final do
+         parágrafo do item 3 ("...no gabarito pareado"). Parágrafo
+         restaurado (texto original, sem alteração de conteúdo);
+         caixa reposicionada para área vazia abaixo.
+  p.43 — as 6 legendas de coluna (W1-W6) estavam todas na mesma
+         linha, sobrepostas. Redistribuídas dentro da largura de
+         cada coluna, confirmadas contra
+         MTX-CM-2026-001_Plano_Montagem_V3_R14.pdf p.15 (fonte não
+         mesclada). Linha "INVESTIMENTO V3" tinha cópia corrompida
+         sobreposta a uma cópia já correta — cópia corrompida
+         removida.
+  Registro completo: MTX-CM-2026-001_ERRATA_REEXPORTACAO_CADERNO_MESTRE.txt
+
+MTX-CM-2026-001_Caderno_Juncoes_R14.pdf  [MELHORADO — 6 pontos]
+  p.1  — nota cruzada: JP-04 (guia-anel) não tem prancha própria
+         aqui, é tema de cobertura (ver Caderno Mestre p.39-42) — não
+         é omissão. Nota sobre tiering de torque: só a Junta M12
+         (p.6) exige torquímetro com selo de aferição.
+  p.2  — GM-01: vista complementar em planta do canal, parabolts M10
+         @600 (fonte: PIT-00).
+  p.3  — JP-01: vista complementar em corte vertical, mostrando a
+         junta contínua da base (GM-01) ao topo (guia-anel JP-04),
+         ~2,79 m.
+  p.4  — JP-02: vista complementar em corte da CHP-C em L (90×70
+         #4,75), fonte: Manual de Fabricação W p.8.
+  p.5  — JP-03: vista complementar em corte vertical das 7× CHP-T
+         @400 (0,25 a 2,65 m do piso), fonte: Manual de Fabricação W
+         R15 p.9; linha do pé-direito 2,85 m (confirmado) marcada;
+         quadro de nomenclatura IA1/IA2/IAN (módulo A) vs I1/I2/I3
+         (módulo B), fonte: ERRATA_CAMPO_R15.
+  p.6  — Módulo A+B: vista complementar em planta com a ordem real
+         de aperto dos 24× M12 (centro→pontas), estendendo a mesma
+         regra já ilustrada para 5 pontos no quadro CERTO×ERRADO.
+  p.2-6 — linha de checklist adicional em cada PIT: "Kit-mestre
+         conferido... gap ~825 un em aberto — Nota de Consolidação
+         R15, pend.3".
+  Registro completo: MTX-CM-2026-001_Plano_Melhoria_Caderno_Juncoes.txt
+  Verificado e SEM alteração: p.5 não reproduziu o "texto sobreposto"
+  originalmente listado no inventário R14 — checado por render +
+  varredura de sobreposição de spans, nenhuma correção necessária.
+
+MTX-CM-2026-001_Nota_Consolidacao_R15.txt  [ATUALIZADO]
+  Pendência 1 (pé-direito 2,85 vs 3,60 m) marcada como ENCERRADA EM
+  07/07/2026, com a confirmação formal recebida nesta sessão.
+  Pendência residual anotada: atualizar o Modelo_BIM_R14.ifc para
+  registrar 2,85 m nos metadados (ainda não feito).
+
+--------------------------------------------------------------
+DOCUMENTOS NOVOS (criados nesta sessão)
+--------------------------------------------------------------
+
+MTX-CM-2026-001_ERRATA_REEXPORTACAO_CADERNO_MESTRE.txt
+  Changelog das 3 correções do Caderno Mestre (o quê, por quê, como
+  verificado, limitações da fonte Helvetica usada no texto reinserido).
+
+MTX-CM-2026-001_Plano_Melhoria_Caderno_Juncoes.txt
+  Análise das 6 páginas do Caderno de Junções + plano priorizado de
+  6 melhorias + registro de implementação (atualizado nesta sessão).
+
+MTX-CM-2026-001_Referencia_Tecnica_Perfilor_Termilor.txt
+  Dados extraídos de 3 documentos reais do fabricante ArcelorMittal
+  Perfilor (U-values do núcleo PIR por espessura, normas NBR/INMETRO/
+  Corpo de Bombeiros, princípios de fixação do sistema TW50-MN).
+  Deixa explícito que o TW50-MN (fechamento parafusado) é tecnologia
+  diferente do sistema de junção do Montex (CHP-T/CHP-C + M8/M12) —
+  os dados não alteraram nenhuma cota dos documentos de junção.
+
+REF_EXTERNA_Perfilor_DET_ILUSTRATIVOS_TW50_VERT.pdf   [fonte externa]
+REF_EXTERNA_Perfilor_DET_ILUSTRATIVOS_TW50_HORIZ.pdf  [fonte externa]
+REF_EXTERNA_Perfilor_Catalogo_Termilor_Cold_TC.pdf    [fonte externa]
+  Cópias dos 3 documentos reais do fabricante, para rastreabilidade
+  da referência técnica acima.
+
+MTX-CM-2026-001_Relatorio_Inventario_Melhorias_07072026.txt
+  Este documento.
+
+--------------------------------------------------------------
+DOCUMENTOS IMPORTADOS NESTA SESSÃO SEM ALTERAÇÃO DE CONTEÚDO
+(já corretos conforme a auditoria R14→R15 registrada na Nota de
+Consolidação R15 — nenhuma ação necessária)
+--------------------------------------------------------------
+00_INVENTARIO_ADEQUACAO_R14.xlsx · 00_INVENTARIO_ADEQUACAO_R15.xlsx ·
+00_LEIA-ME_R14.txt · 00_LEIA-ME_R15.txt ·
+MTX-CM-2026-001_CADERNO_MESTRE_R14.docx ·
+MTX-CM-2026-001_Caderno_Bancadas_W.pdf ·
+MTX-CM-2026-001_Caderno_Completo_Fabricacao_R14.pdf ·
+MTX-CM-2026-001_Caderno_Paredes_R14.pdf ·
+MTX-CM-2026-001_Caderno_Tecnico_BIM_R13_Adendo.docx ·
+MTX-CM-2026-001_Diagrama_Montagem_Integracao.pdf ·
+MTX-CM-2026-001_ERRATA_CAMPO_R15.txt ·
+MTX-CM-2026-001_Estudo_AB_Entrega.pdf ·
+MTX-CM-2026-001_Estudo_R4_PeDireito_Transporte.pdf ·
+MTX-CM-2026-001_Fichas_SKU_R14.pdf ·
+MTX-CM-2026-001_Manual_Campo_A5_R14.pdf ·
+MTX-CM-2026-001_Manual_Campo_A5_R15.pdf ·
+MTX-CM-2026-001_Manual_Fabricacao_W_R14.pdf ·
+MTX-CM-2026-001_Manual_Fabricacao_W_R15.pdf ·
+MTX-CM-2026-001_Manual_Proprietario_R14.pdf ·
+MTX-CM-2026-001_Memorial_ART_Icamento.pdf ·
+MTX-CM-2026-001_Modelo_BIM_R14.ifc (ver pendência 4 abaixo) ·
+MTX-CM-2026-001_Nesting_Corte_R14.xlsx ·
+MTX-CM-2026-001_Nesting_Corte_R15.xlsx ·
+MTX-CM-2026-001_Pacote_Montagem_ISO_R14.pdf ·
+MTX-CM-2026-001_Pacote_Montagem_ISO_R15.pdf ·
+MTX-CM-2026-001_Parecer_Consolidacao_R13.docx ·
+MTX-CM-2026-001_Piloto_Coleta.xlsx ·
+MTX-CM-2026-001_Piloto_Coleta_R15.xlsx ·
+MTX-CM-2026-001_Plano_Cobertura_Forro_R2.pdf ·
+MTX-CM-2026-001_Plano_Montagem_Parafusada_R14.pdf ·
+MTX-CM-2026-001_Plano_Montagem_V3_R14.pdf ·
+MTX-CM-2026-001_Plano_Piloto_Instrumentado.pdf ·
+MTX-CM-2026-001_R5_ParedePronta_Viabilidade.pdf ·
+MTX-CM-2026-001_Romaneio_Fabricacao_R14.xlsx ·
+MTX-CM-2026-001_Romaneio_Fabricacao_R15.xlsx ·
+MTX-CM-2026-001_Termo_Emissao_R14.pdf ·
+MTX-COM-2026-001_Dossie_ParedePronta.pdf ·
+MTX-ERP_Modulo_ParedePronta_UI.zip ·
+MTX-LOG-2026-001_Romaneio_Carga_RotaB.pdf ·
+MTX-OS-2026-014_Lote_Piloto_Dobra.pdf ·
+MTX-PO-2026-001_Orcamento_REV14.xlsx · MTX-PO-2026-001_Orcamento_REV15.xlsx ·
+MTX-QA-2026-001_Caderno_QA_Fichas_R14.xlsx ·
+MTX-QA-2026-001_Caderno_QA_Fichas_R15.xlsx ·
+MTX_Plano_Fabricacao_Interativo_R14/R15.html ·
+MTX_Plano_Montagem_Interativo_R14/R15.html ·
+MTX_Visualizador_3D_Montagem_R14/R15.html ·
+montex_erp_correcoes.sql
+
+================================================================
+PENDÊNCIAS QUE CONTINUAM ABERTAS (não encerradas nesta sessão)
+================================================================
+Ver detalhes na Nota de Consolidação R15:
+  2. Condicionante C1 (ART + DATec SINAT nº 10) — bloqueia produção
+     em série, não o piloto.
+  3. Gap de ~825 un no kit de fixadores (declarado vs. discriminado)
+     — sem dado de origem para fechar sem inventar número.
+  4. Chapas de espera CHP-T/CHP-C não modeladas no Modelo_BIM_R14.ifc
+     — requer atualização do BIM por quem tem acesso ao software de
+     autoria. Passou a incluir também: atualizar o pé-direito para
+     2,85 m nos metadados (agora confirmado, mas ainda não escrito
+     no IFC).
+  5. Verificação direta no banco Supabase (módulo ERP, pp_kits) —
+     fora do pacote entregue, não auditado.
+================================================================
