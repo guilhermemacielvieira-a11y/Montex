@@ -120,12 +120,20 @@ planilha. Ficam registrados para que a série não comece sem eles:
    como o próprio Termo de Emissão R14 já registra corretamente.
    Bloqueia produção em série, não o piloto.
 
-3. GAP DE ~825 UN NO KIT DE FIXADORES. O total declarado no README
-   (~2.760 un, incluindo "PF-1M campo") excede em ~825 un o subtotal
-   agora discriminado nas planilhas (1.935 un = PF-1+PF-2+PF-3+PF-J).
-   Não há dado de origem para fechar essa diferença sem inventar
-   números. Suprimentos/engenharia de produção precisa fornecer a
-   composição completa do kit.
+3. [RECONCILIADO EM 07/07/2026] GAP DE ~825 UN NO KIT DE FIXADORES.
+   O total declarado no README (~2.760 un, incluindo "PF-1M campo")
+   excedia em ~825 un o subtotal discriminado na aba 07 (1.935 un =
+   PF-1+PF-2+PF-3+PF-J). Causa: a aba 07 só tinha trazido essas 4
+   famílias; as famílias PF-4, PF-5, PF-1M e os itens de cimentícia/
+   capuz já estavam quantificados em
+   MTX-CM-2026-001_Plano_Montagem_Parafusada_R14.pdf (pág. 2, tabela-
+   mestre de famílias PF, e pág. 5, sequência × família × contagem —
+   as duas páginas do mesmo documento se confirmam), mas não tinham
+   sido cruzados. Com essas famílias adicionadas na aba 07, o
+   subtotal rastreável sobe para 2.893 un — a diferença residual de
+   ~133 un (~5%) é compatível com o próprio arredondamento em "~" já
+   usado nas quantidades de origem (PF-1M ~90, PF-5 ~220 etc.), não
+   um gap de dado novo. Nenhum número foi inventado.
 
 4. CHAPAS DE ESPERA CHP-T/CHP-C NÃO MODELADAS NO IFC. Qualquer
    clash-check ou quantitativo automático a partir do BIM R14
