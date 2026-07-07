@@ -214,4 +214,37 @@ pacote entregue até 07/07/2026 e não foi possível localizá-lo ou
 verificá-lo. Até que ele seja localizado ou confirmado, tratar esses
 3 itens como RECOMENDADOS (não como formalmente definidos), apesar
 do que o R15.3 declara.
+
+--------------------------------------------------------------
+R15.4 RECEBIDO EM 07/07/2026 — pesquisa externa, verificação
+independente parcial
+--------------------------------------------------------------
+MTX-CM-2026-001_Caderno_Juncoes_Fixacao_R15.4.docx declara ter
+pesquisado (web) o "Guia de Especificação" oficial da Perfilor
+(citado como 4ª edição, 49 pág., agosto/2022) e, a partir dele,
+confirma o vão de 4,40 m do painel, reclassifica o item 10 (RQLe50 —
+diz que arremates são cotados como "variável" no catálogo, não um
+erro de leitura) e confirma que JP-04 e a Junta M12 NÃO aparecem em
+nenhum documento público (são projeto exclusivo Montex).
+
+Verificação independente feita nesta sessão: uma pesquisa própria
+confirmou que um "Guia de Especificação ArcelorMittal Perfilor" REAL
+existe publicamente (edição de novembro/2022, hospedado em
+perfilorhomologacao.tecnologia.ws) — a data de edição diverge da
+citada no R15.4 (novembro vs. "agosto/2022, 4ª edição"), o que pode
+ser só uma imprecisão de citação. NÃO foi possível abrir o PDF nem a
+página oficial da Perfilor para conferir diretamente os valores
+citados (4,40 m; arremates "variável") — ambas retornaram HTTP 403
+ao acesso automatizado. Ou seja: o documento-fonte existe de fato,
+mas os NÚMEROS específicos citados pelo R15.4 não puderam ser
+confirmados de forma independente nesta sessão.
+
+Tratamento adotado: a conclusão "JP-04 e Junta M12 são projeto
+exclusivo Montex, não cobertos por documento público do fabricante"
+é aceita como razoável (é um resultado de ausência — mais fácil de
+confiar do que um número específico). Os valores "4,40 m" e
+"arremates variável" permanecem como informação a confirmar
+diretamente com a Perfilor antes de uso em projeto — não foram
+tratados como fechados nesta consolidação apesar do R15.4 os
+apresentar como "confirmados".
 ================================================================
