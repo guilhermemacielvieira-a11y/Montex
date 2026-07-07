@@ -1,0 +1,79 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · REGISTRO DE CORREÇÃO PONTUAL
+Sistema PAREDE-PRONTA · MTX-CM-2026-001 · 07/07/2026
+Aplica-se a: MTX-CM-2026-001_CADERNO_MESTRE_R14.pdf
+             MTX-CM-2026-001_CADERNO_MESTRE_R15.pdf
+================================================================
+
+POR QUE ESTE REGISTRO EXISTE
+------------------------------
+A Nota de Consolidação R15 (pendência nº 6) e o Errata de Campo R15
+registravam que os PDFs paginados do conjunto — incluindo o Caderno
+Mestre — NÃO haviam sido regenerados nem editados diretamente, por
+não haver gerador paramétrico disponível, e recomendavam reexportação
+pela ferramenta de origem. Essa ferramenta de origem foi verificada
+(pacote "Geradores" fornecido em 07/07/2026) e NÃO contém o script
+que produz o Caderno Mestre / R5-Projeto Parede-Pronta+Viabilidade —
+é um lote de gerinternos mais antigo (revisões R2-R11) para outros
+documentos (Detalhe de Junta, Modelo BIM, Caderno Técnico BIM,
+Memorial de Cálculo, RFQ, Plano de Linha Dupla). Diante da ausência
+confirmada do gerador de origem e a pedido explícito, as 3 páginas
+abaixo foram corrigidas por edição direta e cirúrgica do PDF
+(redação + reinserção de texto), e não por reconstrução de layout.
+
+--------------------------------------------------------------
+O QUE FOI CORRIGIDO
+--------------------------------------------------------------
+
+p.7 — "PROCESSO DE FÁBRICA · LINHA W1-W6": o parágrafo "INVESTIMENTO
+REVISADO" estava corrompido por um defeito de exportação que
+interpretava os sinais "$" de "R$" como abre/fecha de modo matemático,
+removendo espaços e itens de moeda em cadeia. Texto reconstruído
+span a span (negrito = texto literal preservado; oblíquo = palavras
+com espaço removido pelo defeito; reto = dígitos/símbolos, sempre
+preservados) e validado contra a ÚNICA outra ocorrência independente
+do mesmo parágrafo (MTX-CM-2026-001_R5_ParedePronta_Viabilidade.pdf,
+pág. 4 — mesmo defeito, mesmos números, confirmando que o dado em si
+nunca esteve errado, só a exportação). Nenhum valor foi alterado ou
+inventado — apenas espaçamento e o símbolo "R$" restaurados.
+
+p.21 — "Furação JP no GABARITO-MESTRE" (item 3): a caixa vermelha
+"REGRA: gabarito aferido SEMANALMENTE..." estava desenhada sobre o
+final do parágrafo do item 3, cobrindo "...no gabarito pareado".
+Texto do item 3 restaurado (span original, sem alteração de
+conteúdo) e a caixa REGRA deslocada para o espaço vazio abaixo,
+sem sobrepor nenhum outro elemento.
+
+p.43 — "FÁBRICA V3": as 6 legendas de coluna (W1-W6) estavam todas
+desenhadas na mesma linha/altura, sem respeitar a largura de cada
+coluna, produzindo texto ilegível por sobreposição horizontal. Cada
+legenda foi confirmada contra MTX-CM-2026-001_Plano_Montagem_V3_R14.pdf
+pág. 15 (documento de origem, não mesclado, mesma ordem de conteúdo)
+e redistribuída dentro da largura da sua própria coluna. A linha
+"INVESTIMENTO V3" tinha uma cópia corrompida (mesmo defeito do "$")
+sobreposta a uma cópia já correta presente na mesma página (fonte
+Helvetica-Bold, deduzida como correção anterior não finalizada); a
+cópia corrompida foi removida, mantendo a correta.
+
+--------------------------------------------------------------
+O QUE FOI VERIFICADO E NÃO PRECISOU CORREÇÃO
+--------------------------------------------------------------
+MTX-CM-2026-001_Caderno_Juncoes_R14.pdf, p.5: a pendência registrada
+na Nota de Consolidação R15 ("texto sobreposto") NÃO foi reproduzida
+nesta cópia do arquivo — as 6 páginas do caderno foram renderizadas e
+verificadas programaticamente (varredura de sobreposição de todos os
+spans de texto) sem nenhum resultado. Nenhuma alteração foi feita
+neste arquivo.
+
+--------------------------------------------------------------
+MÉTODO E LIMITAÇÕES
+--------------------------------------------------------------
+Correção feita com PyMuPDF (redação da área afetada + reinserção de
+texto). A fonte original (DejaVuSans, Type3 embarcada) não contém
+glifo utilizável para "$" nesse contexto — o texto reinserido usa
+Helvetica/Helvetica-Bold nas mesmas cor/tamanho aproximados, o que
+pode ser visualmente distinguível da tipografia original em inspeção
+próxima. Nenhuma cota, carga, peso ou premissa estrutural foi tocada;
+apenas texto de layout/legenda. Demais páginas do documento não
+foram alteradas (verificado por amostragem visual antes/depois).
+================================================================
