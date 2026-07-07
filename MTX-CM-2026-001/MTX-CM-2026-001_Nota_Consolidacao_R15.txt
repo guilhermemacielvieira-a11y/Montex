@@ -1,0 +1,151 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · NOTA DE CONSOLIDAÇÃO R15
+Sistema PAREDE-PRONTA · MTX-CM-2026-001 · 06/07/2026
+Origem: auditoria de pipeline documental R14 (4 frentes — planilhas
+mestre, PDFs técnicos, docx/IFC/ERP, visualizadores interativos)
+================================================================
+
+ESCOPO DESTA CONSOLIDAÇÃO
+--------------------------
+A R15 corrige o que a auditoria encontrou desalinhado no PIPELINE
+DOCUMENTAL — não é uma revisão de projeto/engenharia. Nenhuma cota,
+peso, carga ou premissa estrutural foi alterada. O que foi corrigido:
+dados que já deveriam bater entre si segundo as próprias regras da
+R13/R14 e não batiam (edição manual divergente, documento nunca
+regenerado, rótulo de revisão esquecido).
+
+Regra do pipeline reafirmada: Romaneio_Fabricacao_R15.xlsx é a fonte
+única. Qualquer edição futura entra por ele.
+
+--------------------------------------------------------------
+CORRIGIDO NESTA CONSOLIDAÇÃO (arquivo novo · o que mudou)
+--------------------------------------------------------------
+
+MTX-CM-2026-001_Romaneio_Fabricacao_R15.xlsx
+  - aba 06_Paredes sincronizada com a aba 08 (SSOT): removidas as
+    referências desatualizadas de F4-B→J04 e I1/I2→PI3/PI2; ambas
+    as abas agora concordam (J04→F5-B, PI3→IA1, PI2→IA2).
+  - nova aba 07_Kit_Fixadores: discrimina PF-1 (831), PF-2 (928),
+    PF-3 (152) e PF-J (24) numericamente pela primeira vez — antes
+    só existiam como texto solto no README. Subtotal rastreável:
+    1.935 un. Gap não resolvido de ~825 un até o total declarado de
+    ~2.760 un — ver PENDÊNCIAS abaixo.
+  - título da aba 00_Resumo atualizado de "ROMANEIO R13" para R15.
+
+MTX-CM-2026-001_Nesting_Corte_R15.xlsx
+  - CORREÇÃO CRÍTICA: aba 02_Corte Paineis PIR tinha as 63 linhas de
+    painel de parede com altura de corte 3,60 m; corrigido para
+    2,85 m (a cota vigente, R4-2,60), batendo com o Romaneio. Painéis
+    de telha (COB-AGUA, 3,76 m) não foram alterados — são cobertura,
+    cota diferente e correta.
+  - rótulos de revisão das demais abas uniformizados.
+
+MTX-PO-2026-001_Orcamento_REV15.xlsx
+  - item 1.9 (verba única de parafusos, R$ 1.450) discriminado em
+    1.9.1 (PF-1), 1.9.2 (PF-2), 1.9.3 (PF-3), 1.9.4 (PF-J), com
+    quantidades da aba 07 do Romaneio. Preço unitário usado é
+    PRO-RATA PROVISÓRIO (R$ 0,7494/un = R$1.450 ÷ 1.935 un) — NÃO é
+    cotação nova; suprimentos deve validar.
+  - nova aba 05_Deltas_REV13-REV15, fechando a lacuna: a REV14 não
+    tinha delta próprio (era a REV13 renomeada).
+
+MTX-QA-2026-001_Caderno_QA_Fichas_R15.xlsx
+  - PIT-W1 ganhou os itens 8 e 9: torque + contador × kit para PF-1
+    e PF-2 (antes só PF-3 era auditado).
+  - título do índice corrigido (misturava "Sistema R5" com revisão
+    documental).
+
+MTX-CM-2026-001_Piloto_Coleta_R15.xlsx
+  - aba 04_Contadores ganhou 2 linhas (casa A e casa B) para rastrear
+    PF-J, que não tinha família própria — indicador 3 do piloto
+    (divergência contador×kit) agora cobre as 4 famílias.
+
+MTX_Plano_Fabricacao_Interativo_R15.html
+MTX_Plano_Montagem_Interativo_R15.html
+MTX_Visualizador_3D_Montagem_R15.html
+  - os 3 arquivos se autodeclaravam internamente R13, R5 e R4 apesar
+    do nome dizer R14 — nunca tinham sido regenerados. Rótulos
+    sincronizados para R15 (ou R4-2,60 quando é nome de cota, não de
+    revisão documental).
+  - Visualizador 3D: PF-3 corrigido de "~140 un" para o valor oficial
+    152 un/casa; "Estação E1" renomeada para "Estação W1" (alinhado
+    à nomenclatura W1-W6 dos demais documentos).
+  - os três continuam com dados HARDCODED em JavaScript, não lidos
+    do Romaneio em tempo real — isso não foi resolvido nesta
+    consolidação (exigiria reescrever os 3 arquivos como geradores
+    parametrizados, fora do escopo de uma correção de dados). Ver
+    PENDÊNCIAS.
+
+MTX-CM-2026-001_ERRATA_CAMPO_R15.txt (NOVO)
+  - inserção para acompanhar o Pacote Montagem ISO R14 e o Manual de
+    Campo A5 R14: desambiguação IA1/IA2/IAN (módulo A) vs I1/I2/I3
+    (módulo B), e resumo de CHP-T/CHP-C para uso em obra — nenhum
+    dos dois documentos de campo os menciona.
+
+--------------------------------------------------------------
+NÃO ALTERADO NESTA CONSOLIDAÇÃO — E POR QUÊ
+--------------------------------------------------------------
+Os PDFs paginados/diagramados (Caderno Mestre, Fichas SKU, Caderno
+de Junções, Manual de Fabricação W, Plano Montagem Parafusada,
+Caderno de Paredes, Caderno Completo de Fabricação, Pacote ISO,
+Manual de Campo A5, Manual do Proprietário, Termo de Emissão) e o
+Modelo BIM (.ifc) NÃO foram regenerados nem editados diretamente
+nesta consolidação. Motivo: são artefatos de layout/CAD/BIM que
+dependem dos geradores paramétricos originais (mencionados no
+README, não disponíveis nesta auditoria) ou de um software de
+autoria BIM — reconstruir o layout à mão introduziria risco de erro
+maior do que o que se pretende corrigir. Onde havia correção
+necessária nesses documentos, ela foi coberta por adendo textual
+(ERRATA_CAMPO_R15) em vez de reedição do PDF.
+
+--------------------------------------------------------------
+PENDÊNCIAS — REQUEREM DECISÃO DE ENGENHARIA/PROJETISTA, NÃO DADO
+--------------------------------------------------------------
+Estes itens NÃO foram e NÃO podem ser encerrados por correção de
+planilha. Ficam registrados para que a série não comece sem eles:
+
+1. CONFIRMAÇÃO FORMAL DO PÉ-DIREITO (2,85 m vs 3,60 m). O Parecer de
+   Consolidação R13 registrou essa divergência como pendente de
+   decisão do projetista. O Modelo_BIM_R14.ifc já descreve o modelo
+   de 3,60 m como "SUPERADO" nos metadados, mas nenhum documento
+   revisado traz confirmação formal e assinada do encerramento dessa
+   pendência. Recomendação: obter essa confirmação por escrito do
+   projetista responsável antes da R16.
+
+2. CONDICIONANTE C1 (ART + DATec SINAT nº 10) — segue pendente,
+   como o próprio Termo de Emissão R14 já registra corretamente.
+   Bloqueia produção em série, não o piloto.
+
+3. GAP DE ~825 UN NO KIT DE FIXADORES. O total declarado no README
+   (~2.760 un, incluindo "PF-1M campo") excede em ~825 un o subtotal
+   agora discriminado nas planilhas (1.935 un = PF-1+PF-2+PF-3+PF-J).
+   Não há dado de origem para fechar essa diferença sem inventar
+   números. Suprimentos/engenharia de produção precisa fornecer a
+   composição completa do kit.
+
+4. CHAPAS DE ESPERA CHP-T/CHP-C NÃO MODELADAS NO IFC. Qualquer
+   clash-check ou quantitativo automático a partir do BIM R14
+   subestima essas peças. Requer atualização do modelo BIM por quem
+   tem acesso ao software de autoria.
+
+5. VERIFICAÇÃO DIRETA NO BANCO SUPABASE (módulo ERP, tabela
+   pp_kits). O código-fonte do módulo de front-end não hardcoda
+   PF-3=206, mas os dados reais do banco de produção não foram
+   auditados aqui (schema fora do pacote entregue) — confirmar
+   diretamente antes de liberar leitura por QR no piloto.
+
+6. PÁGINAS 21-23 DO CADERNO MESTRE R14 e trechos com texto sobreposto
+   /corrompido (Caderno Mestre p.7/21/43, Caderno de Junções p.5).
+   Requer reexportação do PDF de origem pela ferramenta de geração
+   — não é uma correção de dado, é um defeito de exportação.
+
+--------------------------------------------------------------
+COMO VERIFICAR ESTA CONSOLIDAÇÃO
+--------------------------------------------------------------
+Todas as correções acima partiram de números e observações já
+confirmados em pelo menos dois documentos independentes do próprio
+conjunto R14 (nunca inventados). Onde não havia lastro suficiente
+para uma correção seria (o gap do kit de fixadores, o preço unitário
+pro-rata dos parafusos), isso está marcado explicitamente como
+provisório/pendência, não apresentado como fechado.
+================================================================

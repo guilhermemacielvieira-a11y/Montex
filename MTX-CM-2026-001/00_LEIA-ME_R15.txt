@@ -1,0 +1,74 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · CONJUNTO DE FABRICAÇÃO R15
+Sistema PAREDE-PRONTA · cotas R4-2,60 · rev. R15 (CONSOLIDAÇÃO DE
+PIPELINE — LOTE PILOTO SEGUE SOB O TERMO DE EMISSÃO R14) · 06/07/2026
+MTX-CM-2026-001
+================================================================
+
+O QUE É A R15
+--------------
+A R15 NÃO é uma nova emissão de engenharia — nenhuma cota, carga ou
+premissa estrutural mudou. É uma CONSOLIDAÇÃO DE PIPELINE DOCUMENTAL:
+corrige divergências entre planilhas/arquivos que a auditoria de
+pipeline (06/07/2026) encontrou e que a própria regra do projeto
+("toda revisão entra pelo Romaneio; documentos derivados nunca se
+editam à mão") deveria ter impedido. O Termo de Emissão R14
+(00_TERMO_EMISSAO_R14.pdf) permanece o documento de autorização
+válido para o lote piloto — a R15 não o substitui.
+
+Lista completa de correções, o que foi e o que NÃO foi tocado, e as
+pendências que exigem decisão de engenharia (não resolvíveis por
+edição de planilha): ver MTX-CM-2026-001_Nota_Consolidacao_R15.txt.
+
+ARQUIVOS NOVOS/CORRIGIDOS NA R15 (substituem o equivalente R14 no uso
+diário; os R14 permanecem na pasta como registro do lote piloto já
+emitido — não foram movidos nem apagados)
+--------------------------------------------------------------------
+MTX-CM-2026-001_Romaneio_Fabricacao_R15.xlsx ... aba 06 sincronizada
+  com a aba 08 (SSOT); nova aba 07_Kit_Fixadores (PF-1/2/3/J
+  discriminados); título atualizado.
+MTX-CM-2026-001_Nesting_Corte_R15.xlsx ......... CORREÇÃO CRÍTICA:
+  altura de corte dos 63 painéis PIR de parede, 3,60→2,85 m.
+MTX-PO-2026-001_Orcamento_REV15.xlsx ........... item 1.9 discriminado
+  por família de fixador; nova aba de delta REV13-15.
+MTX-QA-2026-001_Caderno_QA_Fichas_R15.xlsx ..... PIT-W1 ganha itens de
+  torque/contador para PF-1 e PF-2 (antes só PF-3).
+MTX-CM-2026-001_Piloto_Coleta_R15.xlsx ......... aba 04 ganha PF-J.
+MTX_Plano_Fabricacao_Interativo_R15.html ....... rótulos internos
+  (estavam presos em R13) sincronizados; timestamp de origem.
+MTX_Plano_Montagem_Interativo_R15.html ......... idem (estava em R5).
+MTX_Visualizador_3D_Montagem_R15.html .......... idem (estava em R4);
+  PF-3 corrigido de ~140 p/ 152 un; "Estação E1"→"Estação W1".
+MTX-CM-2026-001_ERRATA_CAMPO_R15.txt (NOVO) .... acompanha o Pacote
+  ISO R14 e o Manual de Campo A5 R14: desambigua IA1/IA2/IAN (módulo
+  A) vs I1/I2/I3 (módulo B) e resume CHP-T/CHP-C p/ uso em obra.
+MTX-CM-2026-001_Nota_Consolidacao_R15.txt (NOVO) .. changelog completo
+  + pendências de engenharia (pé-direito 2,85×3,60 m, gap de ~825 un
+  no kit de fixadores, CHP não modelada no IFC, verificação Supabase).
+
+NÃO ALTERADO NA R15 — continuam sendo os R14 (PDFs paginados/BIM,
+sem gerador paramétrico disponível nesta consolidação; ver Nota de
+Consolidação para o motivo e o que foi feito no lugar):
+  CADERNO_MESTRE_R14 · Fichas_SKU_R14 · Caderno_Juncoes_R14 ·
+  Manual_Fabricacao_W_R14 · Plano_Montagem_Parafusada_R14 ·
+  Caderno_Paredes_R14 · Caderno_Completo_Fabricacao_R14 ·
+  Pacote_Montagem_ISO_R14 (ver ERRATA_CAMPO_R15) ·
+  Manual_Campo_A5_R14 (ver ERRATA_CAMPO_R15) ·
+  Manual_Proprietario_R14 · Termo_Emissao_R14 · Modelo_BIM_R14.ifc
+
+STATUS (herdado do Termo de Emissão R14, inalterado)
+-----------------------------------------------------
+Piloto em fabricação sob o Termo de Emissão R14. Produção em série
+segue condicionada a: C1 ART (junções JP/içamento + painel portante
+DATec SINAT nº 10) · C2 detalhe de junta externa dupla-barreira ·
+C3 teste de estanqueidade NBR 15575-4. Ver também a pendência nº 1 da
+Nota de Consolidação (confirmação formal do pé-direito 2,85 m).
+
+REGRA DO PIPELINE (reafirmada)
+-------------------------------
+Toda revisão entra pelo ROMANEIO/IFC. Documentos derivados se
+REGENERAM, nunca se editam à mão. A auditoria que originou a R15
+mostrou o custo de não seguir essa regra — recomenda-se instalar uma
+checagem automática de consistência antes da R16 (ver seção de
+governança da Nota de Consolidação / relatório de auditoria).
+================================================================

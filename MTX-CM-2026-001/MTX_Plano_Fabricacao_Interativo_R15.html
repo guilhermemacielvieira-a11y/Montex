@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montex · Plano de Fabricação Interativo — Parede-Pronta R15</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--bg:#06201F;--panel:#0A2E2C;--teal:#1FA79A;--amber:#E8A33D;--ink:#E8F3F2;--mute:#7FA9A6;--red:#E85D4A;--done:#3E5A57;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden;}
+#c3d{position:fixed;inset:0;}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(31,167,154,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(31,167,154,.05) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:1;}
+header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:baseline;gap:14px;padding:12px 18px;background:linear-gradient(180deg,rgba(6,32,31,.94),transparent);}
+header h1{font-size:14px;letter-spacing:.14em;color:var(--teal);font-weight:800;}
+header span{font-size:10.5px;color:var(--mute);letter-spacing:.05em;}
+#hud{position:fixed;left:16px;top:92px;width:360px;max-height:calc(100vh - 240px);overflow-y:auto;z-index:10;background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);border-radius:12px;padding:16px;backdrop-filter:blur(4px);}
+#hud::-webkit-scrollbar{width:5px}#hud::-webkit-scrollbar-thumb{background:var(--teal);border-radius:3px}
+.fase{font-size:9.5px;letter-spacing:.20em;color:var(--amber);font-weight:800;}
+#hTit{font-size:18px;margin:3px 0 2px;color:var(--ink);}
+#hSub{font-size:11px;color:var(--mute);margin-bottom:8px;}
+#hTxt{font-size:11.5px;color:#C9DEDC;line-height:1.55;margin-bottom:10px;}
+.bloco{margin-top:9px;border-left:3px solid var(--teal);background:rgba(31,167,154,.07);padding:8px 10px;border-radius:0 6px 6px 0;}
+.bloco h4{font-size:9px;letter-spacing:.16em;color:var(--teal);margin-bottom:5px;}
+.bloco.jp{border-color:var(--amber);background:rgba(232,163,61,.07);}
+.bloco.jp h4{color:var(--amber);}
+.bloco.dica{border-color:var(--red);background:rgba(232,93,74,.07);}
+.bloco.dica h4{color:var(--red);}
+.bloco ul{list-style:none;}
+.bloco li{font-size:10.5px;color:#DCE9E7;line-height:1.5;padding-left:14px;position:relative;margin-bottom:3px;}
+.bloco li::before{content:"▸";position:absolute;left:0;color:var(--teal);}
+.bloco.jp li::before{content:"🔩";font-size:8px;top:2px;}
+.bloco.pit li::before{content:"☐";color:var(--amber);}
+.dados{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;}
+.dado{background:rgba(6,32,31,.6);border:1px solid rgba(31,167,154,.25);border-radius:6px;padding:6px 8px;}
+.dado b{display:block;font-size:8.5px;letter-spacing:.12em;color:var(--mute);}
+.dado span{font-size:11.5px;font-weight:700;color:var(--ink);font-family:ui-monospace,monospace;}
+#skus{position:fixed;top:44px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:4px;background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);border-radius:10px;padding:7px 9px;max-width:94vw;overflow-x:auto;}
+.sku{min-width:40px;height:26px;border-radius:6px;border:1px solid rgba(31,167,154,.4);background:transparent;color:var(--mute);font-weight:800;font-size:9.5px;cursor:pointer;flex:0 0 auto;}
+.sku:hover{border-color:var(--teal);color:var(--ink);}
+.sku.on{background:var(--amber);color:#3a2604;border-color:var(--amber);}
+.sku.fB{border-style:dashed;}
+#croqui{position:fixed;right:16px;bottom:74px;z-index:10;background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);border-radius:12px;padding:10px;}
+#croqui .etq{font-size:9px;letter-spacing:.16em;color:var(--mute);margin-bottom:4px;text-align:center;}
+#steps{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:5px;align-items:center;background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);border-radius:12px;padding:9px 11px;max-width:92vw;overflow-x:auto;}
+.stp{min-width:44px;height:30px;border-radius:7px;border:1px solid rgba(31,167,154,.4);background:transparent;color:var(--mute);font-weight:800;font-size:10.5px;cursor:pointer;transition:.15s;flex:0 0 auto;}
+.stp:hover{border-color:var(--teal);color:var(--ink);}
+.stp.on{background:var(--teal);color:#04211F;}
+.stp.done{color:var(--teal);}
+#play,#prev,#next{padding:0 12px;background:var(--amber);color:#3a2604;border:none;border-radius:7px;height:30px;font-weight:800;cursor:pointer;font-size:11px;flex:0 0 auto;}
+#prev,#next{background:transparent;border:1px solid var(--amber);color:var(--amber);}
+#views{position:fixed;right:16px;top:92px;z-index:10;display:flex;flex-direction:column;gap:5px;}
+.vw{background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);color:var(--mute);border-radius:8px;padding:7px 11px;font-size:10px;letter-spacing:.08em;cursor:pointer;text-align:right;transition:.15s;}
+.vw:hover,.vw.on{color:var(--ink);border-color:var(--teal);}
+#expl{border-color:rgba(232,163,61,.5);color:var(--amber);}
+#barra{position:fixed;bottom:0;left:0;right:0;height:4px;z-index:11;display:flex;}
+#barra div{height:100%;transition:opacity .3s;opacity:.25;}
+#barra div.done{opacity:1;}
+#hint{position:fixed;left:16px;bottom:14px;z-index:9;font-size:9.5px;color:var(--mute);letter-spacing:.05em;line-height:1.5;}
+svg .ln{stroke:#2A5A56;stroke-width:.03;fill:none;}
+svg .vao{stroke:#E85D4A;stroke-width:.04;fill:none;}
+svg .alu{stroke:#E8A33D;stroke-width:.03;fill:none;}
+svg .omb{fill:#4d5a63;}
+svg .gui{fill:#1FA79A;opacity:.55;}
+svg .bnd{stroke:#E85D4A;stroke-width:.02;stroke-dasharray:.05 .05;fill:none;}
+svg text{fill:#9FCBC7;font-size:.22px;font-weight:700;font-family:ui-monospace;}
+</style>
+</head>
+<body>
+<canvas id="c3d"></canvas>
+<header><h1>MONTEX · PLANO DE FABRICAÇÃO INTERATIVO</h1><span>Linha W · Parede-Pronta R15 · quadro só de requadro (painel PIR autoportante, regra vigente desde a R13) · MTX-CM-2026-001 · Fichas/Romaneio R15</span></header>
+
+<div id="skus"></div>
+
+<div id="hud">
+  <div class="fase" id="hFase">—</div>
+  <h2 id="hTit">—</h2>
+  <div id="hSub">—</div>
+  <div id="hTxt">—</div>
+  <div class="dados" id="hDados"></div>
+  <div class="bloco jp" id="bKit"><h4>KIT / FIXAÇÃO DESTA ESTAÇÃO</h4><ul id="hKit"></ul></div>
+  <div class="bloco pit"><h4 id="hPitT">PIT — INSPEÇÃO ANTES DE LIBERAR</h4><ul id="hPit"></ul></div>
+  <div class="bloco dica"><h4>REGRA R13 · VIGENTE NA R15</h4><ul><li id="hDica">—</li></ul></div>
+</div>
+
+<div id="views">
+  <button class="vw on" data-v="iso">ISOMÉTRICA</button>
+  <button class="vw" data-v="top">TOPO (MESA)</button>
+  <button class="vw" data-v="front">FRONTAL</button>
+  <button class="vw" data-v="vao">CLOSE · VÃO</button>
+  <button class="vw" data-v="borda">CLOSE · BORDA JP</button>
+  <button class="vw" id="expl">VISTA EXPLODIDA</button>
+</div>
+
+<div id="croqui"><div class="etq" id="croqTit">CROQUI DA FICHA · R15</div>
+<svg id="svgC" width="300" height="120" viewBox="0 0 10 4"></svg></div>
+
+<div id="steps"><button id="prev">◀</button><button id="play">▶ AUTO</button><button id="next">▶</button></div>
+<div id="barra"></div>
+<div id="hint">arraste = órbita · roda = zoom · âmbar pulsando = fixação da estação<br>selecione o SKU no topo · ▶ AUTO percorre W1→W6 e avança de parede</div>
+
+<script>
+// ============ DADOS R15 (aba 08 do Romaneio R15 / fichas R14 — regra do quadro-só-requadro vigente desde a R13) ============
+// REGENERADO NA CONSOLIDAÇÃO R15 (06/07/2026): rótulos de revisão sincronizados; fonte = MTX-CM-2026-001_Romaneio_Fabricacao_R15.xlsx aba 08.
+// Achado C-05 da auditoria de pipeline: este arquivo não era regenerado desde a R13. Ver MTX-CM-2026-001_Nota_Consolidacao_R15.txt.
+// vaos: [cx (centro, a partir do centro da parede), y0, w, h, label, porta?]
+const WALLS=[
+ {id:"F4-A",ord:"A-1",m:"A",L:3.29,p:0.62,jp:"JP-02/JP-02",olh:2,rack:16,tipo:"ext",pan:3,mep:"1 circ. tomadas",vaos:[],omb:[],bj:[],
+  w2:"3 painéis PIR · 1 circ. tomadas · teste 500 V no chicote"},
+ {id:"F1",ord:"A-2",m:"A",L:9.30,p:1.45,jp:"JP-02/JP-02",olh:4,bal:1,rack:15,tipo:"ext",pan:9,mep:"2 circ. + 4 pontos",
+  vaos:[[-3.80,1.05,1.0,1.0,"J05",0],[-2.80,0,0.8,2.10,"P02",1],[-1.55,1.60,0.6,0.4,"J06",0],[1.85,1.05,1.2,1.0,"J01",0]],
+  omb:[-3.245,-2.355],bj:[],w1x:"ombreira dupla P02 (2× metalon 70×70)",
+  w2:"9 painéis PIR · 2 circ. + 4 pontos · teste 500 V no chicote"},
+ {id:"F3-A",ord:"A-3",m:"A",L:3.29,p:0.60,jp:"JP-02/JP-02",olh:2,rack:14,tipo:"ext",pan:3,mep:"1 circ.",
+  vaos:[[-0.59,1.05,1.0,1.0,"J07",0],[0.705,0,0.9,2.10,"P01",1]],
+  omb:[0.21,1.20],bj:[],w1x:"ombreira dupla P01 (2× metalon 70×70)",
+  w2:"3 painéis PIR · 1 circ. · teste 500 V no chicote"},
+ {id:"F5-A",ord:"A-4",m:"A",L:2.10,p:0.44,jp:"JP-02/JP-02",olh:2,rack:13,tipo:"hid",pan:2,mep:"hidráulica: shaft cozinha",vaos:[],omb:[],bj:[],
+  shaft:[-0.20,0,1.1,2.5,"SHAFT cozinha"],
+  w2:"2 painéis PIR · hidráulica: shaft cozinha · teste 500 V no chicote"},
+ {id:"JUNTA-A",ord:"A-5",m:"A",L:7.10,p:1.02,jp:"JP-02/JP-02",olh:3,rack:12,tipo:"jun",pan:7,mep:"QD-01 · CXP · furação M12",
+  vaos:[],omb:[],bj:[-1.20,1.10],m12:1,qd:[-2.5,1.2,0.38,0.62,"QD-01"],
+  w1x:"2 montantes de borda de junta (apoio cumeeira)",
+  w2:"7 painéis PIR · QD-01 + CXP + furação M12 · teste 500 V no chicote"},
+ {id:"IA1",ord:"A-6",m:"A",L:3.06,p:0.58,jp:"JP-03/JP-03",olh:2,rack:11,tipo:"hid",pan:3,mep:"SHAFT hidráulico (12/13 pts)",
+  vaos:[[0.92,0,0.8,2.10,"PI3",1]],omb:[],bj:[],shaft:[-0.48,0,1.2,2.5,"SHAFT banho"],interna:1,
+  w2:"3 painéis PIR · hidráulica banho (12/13 pts) · TESTE hidr. 1,5×/60 min"},
+ {id:"IA2",ord:"A-7",m:"A",L:3.06,p:0.56,jp:"JP-03/JP-03",olh:2,rack:10,tipo:"int",pan:3,mep:"1 circ.",
+  vaos:[[0,0,0.8,2.10,"PI2",1]],omb:[],bj:[],interna:1,
+  w2:"3 painéis PIR · 1 circ. · teste 500 V no chicote"},
+ {id:"IAN",ord:"A-8",m:"A",L:1.40,p:0.30,jp:"JP-03/JP-01",olh:1,rack:9,tipo:"int",pan:2,mep:"—",
+  vaos:[[-0.10,0,0.7,2.10,"PI4",1]],omb:[],bj:[],interna:1,comp:1,
+  w2:"2 painéis PIR · —"},
+ {id:"F4-B",ord:"B-1",m:"B",L:3.29,p:0.62,jp:"JP-02/JP-02",olh:2,rack:8,tipo:"ext",pan:3,mep:"1 circ.",vaos:[],omb:[],bj:[],
+  w2:"3 painéis PIR · 1 circ. · teste 500 V no chicote",
+  nota:"correção R13: J04 não é desta parede (pertence à F5-B, cf. aba 08)"},
+ {id:"F2",ord:"B-2",m:"B",L:9.30,p:1.42,jp:"JP-02/JP-02",olh:4,bal:1,rack:7,tipo:"ext",pan:9,mep:"2 circ. + tomadas",
+  vaos:[[0.60,1.05,1.0,1.0,"J03",0]],omb:[],bj:[],
+  w2:"9 painéis PIR · 2 circ. + tomadas · teste 500 V no chicote"},
+ {id:"F3-B",ord:"B-3",m:"B",L:3.29,p:0.60,jp:"JP-02/JP-02",olh:2,rack:6,tipo:"ext",pan:3,mep:"1 circ.",
+  vaos:[[0,1.05,1.0,1.0,"J02",0]],omb:[],bj:[],
+  w2:"3 painéis PIR · 1 circ. · teste 500 V no chicote"},
+ {id:"F5-B",ord:"B-4",m:"B",L:2.10,p:0.42,jp:"JP-02/JP-02",olh:2,rack:5,tipo:"ext",pan:2,mep:"1 circ.",
+  vaos:[[0,1.05,1.0,1.0,"J04",0]],omb:[],bj:[],
+  w2:"2 painéis PIR · 1 circ. · teste 500 V no chicote",
+  nota:"correção R13: croqui R12 omitia o vão J04 nesta parede"},
+ {id:"JUNTA-B",ord:"B-5",m:"B",L:7.10,p:1.00,jp:"JP-02/JP-02",olh:3,rack:4,tipo:"jun",pan:7,mep:"CXP-JUNTA plug-in · M12",
+  vaos:[[2.20,0,0.8,2.10,"PI1",1]],omb:[],bj:[-1.20,1.10],m12:1,
+  w1x:"2 montantes de borda de junta (apoio cumeeira)",
+  w2:"7 painéis PIR · CXP-JUNTA plug-in + M12 · teste 500 V no chicote"},
+ {id:"I1",ord:"B-6",m:"B",L:3.00,p:0.55,jp:"JP-03/JP-03",olh:2,rack:3,tipo:"int",pan:3,mep:"1 circ.",vaos:[],omb:[],bj:[],interna:1,
+  w2:"3 painéis PIR · 1 circ. · teste 500 V no chicote",
+  nota:"correção R13: PI3 não é desta parede (pertence à IA1, cf. aba 08)"},
+ {id:"I2",ord:"B-7",m:"B",L:3.00,p:0.55,jp:"JP-03/JP-03",olh:2,rack:2,tipo:"int",pan:3,mep:"1 circ.",vaos:[],omb:[],bj:[],interna:1,
+  w2:"3 painéis PIR · 1 circ. · teste 500 V no chicote",
+  nota:"correção R13: PI2 não é desta parede (pertence à IA2, cf. aba 08)"},
+ {id:"I3",ord:"B-8",m:"B",L:3.00,p:0.55,jp:"JP-03/JP-01",olh:2,rack:1,tipo:"int",pan:3,mep:"—",vaos:[],omb:[],bj:[],interna:1,comp:1,
+  w2:"3 painéis PIR · —"},
+];
+const PF={"F4-A":[37,32],"F1":[126,160],"F3-A":[37,96],"F5-A":[22,32],"JUNTA-A":[95,32],"IA1":[36,32],"IA2":[36,32],"IAN":[17,64],
+ "F4-B":[37,64],"F2":[126,64],"F3-B":[37,64],"F5-B":[22,32],"JUNTA-B":[95,64],"I1":[36,64],"I2":[36,64],"I3":[36,32]};
+const pf3=w=>(w.omb.length||w.bj.length)?14:8;
+const fmt=n=>n.toFixed(2).replace(".",",");
+
+// ============ ESTAÇÕES ============
+const H=2.85,TH=0.07,Y0=0.32;
+function stations(w){
+ const extras=w.w1x?` + ${w.w1x}`:"";
+ const nRec=w.vaos.length;
+ return [
+ {k:"IN",fase:"LINHA W · PREPARAÇÃO",tit:`SKU ${w.id} — abrir ordem`,sub:`${fmt(w.L)}×2,85 m · ${fmt(w.p)} t · ${w.pan} painéis PIR · rack ${w.rack}`,
+  txt:(w.comp?"Parede de COMPENSAÇÃO: medir o vão real do módulo antes de liberar o corte. ":w.tipo==="jun"?"Parede da JUNTA: furação Ø14 (M12) SEMPRE no gabarito PAREADO com a irmã. ":"")+
+      "A ficha R13 deste SKU abre no tablet pelo QR. Regra de ouro da R13: o quadro é SÓ O REQUADRO — quem vence o vão de 2,85 m é o painel PIR autoportante (Termilor TC 70: vão adm. 4,40 m)."+(w.nota?" · "+w.nota.toUpperCase():""),
+  kit:["Ficha SKU R14 no tablet (QR)","Kit PF conferido: PF-1 ≈ "+PF[w.id][0]+" · PF-2 ≈ "+PF[w.id][1]+" · PF-3 = "+pf3(w),"Nesting do painel c/ recortes já programado (CNC)"],
+  pit:["Ordem de produção assinada","Romaneio R15 conferido contra rack de destino"],
+  dica:"Fichas R12 SUPERADAS: mostravam montantes de vão e vergas que não existem no produto. Na dúvida, o croqui R13 manda."},
+ {k:"W1A",fase:"ESTAÇÃO W1-A · CORTE",tit:"Corte dos perfis do requadro",sub:"guias U100 + extremidades — NADA de montante de vão/verga",
+  txt:`Cortar: 2 guias U100×50×17×2,0 de ${fmt(w.L)} m + 2 montantes de extremidade 70×70 a 2,79 m (furos Ø9 @400 no gabarito JP)${extras}. Tolerância ±1,0 mm · esquadro 90°±0,5°.`,
+  kit:["Gabarito JP aferido (semanal)","Plasma CNC — programa do SKU","Retoque de zinco nos cortes"],
+  pit:["Comprimentos ±1,0 mm","Furação JP passa/não-passa (calibre de pino)"],
+  dica:"Se aparecer montante de vão/verga na bancada, a estação está usando ficha R12 — PARAR e trocar pela R13."},
+ {k:"W1B",fase:"ESTAÇÃO W1-B · QUADRO",tit:"Requadro na mesa",sub:`PF-3: ${pf3(w)} un · 2×M8 · 25 N·m por encontro`,
+  txt:"G-INF na mesa → montantes de extremidade → G-SUP fecha o requadro."+(w.omb.length?" Ombreiras duplas posicionadas no vão da porta (flanqueiam o recorte).":"")+(w.bj.length?" Montantes de borda de junta no eixo do apoio da cumeeira.":"")+" Diagonais Δ≤3 mm no laser antes de liberar.",
+  kit:[`PF-3 = ${pf3(w)} un (2×M8 autobrocante · 25 N·m)`,"Contador da parafusadeira AZUL → QR"],
+  pit:["Diagonais do requadro Δ≤3 mm","Contador × kit PF-3: delta = 0","AUSÊNCIA de montante intermediário/verga (croqui R13)"],
+  dica:"O requadro não é estrutura da parede em serviço — é berço de fabricação, borda de junção JP e caminho do içamento."},
+ {k:"W2",fase:"ESTAÇÃO W2 · NÚCLEO",tit:"Painéis PIR + MEP embutido",sub:w.w2,
+  txt:`${w.pan} painéis 1,15×2,85 encaixam macho-fêmea (macho p/ a direita — padrão único) e parafusam NAS GUIAS do requadro (PF-1 @300 + costura @400).`+(nRec?` Recortes de vão (${w.vaos.map(v=>v[4]).join(", ")}) já vêm do nesting CNC.`:"")+(w.shaft?" Shaft hidráulico testado a 1,5× por 60 min ANTES do fechamento.":"")+" Canaletas de MEP fresadas de fábrica — desvio de vão pela canaleta, nunca furando o contorno do recorte.",
+  kit:["PF-1 Ø5,5 @300 nas guias + costura @400","MEP: "+w.mep,(w.m12?"Furação Ø14 M12 no gabarito PAREADO":"Chicote elétrico p/ teste 500 V")],
+  pit:["Folga painel×requadro ≤2 mm","Teste 500 V no chicote"+(w.shaft?" · teste hidr. 1,5×/60 min":""),"Macho-fêmea sem esmagamento"],
+  dica:"R13: PF-2 só existe nas guias e extremidades — não há montante no meio para parafusar."},
+ {k:"W3",fase:"ESTAÇÃO W3 · PLACAS",tit:w.interna?"Gesso nas 2 faces":"Cimentícia + gesso",sub:"desencontros conforme Manual W · bandas secas 100 mm",
+  txt:(w.interna?`Gesso 12,5 nas duas faces (${2*w.pan} chapas), banda seca −100 mm nas bordas.`:`Placa cimentícia 8 mm na face externa (${w.pan} placas, borda −20 mm) + gesso 12,5 interno (${w.pan} chapas, banda −100 mm).`)+" Juntas de placa desencontradas das juntas de painel.",
+  kit:["PF-2 ≈ "+PF[w.id][1]+" un nas guias/extremidades","Fita + massa nas juntas internas de placa"],
+  pit:["Desencontro placa×painel conferido","Bandas secas 100 mm livres (sem massa/pintura)"],
+  dica:"A banda seca é o pulmão da junta de campo — placa que invade a banda vira retrabalho na montagem."},
+ {k:"W4",fase:"ESTAÇÃO W4 · ESQUADRIAS + JUNTAS",tit:nRec?`Requadro alumínio: ${w.vaos.map(v=>v[4]).join(" + ")}`:"Juntas internas",sub:nRec?"marco no ALUMÍNIO — nunca na face 0,43 mm":"fita + massa",
+  txt:(nRec?`Requadro ALUMÍNIO fixado no recorte do painel; marco da esquadria parafusa NO ALUMÍNIO com rebite estrutural/parafuso próprio. PROIBIDO autobrocante direto na chapa 0,43 mm (arrancamento insuficiente). Telas 45° nos cantos de vão. `:"")+"Juntas internas fita+massa ELÁSTICA."+(w.vaos.some(v=>v[5])?" Porta: guia inferior contínua — só corta na W6 (soleira de campo cobre).":""),
+  kit:nRec?["Requadro alumínio branco (kit REQ do SKU)","Rebite estrutural / parafuso do fabricante","Calço por parafuso + PU perimetral"]:["Fita + massa elástica","Cantoneiras PVC nas arestas"],
+  pit:nRec?["Prumo/nível do marco ±1 mm","10 ciclos abre/fecha suave","Borrifo 500 ml no peitoril: zero entrada"]:["Juntas lisas · massa elástica"],
+  dica:"R13: não existe verga — o recorte do painel é o vão. A esquadria vive no requadro alumínio."},
+ {k:"W5",fase:"ESTAÇÃO W5 · ACABAMENTO",tit:"Pintura de fábrica",sub:w.interna?"1 demão látex nas 2 faces":"textura elastomérica externa · látex interno",
+  txt:"Mascarar bandas secas"+(w.tipo!=="int"?" + rabicho elétrico":"")+". "+(w.interna?"1 demão de látex nas duas faces.":"Externa: textura elastomérica (verde sálvia). Interna: 1 demão látex.")+" Aposta W5 em teste no piloto: ≤1 retoque/parede mantém a demão de fábrica.",
+  kit:["Máscara das bandas 100 mm","Tinta do lote (rastreada no QR)"],
+  pit:["Bandas secas SEM tinta","Sem escorrimento nos vãos"],
+  dica:"Retoque pós-montagem é o indicador 2 do piloto — capriche aqui e o campo agradece."},
+ {k:"W6",fase:"ESTAÇÃO W6 · PASSAPORTE",tit:`Embalagem → rack ${w.rack}`,sub:`ordem ${w.ord} · ${w.olh}${w.bal?" (balancim)":""} olhais · carga inversa`,
+  txt:`Passaporte QR fecha o SKU: fotos, torques, testes. Proteções de borda + olhais${w.bal?" com balancim":""} no requadro. Posição ${w.rack} do rack (carga inversa: última a sair = primeira a montar).`+(w.vaos.some(v=>v[5])?" Corte da guia inferior no vão da porta AGORA (disco fino + retoque de zinco).":""),
+  kit:["Olhais removíveis + chapa de reforço #4,75 na guia","Cantoneiras + stretch","Etiqueta QR do passaporte"],
+  pit:["Contador × kit TOTAL: delta = 0","Içamento só com 100% dos PF (diafragma = painel)","Posição do rack conferida"],
+  dica:"O rack é carga inversa — errar a posição aqui trava a sequência A-1→B-8 inteira no campo."},
+];}
+
+// ============ CENA 3D ============
+const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c3d'),antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x06201F,26,64);
+const cam=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,0.1,200);
+scene.add(new THREE.AmbientLight(0xbfd8d5,0.85));
+const sun=new THREE.DirectionalLight(0xfff2dd,0.85);sun.position.set(8,14,7);scene.add(sun);
+const fill=new THREE.DirectionalLight(0x1FA79A,0.22);fill.position.set(-7,5,-9);scene.add(fill);
+const grid=new THREE.GridHelper(50,50,0x1FA79A,0x0e3b38);grid.material.opacity=0.25;grid.material.transparent=true;scene.add(grid);
+const M={
+ mesa:new THREE.MeshLambertMaterial({color:0x2f4f4b}),
+ guia:new THREE.MeshLambertMaterial({color:0x8FB8B2}),
+ mont:new THREE.MeshLambertMaterial({color:0x53616B}),
+ omb:new THREE.MeshLambertMaterial({color:0x3d4a52}),
+ pir:new THREE.MeshLambertMaterial({color:0xE9DFC8}),
+ pirOn:new THREE.MeshLambertMaterial({color:0x1FA79A,emissive:0x0c4a45}),
+ cim:new THREE.MeshLambertMaterial({color:0xD8E4D8}),
+ ges:new THREE.MeshLambertMaterial({color:0xEDE7DA}),
+ tinta:new THREE.MeshLambertMaterial({color:0xB7C9A8}),
+ alu:new THREE.MeshLambertMaterial({color:0xF4F4F4}),
+ win:new THREE.MeshLambertMaterial({color:0x9FD4E8,transparent:true,opacity:.75}),
+ banda:new THREE.MeshBasicMaterial({color:0xE85D4A,transparent:true,opacity:.4}),
+ shaft:new THREE.MeshLambertMaterial({color:0x9CC4E4,transparent:true,opacity:.85}),
+ rack:new THREE.MeshLambertMaterial({color:0xE8A33D}),
+ qd:new THREE.MeshLambertMaterial({color:0xE8A33D})};
+const grp=new THREE.Group();scene.add(grp);
+const B=(a,b,c)=>new THREE.BoxGeometry(a,b,c);
+function mesh(geo,mat,x,y,z){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);grp.add(m);return m;}
+const boltGeo=new THREE.SphereGeometry(0.05,10,10),boltMat=new THREE.MeshBasicMaterial({color:0xE8A33D});
+const boltGrp=new THREE.Group();scene.add(boltGrp);
+function setBolts(list){while(boltGrp.children.length)boltGrp.remove(boltGrp.children[0]);
+ for(const p of list){const s=new THREE.Mesh(boltGeo,boltMat);s.position.set(...p);boltGrp.add(s);}}
+
+let parts={},anim=[],exploded=false;
+function clearWall(){while(grp.children.length)grp.remove(grp.children[0]);parts={};anim=[];}
+function dropIn(m,delay){m.userData.ty=m.position.y;m.position.y+=3.2+delay*0.28;anim.push(m);}
+
+function buildWall(w){
+ clearWall();
+ const L=w.L;
+ // mesa de fabricação
+ mesh(B(L+1.2,0.18,1.9),M.mesa,0,0.09,0).userData.keep=1;
+ // W1: requadro
+ parts.gInf=mesh(B(L,0.10,0.10),M.guia,0,Y0-0.05,0);
+ parts.gSup=mesh(B(L,0.10,0.10),M.guia,0,Y0+H+0.05,0);
+ parts.mEsq=mesh(B(0.07,H,0.10),M.mont,-L/2+0.035,Y0+H/2,0);
+ parts.mDir=mesh(B(0.07,H,0.10),M.mont,L/2-0.035,Y0+H/2,0);
+ parts.extra=[];
+ for(const ox of w.omb) parts.extra.push(mesh(B(0.07,H,0.10),M.omb,ox,Y0+H/2,0));
+ for(const bx of w.bj) parts.extra.push(mesh(B(0.07,H,0.10),M.omb,bx,Y0+H/2,0));
+ // W2: painéis
+ parts.pan=[];let x=-L/2;
+ for(let i=0;i<w.pan;i++){const wp=Math.min(1.15,L-(x+L/2));if(wp<=0.01)break;
+  parts.pan.push(mesh(B(wp-0.02,H-0.02,TH),M.pir,x+wp/2,Y0+H/2,0));x+=wp;}
+ parts.vaos=[];
+ for(const [cx,y0,vw,vh,lab,isP] of w.vaos){
+  const o=mesh(B(vw,vh,TH+0.10),new THREE.MeshBasicMaterial({color:0x06201F}),cx,Y0+y0+vh/2,0);
+  parts.vaos.push(o);}
+ parts.shaft=w.shaft?mesh(B(w.shaft[2],w.shaft[3],TH+0.06),M.shaft,w.shaft[0],Y0+w.shaft[3]/2,0):null;
+ parts.qd=w.qd?mesh(B(w.qd[2],w.qd[3],TH+0.12),M.qd,w.qd[0],Y0+w.qd[1]+w.qd[3]/2,0):null;
+ // W3: placas
+ parts.cim=mesh(B(L-0.04,H-0.04,0.012),w.interna?M.ges:M.cim,0,Y0+H/2,TH/2+0.012);
+ parts.ges=mesh(B(L-0.04,H-0.20,0.012),M.ges,0,Y0+H/2,-TH/2-0.012);
+ // bandas secas
+ parts.bandas=[mesh(B(0.10,H-0.1,TH+0.06),M.banda,-L/2+0.12,Y0+H/2,0),
+               mesh(B(0.10,H-0.1,TH+0.06),M.banda,L/2-0.12,Y0+H/2,0)];
+ // W4: esquadrias
+ parts.esq=[];
+ for(const [cx,y0,vw,vh,lab,isP] of w.vaos){
+  parts.esq.push(mesh(B(vw+0.06,0.05,0.16),M.alu,cx,Y0+y0+vh+0.025,0));
+  parts.esq.push(mesh(B(vw+0.06,0.05,0.16),M.alu,cx,Y0+y0-0.025+(y0===0?0.05:0),0));
+  parts.esq.push(mesh(B(0.05,vh,0.16),M.alu,cx-vw/2-0.025,Y0+y0+vh/2,0));
+  parts.esq.push(mesh(B(0.05,vh,0.16),M.alu,cx+vw/2+0.025,Y0+y0+vh/2,0));
+  if(!isP) parts.esq.push(mesh(B(vw-0.04,vh-0.04,0.02),M.win,cx,Y0+y0+vh/2,0));
+ }
+ // W6: olhais + rack
+ parts.olh=[];
+ for(let i=0;i<w.olh;i++){const ox=(i+1)*L/(w.olh+1)-L/2;
+  parts.olh.push(mesh(new THREE.TorusGeometry(0.09,0.03,8,16),M.rack,ox,Y0+H+0.22,0));}
+ parts.rackF=[mesh(B(0.10,3.4,0.10),M.rack,-L/2-0.35,1.6,-0.55),mesh(B(0.10,3.4,0.10),M.rack,L/2+0.35,1.6,-0.55),
+              mesh(B(L+0.9,0.10,0.10),M.rack,0,3.25,-0.55)];
+ parts.rackF.forEach(r=>r.rotation.x=-0.18);
+ parts.qr=mesh(B(0.28,0.28,0.03),M.rack,L/2-0.3,Y0+1.55,TH/2+0.05);
+ grp.position.x=0;
+}
+
+// visibilidade por estação (0..7)
+function applyStation(w,si,animate){
+ const vis=(m,v,d)=>{if(!m)return;const was=m.visible;m.visible=v;
+  if(v&&!was&&animate)dropIn(m,d||0);};
+ const s=si; let d=0;
+ vis(parts.gInf,s>=2,d++);vis(parts.mEsq,s>=2,d++);vis(parts.mDir,s>=2,d++);
+ parts.extra.forEach(m=>vis(m,s>=2,d++));vis(parts.gSup,s>=2,d++);
+ parts.pan.forEach(m=>{vis(m,s>=3,d++);m.material=(s===3)?M.pirOn:(s>=6?M.tinta:M.pir);});
+ parts.vaos.forEach(m=>vis(m,s>=3));
+ if(parts.shaft)vis(parts.shaft,s>=3,d++);
+ if(parts.qd)vis(parts.qd,s>=3,d++);
+ vis(parts.cim,s>=4,d++);vis(parts.ges,s>=4,d++);
+ parts.bandas.forEach(m=>{vis(m,s>=4&&s<7);});
+ parts.esq.forEach(m=>vis(m,s>=5,d++));
+ parts.olh.forEach(m=>vis(m,s>=7,d++));
+ parts.rackF.forEach(m=>vis(m,s>=7));
+ vis(parts.qr,s>=7,d++);
+ // bolts
+ const bl=[],L=w.L;
+ if(s===2){bl.push([-L/2+0.035,Y0,0],[L/2-0.035,Y0,0],[-L/2+0.035,Y0+H,0],[L/2-0.035,Y0+H,0]);
+  w.omb.concat(w.bj).forEach(x=>bl.push([x,Y0,0],[x,Y0+H,0]));}
+ if(s===3){for(let x=-L/2+0.3;x<L/2;x+=0.62){bl.push([x,Y0+0.02,0.1],[x,Y0+H-0.02,0.1]);}}
+ if(s===4){for(let x=-L/2+0.4;x<L/2;x+=0.9){bl.push([x,Y0+0.6,TH/2+0.05],[x,Y0+2.2,TH/2+0.05]);}}
+ if(s===5){for(const [cx,y0,vw,vh] of w.vaos){bl.push([cx-vw/2,Y0+y0+vh/2,0.12],[cx+vw/2,Y0+y0+vh/2,0.12],[cx,Y0+y0+vh,0.12]);}}
+ if(s===7){parts.olh.forEach(o=>bl.push([o.position.x,Y0+H+0.22,0]));}
+ setBolts(bl);
+}
+
+// ============ CROQUI SVG (ficha R13) ============
+const NS="http://www.w3.org/2000/svg";
+function drawCroqui(w){
+ const svg=document.getElementById('svgC');svg.innerHTML="";
+ const L=w.L,sc=9.2/Math.max(L,3.2);
+ const WW=L*sc,HH=2.85*sc*0.95,X0=(10-WW)/2,YB=3.6;
+ const R=(x,y,wd,ht,cls)=>{const r=document.createElementNS(NS,'rect');
+  r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',wd);r.setAttribute('height',ht);
+  r.setAttribute('class',cls);svg.appendChild(r);return r;};
+ R(X0,YB-HH,WW,HH,'ln');
+ R(X0-0.06,YB-HH-0.10,WW+0.12,0.10,'gui');R(X0-0.06,YB,WW+0.12,0.10,'gui');
+ R(X0-0.06,YB-HH,0.06,HH,'gui');R(X0+WW,YB-HH,0.06,HH,'gui');
+ for(let x=1.15;x<L-0.05;x+=1.15){const l=document.createElementNS(NS,'line');
+  l.setAttribute('x1',X0+x*sc);l.setAttribute('x2',X0+x*sc);l.setAttribute('y1',YB-HH+0.06);l.setAttribute('y2',YB-0.06);
+  l.setAttribute('class','ln');l.setAttribute('stroke-dasharray','.06 .06');svg.appendChild(l);}
+ R(X0+0.03,YB-HH+0.05,0.10,HH-0.10,'bnd');R(X0+WW-0.13,YB-HH+0.05,0.10,HH-0.10,'bnd');
+ w.omb.concat(w.bj).forEach(x=>R(X0+(x+L/2)*sc-0.035,YB-HH,0.07,HH,'omb'));
+ for(const [cx,y0,vw,vh,lab] of w.vaos){
+  const vx=X0+(cx+L/2-vw/2)*sc,vy=YB-(y0+vh)*sc*0.95;
+  R(vx,vy,vw*sc,vh*sc*0.95,'vao');R(vx+0.04,vy+0.04,vw*sc-0.08,vh*sc*0.95-(y0>0?0.08:0.04),'alu');
+  const t=document.createElementNS(NS,'text');t.setAttribute('x',vx+vw*sc/2);t.setAttribute('y',vy+vh*sc*0.5);
+  t.setAttribute('text-anchor','middle');t.textContent=lab;svg.appendChild(t);}
+ document.getElementById('croqTit').textContent=`CROQUI FICHA R15 · ${w.id} · ${w.pan} painéis`;
+}
+
+// ============ NAVEGAÇÃO ============
+let wi=0,si=0,playing=false,playT=null;
+const NST=8;
+const skusDiv=document.getElementById('skus');
+WALLS.forEach((w,k)=>{const b=document.createElement('button');
+ b.className='sku'+(w.m==="B"?' fB':'');b.textContent=w.ord;b.title=w.id;
+ b.onclick=()=>{goWall(k,0);};skusDiv.appendChild(b);});
+const skuBts=[...document.querySelectorAll('.sku')];
+const stepsBar=document.getElementById('steps'),nxt=document.getElementById('next');
+const KEYS=["📋","✂","▣","▤","▥","◫","🎨","📦"],TITS=["ORDEM","W1-A","W1-B","W2","W3","W4","W5","W6"];
+TITS.forEach((t,i)=>{const b=document.createElement('button');b.className='stp';b.textContent=t;
+ b.onclick=()=>goStep(i);stepsBar.insertBefore(b,nxt);});
+const stpBts=[...document.querySelectorAll('.stp')];
+const barra=document.getElementById('barra');
+for(let i=0;i<WALLS.length*NST;i++){const d=document.createElement('div');d.style.flex="1";
+ d.style.background=(Math.floor(i/NST)%2)?"#48B9AE":"#1FA79A";barra.appendChild(d);}
+function ul(id,items){document.getElementById(id).innerHTML=items.map(x=>`<li>${x}</li>`).join('');}
+function setHUD(w,st){
+ document.getElementById('hFase').textContent=st.fase+` · SKU ${wi+1}/16 · ETAPA ${si+1}/8`;
+ document.getElementById('hTit').textContent=st.tit;
+ document.getElementById('hSub').textContent=st.sub;
+ document.getElementById('hTxt').textContent=st.txt;
+ document.getElementById('hDados').innerHTML=Object.entries({SKU:w.id,Dim:`${fmt(w.L)}×2,85`,Peso:fmt(w.p)+" t",Bordas:w.jp,Rack:w.rack+" (inversa)",Painéis:w.pan})
+  .map(([k,v])=>`<div class="dado"><b>${k}</b><span>${v}</span></div>`).join('');
+ ul('hKit',st.kit);ul('hPit',st.pit);
+ document.getElementById('hPitT').textContent=`PIT-${st.k.startsWith("W1")?"W1":st.k} — INSPEÇÃO ANTES DE LIBERAR`;
+ document.getElementById('hDica').textContent=st.dica;
+ skuBts.forEach((b,k)=>b.classList.toggle('on',k===wi));
+ stpBts.forEach((b,k)=>b.className='stp'+(k===si?' on':k<si?' done':''));
+ [...barra.children].forEach((d,k)=>d.classList.toggle('done',k<=wi*NST+si));}
+function goWall(k,s){wi=Math.max(0,Math.min(15,k));buildWall(WALLS[wi]);drawCroqui(WALLS[wi]);goStep(s??0,true);}
+function goStep(s,fresh){si=Math.max(0,Math.min(NST-1,s));
+ const w=WALLS[wi];applyStation(w,si,!fresh||si>0);setHUD(w,stations(w)[si]);}
+document.getElementById('prev').onclick=()=>{if(si>0)goStep(si-1);else if(wi>0)goWall(wi-1,NST-1);};
+document.getElementById('next').onclick=()=>{if(si<NST-1)goStep(si+1);else if(wi<15)goWall(wi+1,0);};
+document.getElementById('play').onclick=function(){playing=!playing;this.textContent=playing?'⏸':'▶ AUTO';
+ if(playing){playT=setInterval(()=>{if(si<NST-1)goStep(si+1);else if(wi<15)goWall(wi+1,0);
+  else{playing=false;document.getElementById('play').textContent='▶ AUTO';clearInterval(playT);}},3000);}else clearInterval(playT);};
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')document.getElementById('next').click();
+ if(e.key==='ArrowLeft')document.getElementById('prev').click();});
+
+// ============ CÂMERA ============
+let theta=0.85,phi=1.05,rad=9,tgt=new THREE.Vector3(0,1.6,0),drag=false,px=0,py=0,vAnim=null;
+function viewFor(v){const w=WALLS[wi],L=w.L;
+ const V={iso:{t:0.85,p:1.05,r:Math.max(7,L*1.15),tg:[0,1.5,0]},
+  top:{t:0.85,p:0.14,r:Math.max(7,L*1.2),tg:[0,0.4,0]},
+  front:{t:1.5708,p:1.35,r:Math.max(6,L*1.05),tg:[0,1.6,0]},
+  vao:w.vaos.length?{t:1.25,p:1.15,r:3.4,tg:[w.vaos[0][0],Y0+w.vaos[0][1]+w.vaos[0][3]/2,0]}:{t:1.25,p:1.15,r:4,tg:[0,1.5,0]},
+  borda:{t:0.65,p:1.2,r:3.2,tg:[-L/2,1.4,0]}};return V[v];}
+function camUpd(){cam.position.set(tgt.x+rad*Math.sin(phi)*Math.cos(theta),tgt.y+rad*Math.cos(phi),tgt.z+rad*Math.sin(phi)*Math.sin(theta));cam.lookAt(tgt);}
+addEventListener('pointerdown',e=>{if(e.target.tagName==='CANVAS'){drag=true;px=e.clientX;py=e.clientY;}});
+addEventListener('pointerup',()=>drag=false);
+addEventListener('pointermove',e=>{if(!drag)return;theta+=(e.clientX-px)*0.006;phi=Math.min(1.5,Math.max(0.12,phi-(e.clientY-py)*0.005));px=e.clientX;py=e.clientY;});
+addEventListener('wheel',e=>{rad=Math.min(40,Math.max(3,rad+e.deltaY*0.012));},{passive:true});
+document.querySelectorAll('.vw[data-v]').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.vw[data-v]').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+ const v=viewFor(b.dataset.v);vAnim={t0:theta,p0:phi,r0:rad,g0:tgt.clone(),t1:v.t,p1:v.p,r1:v.r,g1:new THREE.Vector3(...v.tg),k:0};});
+document.getElementById('expl').onclick=function(){exploded=!exploded;this.classList.toggle('on',exploded);};
+
+// ============ LOOP ============
+const clock=new THREE.Clock();
+function loop(){requestAnimationFrame(loop);
+ const dt=Math.min(clock.getDelta(),0.05);
+ anim=anim.filter(m=>{m.position.y+=(m.userData.ty-m.position.y)*Math.min(1,dt*5.5);
+  if(Math.abs(m.position.y-m.userData.ty)<0.01){m.position.y=m.userData.ty;return false;}return true;});
+ const eo=exploded?1:0;
+ if(parts.cim&&!anim.includes(parts.cim))parts.cim.position.z+=((TH/2+0.012+eo*0.8)-parts.cim.position.z)*dt*5;
+ if(parts.ges&&!anim.includes(parts.ges))parts.ges.position.z+=((-TH/2-0.012-eo*0.8)-parts.ges.position.z)*dt*5;
+ const s=1+0.28*Math.sin(performance.now()*0.006);boltGrp.children.forEach(b=>b.scale.set(s,s,s));
+ if(vAnim){vAnim.k=Math.min(1,vAnim.k+dt*2.2);const k=vAnim.k,e=k*k*(3-2*k);
+  theta=vAnim.t0+(vAnim.t1-vAnim.t0)*e;phi=vAnim.p0+(vAnim.p1-vAnim.p0)*e;rad=vAnim.r0+(vAnim.r1-vAnim.r0)*e;
+  tgt.lerpVectors(vAnim.g0,vAnim.g1,e);if(k>=1)vAnim=null;}
+ camUpd();renderer.render(scene,cam);}
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+goWall(0,0);const v0=viewFor('iso');theta=v0.t;phi=v0.p;rad=v0.r;tgt.set(...v0.tg);camUpd();loop();
+</script>
+</body>
+</html>

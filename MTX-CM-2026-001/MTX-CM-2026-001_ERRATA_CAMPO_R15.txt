@@ -1,0 +1,75 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · ERRATA DE CAMPO R15
+Sistema PAREDE-PRONTA · MTX-CM-2026-001 · 06/07/2026
+Aplica-se a: MTX-CM-2026-001_Pacote_Montagem_ISO_R14.pdf
+             MTX-CM-2026-001_Manual_Campo_A5_R14.pdf
+================================================================
+
+POR QUE ESTA ERRATA EXISTE
+---------------------------
+A auditoria de pipeline documental R14→R15 encontrou dois pontos nos
+documentos QUE O MONTADOR CARREGA EM OBRA (Pacote ISO e Manual de
+Campo A5) que não puderam ser corrigidos por regeneração automática
+— são PDFs paginados/diagramados, sem gerador paramétrico disponível
+nesta consolidação. Em vez de reeditar o layout à mão (o que violaria
+a própria regra do pipeline: "documentos derivados nunca se editam à
+mão"), esta errata funciona como INSERÇÃO OFICIAL, no mesmo padrão já
+usado pelo projeto na errata R13 do Caderno Mestre e do Manual de
+Fabricação W: um adendo curto que se sobrepõe ao conteúdo antigo até
+a próxima regeneração formal (R16).
+
+Leve esta folha junto com o Pacote ISO / Manual de Campo A5 até que
+uma nova emissão os incorpore.
+
+--------------------------------------------------------------
+1) DESAMBIGUAÇÃO DE NOMENCLATURA — PAREDES INTERNAS
+--------------------------------------------------------------
+Existem DOIS conjuntos de paredes internas parecidos, um por módulo.
+Não confundir:
+
+  MÓDULO A (passos A-6, A-7, A-8):    IA1 · IA2 · IAN
+  MÓDULO B (passos B-6, B-7, B-8):    I1  · I2  · I3
+
+Fonte de verdade: MTX-CM-2026-001_Romaneio_Fabricacao_R15.xlsx,
+aba 08_Paredes_Prontas (colunas A/H). Se o Pacote ISO ou o Manual de
+Campo A5 usarem "I1/I2/I3" para descrever um passo do MÓDULO A
+(A-6/A-7/A-8), está errado — o correto para o módulo A é sempre o
+prefixo "IA" (IA1/IA2/IAN). Os códigos sem prefixo "IA" (I1, I2, I3)
+pertencem exclusivamente ao módulo B.
+
+  Esquadrias associadas (aba 08, coluna D):
+    IA1 → PI3   |   IA2 → PI2   |   IAN → PI4
+    I1  → —(sem esquadria)  |  I2 → —  |  I3 → —
+
+--------------------------------------------------------------
+2) CHAPAS DE ESPERA CHP-T / CHP-C — AUSENTES NOS DOCUMENTOS DE CAMPO
+--------------------------------------------------------------
+O Pacote ISO R14 e o Manual de Campo A5 R14 não mencionam as chapas
+de espera CHP-T/CHP-C em nenhum ponto. Elas são a peça que recebe o
+parafuso PF-3 na junção tipo T — "em campo ninguém fura o painel"
+(Caderno de Junções R14). Resumo para uso em obra, até a próxima
+emissão incorporar o detalhe completo:
+
+  - CHP-T: chapa de espera para junção em T (parede que encontra
+    outra no meio do vão). CHP-C: chapa de espera para junção em
+    canto (L).
+  - 140 chapas + 280 porcas-rebite M8 por casa (aba 03 do Nesting).
+  - PF-3 = 152 un/casa fixam nessas chapas, 2×M8 por encontro,
+    torque 25 N·m (ficha PIT-W2c).
+  - Instrução de campo: identificar a chapa de espera embutida na
+    borda de junção (JP-01/JP-02/JP-03) ANTES de aproximar as duas
+    paredes — ela já vem de fábrica; não fure o painel para criar
+    um ponto de fixação novo.
+  - Detalhe completo: MTX-CM-2026-001_Manual_Fabricacao_W_R14.pdf
+    (Detalhe JP 1/2, 2/2, 2/2-B, 2/2-C) e
+    MTX-CM-2026-001_Caderno_Juncoes_R14.pdf (6 pranchas).
+
+--------------------------------------------------------------
+3) REFERÊNCIA CRUZADA — O QUE MAIS MUDOU NA CONSOLIDAÇÃO R15
+--------------------------------------------------------------
+Ver MTX-CM-2026-001_Nota_Consolidacao_R15.txt para a lista completa
+de correções aplicadas ao Romaneio, Nesting, Orçamento, QA, coleta do
+piloto e visualizadores interativos, e para os itens que permanecem
+como PENDÊNCIA (requerem decisão de engenheiro/projetista, não
+resolvíveis por edição de planilha).
+================================================================

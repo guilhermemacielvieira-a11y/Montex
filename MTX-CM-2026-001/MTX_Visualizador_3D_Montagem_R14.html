@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montex · Montagem 3D — Bicas 70 R4</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root{--bg:#06201F;--panel:#0A2E2C;--teal:#1FA79A;--amber:#E8A33D;--ink:#E8F3F2;--mute:#7FA9A6;--red:#E85D4A;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden;}
+  #c3d{position:fixed;inset:0;}
+  /* grade CAD de fundo */
+  body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(31,167,154,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(31,167,154,.05) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:1;}
+  header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:baseline;gap:14px;padding:14px 20px;background:linear-gradient(180deg,rgba(6,32,31,.92),transparent);}
+  header h1{font-size:15px;letter-spacing:.14em;color:var(--teal);font-weight:800;}
+  header span{font-size:11px;color:var(--mute);letter-spacing:.06em;}
+  #hud{position:fixed;left:20px;top:64px;width:330px;z-index:10;background:rgba(10,46,44,.92);border:1px solid rgba(31,167,154,.35);border-radius:10px;padding:16px;backdrop-filter:blur(4px);}
+  #hud .etq{font-size:10px;letter-spacing:.18em;color:var(--amber);font-weight:700;}
+  #hud h2{font-size:17px;margin:4px 0 6px;color:var(--ink);}
+  #hud p{font-size:11.5px;color:var(--mute);line-height:1.55;}
+  #hud .pf{margin-top:10px;padding:8px 10px;border-left:3px solid var(--amber);background:rgba(232,163,61,.08);font-size:11px;color:#F3D9AE;font-family:ui-monospace,monospace;}
+  #steps{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px;align-items:center;background:rgba(10,46,44,.92);border:1px solid rgba(31,167,154,.35);border-radius:12px;padding:10px 12px;}
+  .stp{width:34px;height:34px;border-radius:8px;border:1px solid rgba(31,167,154,.4);background:transparent;color:var(--mute);font-weight:800;font-size:13px;cursor:pointer;transition:.18s;}
+  .stp:hover{border-color:var(--teal);color:var(--ink);}
+  .stp.on{background:var(--teal);color:#04211F;border-color:var(--teal);}
+  .stp.done{color:var(--teal);}
+  #play{width:auto;padding:0 14px;background:var(--amber);color:#3a2604;border:none;border-radius:8px;height:34px;font-weight:800;cursor:pointer;font-size:12px;}
+  #views{position:fixed;right:20px;top:64px;z-index:10;display:flex;flex-direction:column;gap:6px;}
+  .vw{background:rgba(10,46,44,.92);border:1px solid rgba(31,167,154,.35);color:var(--mute);border-radius:8px;padding:8px 12px;font-size:11px;letter-spacing:.08em;cursor:pointer;text-align:right;transition:.18s;}
+  .vw:hover,.vw.on{color:var(--ink);border-color:var(--teal);}
+  #expl{margin-top:8px;background:rgba(10,46,44,.92);border:1px solid rgba(232,163,61,.4);color:var(--amber);}
+  #hint{position:fixed;right:20px;bottom:22px;z-index:10;font-size:10px;color:var(--mute);letter-spacing:.06em;text-align:right;line-height:1.6;}
+  #bar{position:fixed;bottom:0;left:0;height:3px;background:var(--amber);z-index:11;width:0;transition:width .3s;}
+</style>
+</head>
+<body>
+<canvas id="c3d"></canvas>
+<header><h1>MONTEX · MONTAGEM 3D</h1><span>Casa Popular Bicas 70 · R4-2,60 · plano 100% parafusado · MTX-CM-2026-001</span></header>
+
+<div id="hud">
+  <div class="etq" id="hEtq">ETAPA 0</div>
+  <h2 id="hTit">Radier e guias</h2>
+  <p id="hTxt">—</p>
+  <div class="pf" id="hPf">—</div>
+</div>
+
+<div id="views">
+  <button class="vw on" data-v="iso">ISOMÉTRICA</button>
+  <button class="vw" data-v="front">FRONTAL</button>
+  <button class="vw" data-v="top">TOPO</button>
+  <button class="vw" data-v="junta">CLOSE · JUNTA</button>
+  <button class="vw" id="expl">VISTA EXPLODIDA</button>
+</div>
+
+<div id="steps">
+  <button id="play">▶ AUTO</button>
+</div>
+<div id="hint">arraste · órbita livre — roda do mouse · zoom<br>pontos âmbar = parafusamento da etapa</div>
+<div id="bar"></div>
+
+<script>
+// ================= CENA =================
+const W=()=>innerWidth,H=()=>innerHeight;
+const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c3d'),antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(W(),H());
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x06201F,26,60);
+const cam=new THREE.PerspectiveCamera(42,W()/H(),0.1,200);
+scene.add(new THREE.AmbientLight(0xbfd8d5,0.75));
+const sun=new THREE.DirectionalLight(0xfff2dd,0.9);sun.position.set(8,14,6);scene.add(sun);
+const fill=new THREE.DirectionalLight(0x1FA79A,0.25);fill.position.set(-6,4,-8);scene.add(fill);
+// chão
+const grid=new THREE.GridHelper(60,60,0x1FA79A,0x0e3b38);grid.material.opacity=0.28;grid.material.transparent=true;scene.add(grid);
+
+// materiais
+const M={
+ slab:new THREE.MeshLambertMaterial({color:0x2f4f4b}),
+ guia:new THREE.MeshLambertMaterial({color:0x8FB8B2}),
+ met:new THREE.MeshLambertMaterial({color:0x37474F}),
+ pir:new THREE.MeshLambertMaterial({color:0xDDEBF7}),
+ pirIn:new THREE.MeshLambertMaterial({color:0xC7DCEA}),
+ junta:new THREE.MeshLambertMaterial({color:0xE85D4A}),
+ ptb:new THREE.MeshLambertMaterial({color:0xB9C4C4}),
+ forro:new THREE.MeshLambertMaterial({color:0xE9E4D8}),
+ trav:new THREE.MeshLambertMaterial({color:0x1FA79A}),
+ telha:new THREE.MeshLambertMaterial({color:0xcfe0ee}),
+ capuz:new THREE.MeshLambertMaterial({color:0xB08968}),
+ win:new THREE.MeshLambertMaterial({color:0x9FD4E8,transparent:true,opacity:.85}),
+};
+
+// ============ GEOMETRIA (cotas R4 reais em metros) ============
+// Sistema: módulo SOCIAL em y-plan 0..3.3 (frente z+), módulo QUARTOS atrás. Origem no centro.
+const H_PAR=2.85,H_FORRO=2.60,T_BX=2.86,CUME=3.08,PTB_H=0.33,PTBJ_TOP=3.22;
+const pieces=[]; // {mesh, step, explLayer, finalPos}
+const grpB=new THREE.Group(); // módulo quartos (translada na etapa 8)
+scene.add(grpB);
+function add(step,layer,geo,mat,x,y,z,grp){
+  const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);
+  (grp||scene).add(m);
+  pieces.push({m,step,layer,fx:x,fy:y,fz:z,grp:!!grp});
+  return m;
+}
+const B=(a,b,c)=>new THREE.BoxGeometry(a,b,c);
+// deslocamentos: social centrado x=-1..? social 9.3 (x -4.65..4.65) z frontal 1.75 (depth 3.3 => z 0.1..3.4? simplificar: social z=1.75 center, quartos z=-1.85; offset x social +1.03, quartos -1.03 (recuo 2.06)
+const SX=1.03, QX=-1.03, SZ=1.78, QZ=-1.78, DEP=3.3, LEN=9.3, GAP_B0=7.5; // B começa afastado 7.5 em -z e converge
+
+// --- etapa 1: radier + guias inferiores
+add(1,0,B(LEN+0.3,0.25,DEP+0.3),M.slab,SX,0.125,SZ);
+add(1,0,B(LEN+0.3,0.25,DEP+0.3),M.slab,QX,0.125,QZ,grpB);
+for(const [gx,gz,gl,gw,grp] of [[SX,SZ+DEP/2,LEN,0.1,null],[SX,SZ-DEP/2,LEN,0.1,null],[SX-LEN/2,SZ,0.1,DEP,null],[SX+LEN/2,SZ,0.1,DEP,null],
+                                 [QX,QZ+DEP/2,LEN,0.1,grpB],[QX,QZ-DEP/2,LEN,0.1,grpB],[QX-LEN/2,QZ,0.1,DEP,grpB],[QX+LEN/2,QZ,0.1,DEP,grpB]]){
+  add(1,0,B(gl,0.06,gw),M.guia,gx,0.28,gz,grp);
+}
+// --- etapa 2: montantes (cantos) + guias superiores
+for(const [mx,mz,grp] of [[SX-LEN/2+0.05,SZ-DEP/2+0.05],[SX+LEN/2-0.05,SZ-DEP/2+0.05],[SX-LEN/2+0.05,SZ+DEP/2-0.05],[SX+LEN/2-0.05,SZ+DEP/2-0.05]])
+  add(2,1,B(0.09,H_PAR,0.09),M.met,mx,0.31+H_PAR/2,mz);
+for(const [mx,mz] of [[QX-LEN/2+0.05,QZ-DEP/2+0.05],[QX+LEN/2-0.05,QZ-DEP/2+0.05],[QX-LEN/2+0.05,QZ+DEP/2-0.05],[QX+LEN/2-0.05,QZ+DEP/2-0.05]])
+  add(2,1,B(0.09,H_PAR,0.09),M.met,mx,0.31+H_PAR/2,mz,grpB);
+for(const [gx,gz,gl,gw,grp] of [[SX,SZ+DEP/2,LEN,0.1,null],[SX,SZ-DEP/2,LEN,0.1,null],[SX-LEN/2,SZ,0.1,DEP,null],[SX+LEN/2,SZ,0.1,DEP,null],
+                                 [QX,QZ+DEP/2,LEN,0.1,grpB],[QX,QZ-DEP/2,LEN,0.1,grpB],[QX-LEN/2,QZ,0.1,DEP,grpB],[QX+LEN/2,QZ,0.1,DEP,grpB]]){
+  add(2,1,B(gl,0.06,gw),M.guia,gx,0.31+H_PAR+0.03,gz,grp);
+}
+// --- etapa 3: painéis externos (1,15) c/ vãos simplificados
+function fachada(step,cx,cz,horiz,grp,comVaos){
+  const n=8;
+  for(let i=0;i<n;i++){
+    const off=-LEN/2+0.575+i*1.15+0.05;
+    let mat=M.pir;
+    const x=horiz?cx+off:cx, z=horiz?cz:cz+((i<3)?(-DEP/2+0.575+i*1.15):(0));
+    if(!horiz&&i>=3)break;
+    add(step,2,horiz?B(1.12,H_PAR,0.08):B(0.08,H_PAR,1.12),mat,x,0.31+H_PAR/2,z,grp);
+    if(comVaos&&(i===1||i===5)&&horiz){ // janelas ilustrativas
+      add(step,2,B(1.0,1.0,0.10),M.win,x,0.31+1.6,z,grp);
+    }
+  }
+}
+fachada(3,SX,SZ+DEP/2,true,null,true);   // F1 frente social
+fachada(3,SX,SZ-DEP/2,true,null,false);  // junta lado social (parede)
+fachada(3,SX-LEN/2,SZ,false,null,false); fachada(3,SX+LEN/2,SZ,false,null,false);
+fachada(3,QX,QZ-DEP/2,true,grpB,true);   // F2 fundos quartos
+fachada(3,QX,QZ+DEP/2,true,grpB,false);
+fachada(3,QX-LEN/2,QZ,false,grpB,false); fachada(3,QX+LEN/2,QZ,false,grpB,false);
+// --- etapa 4: internas
+add(4,2,B(0.08,H_PAR,2.9),M.pirIn,SX-1.2,0.31+H_PAR/2,SZ);
+add(4,2,B(0.08,H_PAR,2.9),M.pirIn,SX+0.3,0.31+H_PAR/2,SZ);
+add(4,2,B(1.35,H_PAR,0.08),M.pirIn,SX-0.5,0.31+H_PAR/2,SZ+0.5);
+add(4,2,B(0.08,H_PAR,2.9),M.pirIn,QX-1.9,0.31+H_PAR/2,QZ,grpB);
+add(4,2,B(0.08,H_PAR,2.9),M.pirIn,QX-0.8,0.31+H_PAR/2,QZ,grpB);
+add(4,2,B(0.08,H_PAR,2.9),M.pirIn,QX+1.6,0.31+H_PAR/2,QZ,grpB);
+// faixa vermelha da junta (referência)
+add(4,2,B(LEN,H_PAR,0.02),M.junta,SX,0.31+H_PAR/2,SZ-DEP/2-0.06);
+add(4,2,B(LEN,H_PAR,0.02),M.junta,QX,0.31+H_PAR/2,QZ+DEP/2+0.06,grpB);
+// --- etapa 5: PTB
+for(const [px,pz,pl,pw,grp,hh,yy] of [
+ [SX,SZ+DEP/2,LEN,0.07,null,PTB_H,0.31+H_PAR+PTB_H/2],
+ [SX-LEN/2,SZ,0.07,DEP,null,PTB_H,0.31+H_PAR+PTB_H/2],[SX+LEN/2,SZ,0.07,DEP,null,PTB_H,0.31+H_PAR+PTB_H/2],
+ [SX,SZ-DEP/2,LEN,0.07,null,0.37,0.31+H_PAR+0.185],
+ [QX,QZ-DEP/2,LEN,0.07,grpB,PTB_H,0.31+H_PAR+PTB_H/2],
+ [QX-LEN/2,QZ,0.07,DEP,grpB,PTB_H,0.31+H_PAR+PTB_H/2],[QX+LEN/2,QZ,0.07,DEP,grpB,PTB_H,0.31+H_PAR+PTB_H/2],
+ [QX,QZ+DEP/2,LEN,0.07,grpB,0.37,0.31+H_PAR+0.185]]){
+  add(5,3,B(pl,hh,pw),M.ptb,px,yy,pz,grp);
+}
+// --- etapa 6: travessas + forro
+for(const dx of [-2.3,0,2.3]){
+  add(6,4,B(0.06,0.05,DEP-0.2),M.trav,SX+dx,0.31+H_FORRO+0.08,SZ);
+  add(6,4,B(0.06,0.05,DEP-0.2),M.trav,QX+dx,0.31+H_FORRO+0.08,QZ,grpB);
+}
+add(6,4,B(LEN-0.2,0.04,DEP-0.2),M.forro,SX,0.31+H_FORRO,SZ);
+add(6,4,B(LEN-0.2,0.04,DEP-0.2),M.forro,QX,0.31+H_FORRO,QZ,grpB);
+// --- etapa 7: cassetes (água inclinada — box rotacionado)
+function agua(step,cx,cz,sign,grp){
+  const g=B(LEN,0.06,DEP+0.35);
+  const m=add(step,5,g,M.telha,cx,0.31+(T_BX+CUME)/2- .28,cz);
+  m.rotation.x=sign*Math.atan(0.22/DEP);
+  m.position.y=0.31+(T_BX+CUME)/2-0.25;
+  if(grp){scene.remove(m);grp.add(m);pieces[pieces.length-1].grp=true;}
+  // terças
+  for(let k=0;k<4;k++){
+    const zz=cz+sign*(-DEP/2+0.4+k*0.85), yy=0.31+CUME-0.15-k*0.06;
+    add(step,5,B(LEN-0.2,0.05,0.05),M.met,cx,yy,zz,grp);
+  }
+}
+agua(7,SX,SZ,-1,null);   // cai p/ frente (z+): alto na junta (z-)
+agua(7,QX,QZ,1,grpB);    // cai p/ trás
+// --- etapa 8: capuz de cumeeira (só após acoplar)
+add(8,6,B(LEN+0.4,0.06,0.55),M.capuz,0,0.31+CUME+0.10,0);
+
+// ============ PONTOS DE PARAFUSO POR ETAPA ============
+const boltGroups={};
+const boltGeo=new THREE.SphereGeometry(0.055,10,10);
+const boltMat=new THREE.MeshBasicMaterial({color:0xE8A33D});
+function bolts(step,list){const g=new THREE.Group();list.forEach(p=>{const s=new THREE.Mesh(boltGeo,boltMat);s.position.set(...p);g.add(s);});g.visible=false;scene.add(g);boltGroups[step]=g;}
+bolts(2,[[SX-LEN/2+0.05,0.31+H_PAR,SZ-DEP/2+0.05],[SX+LEN/2-0.05,0.31+H_PAR,SZ-DEP/2+0.05],[SX-LEN/2+0.05,0.31+H_PAR,SZ+DEP/2-0.05],[SX+LEN/2-0.05,0.31+H_PAR,SZ+DEP/2-0.05]]);
+bolts(3,Array.from({length:8},(_,i)=>[SX-LEN/2+0.575+i*1.15,0.45,SZ+DEP/2+0.08]));
+bolts(4,[[SX-1.2,0.45,SZ+1.2],[SX+0.3,0.45,SZ+1.2],[SX-1.2,0.31+H_PAR-0.1,SZ+1.2]]);
+bolts(5,Array.from({length:8},(_,i)=>[SX-LEN/2+0.575+i*1.15,0.31+H_PAR+0.02,SZ+DEP/2+0.08]));
+bolts(6,[[SX-2.3,0.31+H_FORRO+0.1,SZ+DEP/2-0.15],[SX,0.31+H_FORRO+0.1,SZ+DEP/2-0.15],[SX+2.3,0.31+H_FORRO+0.1,SZ+DEP/2-0.15]]);
+bolts(7,Array.from({length:6},(_,i)=>[SX-LEN/2+0.8+i*1.5,0.31+T_BX+0.05,SZ+DEP/2-0.05]));
+bolts(8,Array.from({length:9},(_,i)=>[-4+i*1.0,0.31+0.5+((i%3)*0.8),0]));
+
+// ============ ETAPAS (conteúdo HUD) ============
+const STEPS=[
+ {t:"Ponto de partida",d:"Duas baias em paralelo: módulo SOCIAL (frente) e módulo QUARTOS. Use os botões abaixo ou ▶ AUTO. Arraste para orbitar.",pf:"Cotas R4-2,60 · paredes 2,85 · forro 2,60 · cumeeira 3,08"},
+ {t:"Radier + guias inferiores",d:"Quadro de piso nivelado; guias U100×50 fixadas no perímetro dos dois módulos — o gabarito de tudo que vem depois.",pf:"Fixação química / estrutural no quadro do piso"},
+ {t:"Montantes de canto/junção + guias superiores (R13)",d:"Metalon 70×70 nos cantos e interfaces; guia superior fecha o quadro. Estação E1 — o único lugar com solda opcional; aqui, 100% parafusado.",pf:"PF-3 · 2×M8 autobrocante por encontro · 25 N·m · ~140 un"},
+ {t:"Painéis PIR externos",d:"Painéis 1,15×2,85 encaixam macho-fêmea e parafusam nas GUIAS DO REQUADRO (R13: sem montantes intermediários; painel autoportante). Baias A e B avançam em paralelo — vãos já recortados de fábrica c/ requadro alumínio.",pf:"PF-1 Ø5,5 @300 nas guias + costura @400 · PF-2 @400 no requadro/extremidades · ~1.250 un"},
+ {t:"Paredes internas + junta",d:"Internas a 2,85 (todas sob a telha — sem recorte de rampa). As paredes de junta (vermelho) recebem a furação CNC pareada dos M12.",pf:"PF-1/PF-2 · ~630 un · furação M12 conferida no gabarito"},
+ {t:"Platibanda PTB",d:"Painéis de requadro 50×30 com cimentícia aplicada NO CHÃO sobem prontos: 0,33 m nas fachadas, 0,37 m na banda da junta.",pf:"PF-5 · 2×M8 por gusset na malha 1,15 · ~60 un"},
+ {t:"Travessas + forro autoportante",d:"Travessas 50×30 na malha 1,15 apoiadas na guia-anel JP-04 e nas extremidades (R13: sem montantes intermediários); forro a 2,60 independente da cobertura — pode acontecer ANTES do cassete.",pf:"PF-4 · 2×M8 porca flangeada por apoio (desmontável) · GN25 no gesso"},
+ {t:"Cassetes de cobertura",d:"Cada água desce pronta e TESTADA (chuva simulada no chão): terças nos consolos, telha na crista, calha na borda baixa.",pf:"PF-5 · terça→consolo M8 · telha Ø5,5 EPDM @300 na crista · ~220 un"},
+ {t:"Acoplamento + cumeeira",d:"Módulo QUARTOS converge até a junta: 24×M12 com EPDM contínuo, e o CAPUZ DE CUMEEIRA — a única peça que cruza a junta — fecha com fita butílica.",pf:"PF-J · M12 8.8 @600 · 85 N·m · capuz Ø5,5 na crista"}
+];
+// botões
+const stepsBar=document.getElementById('steps');
+STEPS.forEach((s,i)=>{const b=document.createElement('button');b.className='stp'+(i===0?' on':'');b.textContent=i;b.onclick=()=>go(i);stepsBar.appendChild(b);});
+const bts=[...document.querySelectorAll('.stp')];
+
+// ============ ESTADO / ANIMAÇÃO ============
+let cur=0, anim=[], exploded=false, playing=false, playT=null;
+function setHUD(i){
+  document.getElementById('hEtq').textContent='ETAPA '+i+' / 8';
+  document.getElementById('hTit').textContent=STEPS[i].t;
+  document.getElementById('hTxt').textContent=STEPS[i].d;
+  document.getElementById('hPf').textContent='🔩 '+STEPS[i].pf;
+  document.getElementById('bar').style.width=(i/8*100)+'%';
+  bts.forEach((b,k)=>{b.className='stp'+(k===i?' on':(k<i?' done':''));});
+}
+function go(i){
+  cur=i;setHUD(i);
+  pieces.forEach(p=>{
+    const vis=p.step<=i;
+    if(vis&&!p.m.visible){p.m.visible=true;p.m.position.y=p.fy+3.5;p.m.material.transparent=true;anim.push({p,from:p.fy+3.5});}
+    else if(!vis){p.m.visible=false;}
+  });
+  Object.entries(boltGroups).forEach(([s,g])=>g.visible=(+s===i));
+  // acoplamento do módulo B
+  targetBz=(i>=8)?0:GAP_B0*0;  // B fica no lugar sempre; na etapa 8 apenas junta visual: usamos gap
+  grpTarget=(i>=8)?0:-1.2;     // afastamento visual pré-acoplamento
+}
+let grpTarget=-1.2;
+grpB.position.z=-1.2;
+// órbita manual
+let theta=0.9,phi=1.05,rad=17,tgt=new THREE.Vector3(0,1.6,0),drag=false,px=0,py=0;
+function camUpd(){
+  cam.position.set(tgt.x+rad*Math.sin(phi)*Math.cos(theta),tgt.y+rad*Math.cos(phi),tgt.z+rad*Math.sin(phi)*Math.sin(theta));
+  cam.lookAt(tgt);
+}
+addEventListener('pointerdown',e=>{if(e.target.tagName==='CANVAS'){drag=true;px=e.clientX;py=e.clientY;}});
+addEventListener('pointerup',()=>drag=false);
+addEventListener('pointermove',e=>{if(!drag)return;theta+=(e.clientX-px)*0.006;phi=Math.min(1.45,Math.max(0.25,phi-(e.clientY-py)*0.005));px=e.clientX;py=e.clientY;});
+addEventListener('wheel',e=>{rad=Math.min(40,Math.max(6,rad+e.deltaY*0.012));},{passive:true});
+// presets
+const VIEWS={iso:{t:0.9,p:1.05,r:17,tg:[0,1.6,0]},front:{t:1.5708,p:1.35,r:15,tg:[0,1.7,0]},top:{t:0.9,p:0.3,r:19,tg:[0,0,0]},junta:{t:1.2,p:1.15,r:7.5,tg:[0,2.6,0]}};
+let vAnim=null;
+document.querySelectorAll('.vw[data-v]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.vw').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const v=VIEWS[b.dataset.v];vAnim={t0:theta,p0:phi,r0:rad,g0:tgt.clone(),t1:v.t,p1:v.p,r1:v.r,g1:new THREE.Vector3(...v.tg),k:0};
+});
+document.getElementById('expl').onclick=function(){exploded=!exploded;this.classList.toggle('on',exploded);};
+document.getElementById('play').onclick=function(){
+  playing=!playing;this.textContent=playing?'⏸ PAUSA':'▶ AUTO';
+  if(playing){if(cur>=8)go(0);playT=setInterval(()=>{if(cur<8)go(cur+1);else{playing=false;this.textContent='▶ AUTO';clearInterval(playT);}},2600);}
+  else clearInterval(playT);
+};
+// loop
+const clock=new THREE.Clock();
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(clock.getDelta(),0.05);
+  anim=anim.filter(a=>{
+    a.p.m.position.y+= (a.p.fy - a.p.m.position.y)*Math.min(1,dt*6);
+    if(Math.abs(a.p.m.position.y-a.p.fy)<0.01){a.p.m.position.y=a.p.fy;return false;}return true;
+  });
+  // explosão: desloca camadas
+  const eOff=exploded?1:0;
+  pieces.forEach(p=>{
+    const base=p.fy+(anim.find(a=>a.p===p)?0:0);
+    if(!anim.find(a=>a.p===p)&&p.m.visible){
+      p.m.position.y += ((p.fy + eOff*p.layer*0.55) - p.m.position.y)*Math.min(1,dt*5);
+    }
+  });
+  // acoplamento suave do grupo B
+  grpB.position.z += (grpTarget - grpB.position.z)*Math.min(1,dt*3);
+  // pulso dos parafusos
+  const s=1+0.25*Math.sin(performance.now()*0.006);
+  Object.values(boltGroups).forEach(g=>{if(g.visible)g.scale.set(s,s,s);});
+  // anim de câmera preset
+  if(vAnim){vAnim.k=Math.min(1,vAnim.k+dt*2.2);const k=vAnim.k,e=k*k*(3-2*k);
+    theta=vAnim.t0+(vAnim.t1-vAnim.t0)*e;phi=vAnim.p0+(vAnim.p1-vAnim.p0)*e;rad=vAnim.r0+(vAnim.r1-vAnim.r0)*e;
+    tgt.lerpVectors(vAnim.g0,vAnim.g1,e);if(k>=1)vAnim=null;}
+  camUpd();renderer.render(scene,cam);
+}
+addEventListener('resize',()=>{cam.aspect=W()/H();cam.updateProjectionMatrix();renderer.setSize(W(),H());});
+// init: só etapa 0 visível? mostrar radier desde o começo p/ contexto
+pieces.forEach(p=>p.m.visible=false);
+go(0);camUpd();loop();
+</script>
+</body>
+</html>

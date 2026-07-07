@@ -1,0 +1,74 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · CONJUNTO DE FABRICAÇÃO R14
+Sistema PAREDE-PRONTA · cotas R4-2,60 · rev. R14 (EMISSÃO LOTE PILOTO) · 06/07/2026
+MTX-CM-2026-001
+================================================================
+
+CONTEÚDO
+--------
+01_CADERNO_MESTRE_R14.pdf ...... 45 pág. — Vol.1+2+3 c/ ERRATA R13 integrada
+  (+ .docx)                       CORRIGIDO: sequências de montagem (pág.
+                                  40-41) reconstruídas sem texto cortado;
+                                  títulos completos (pág. 7 e 43)
+02_FICHAS_SKU_R14.pdf .......... 17 pág. — 1 ficha por parede (16 SKUs),
+                                  geradas automaticamente do Romaneio R14 (conjunto)
+                                  (R12 SUPERADA — não usar na linha)
+03_ROMANEIO_R14.xlsx ........... base de dados (aba 08_Paredes_Prontas =
+                                  fonte das fichas; editar e regenerar)
+04_APOIO/ (versões _R14) ....... Caderno_Juncoes_R14 (NOVO — croquis 1
+                                  ação/quadro + certo×errado, 6 pranchas) ·
+                                  Manual Fabricação W R13.1 (+detalhes CHP
+                                  + vistas realistas) · Pacote ISO
+                                  (isométrico da capa CORRIGIDO — não corta
+                                  mais o desenho) · Plano Montagem V3 ·
+                                  Manual Campo A5 · Manual Proprietário ·
+                                  Plano de MONTAGEM interativo · Plano de
+                                  FABRICAÇÃO interativo (novo: isométrico
+                                  por estação W × parede) · Visualizador 3D
+05_CONDICIONANTES/ ............. inclui C5_Orcamento_REV14.xlsx
+Modelo_BIM_R14.ifc ............. mestre geométrico (metadados R13;
+                                  geometria = R12, revisão documental)
+
+O QUE MUDOU NA R13 (05/07/2026)
+-------------------------------
+QUADRO SÓ DE REQUADRO: guias U100 contornando todos os painéis PIR
+70 mm — SEM montantes intermediários e SEM vergas/contravergas
+(painel autoportante · Termilor TC 70: vão adm. 4,40 m > pé 2,85 m).
+Exceções: 10 montantes de canto · 4 borda de junta (apoio cumeeira) ·
+4 ombreiras P01/P02. Vãos: requadro alumínio.
+AÇO INALTERADO (aba 01/Nesting R9 já eram mínimos) — a R13 corrige as
+FICHAS, que ainda mandavam fabricar 58 montantes + vergas fantasma.
+PF-3: 206 → 152 un/casa. Correções aba 08→fichas: J04 em F5-B (não
+F4-B) · PI3/PI2 em IA1/IA2 (não I1/I2).
+R13.1/R13.2: chapas de espera CHP-T/CHP-C detalhadas (Manual W + Caderno de
+Junções) e integradas ao Romaneio/Orçamento/QA (PIT-W2c); Plano V3 com
+anexos de renders IA (Firefly, refs em _firefly_ref/ na pasta-mãe).
+Detalhes: MTX-CM-2026-001_Caderno_Tecnico_BIM_R14_Adendo.docx (pasta-mãe).
+
+STATUS
+------
+R14 = EMITIDO P/ FABRICAÇÃO DO LOTE PILOTO (ver 00_TERMO_EMISSAO_R14.pdf —
+C1/ART registrada como condição p/ SÉRIE e habitação, decisão do contratante).
+Produção em série condicionada a: C1 ART (junções JP/içamento + painel
+portante DATec SINAT nº 10) · C2 detalhe de junta externa dupla-barreira ·
+C3 teste de estanqueidade NBR 15575-4 no protótipo. Piloto: 1 casa rota A
++ 1 casa rota B.
+
+INDICADORES QUE O PILOTO CALIBRA (melhoria contínua por dados)
+--------------------------------------------------------------
+1. Tempos por SKU × estação W ..... fichas ganham tempo-alvo individual
+                                     na próxima revisão (cronometragem;
+                                     W1 deve cair — quadro só requadro)
+2. Taxa de retoque pós-montagem ... decide a aposta W5 (demão de fábrica);
+                                     critério: ≤1 retoque/parede = mantém
+3. Divergências contador × kit .... parafusadeiras c/ contador → ERP;
+                                     divergência = alerta por etapa
+                                     (kit PF-3 recontado na R13: -54 un)
+4. Vibração de transporte ......... acelerômetro no rack (risco R3 FMEA)
+5. Não-conformidades por PIT-W .... dirige treinamento por estação
+
+REGRA DO PIPELINE
+-----------------
+Toda revisão entra pelo ROMANEIO/IFC. Documentos derivados se REGENERAM,
+nunca se editam à mão. Geradores paramétricos disponíveis p/ reemissão.
+================================================================

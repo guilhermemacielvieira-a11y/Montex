@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montex · Plano de Montagem Interativo — Parede-Pronta R5</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--bg:#06201F;--panel:#0A2E2C;--teal:#1FA79A;--amber:#E8A33D;--ink:#E8F3F2;--mute:#7FA9A6;--red:#E85D4A;--done:#3E5A57;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden;}
+#c3d{position:fixed;inset:0;}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(31,167,154,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(31,167,154,.05) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:1;}
+header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:baseline;gap:14px;padding:12px 18px;background:linear-gradient(180deg,rgba(6,32,31,.94),transparent);}
+header h1{font-size:14px;letter-spacing:.14em;color:var(--teal);font-weight:800;}
+header span{font-size:10.5px;color:var(--mute);letter-spacing:.05em;}
+/* painel didático */
+#hud{position:fixed;left:16px;top:56px;width:352px;max-height:calc(100vh - 200px);overflow-y:auto;z-index:10;background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);border-radius:12px;padding:16px;backdrop-filter:blur(4px);}
+#hud::-webkit-scrollbar{width:5px}#hud::-webkit-scrollbar-thumb{background:var(--teal);border-radius:3px}
+.fase{font-size:9.5px;letter-spacing:.20em;color:var(--amber);font-weight:800;}
+#hTit{font-size:18px;margin:3px 0 2px;color:var(--ink);}
+#hSub{font-size:11px;color:var(--mute);margin-bottom:8px;}
+#hTxt{font-size:11.5px;color:#C9DEDC;line-height:1.55;margin-bottom:10px;}
+.bloco{margin-top:9px;border-left:3px solid var(--teal);background:rgba(31,167,154,.07);padding:8px 10px;border-radius:0 6px 6px 0;}
+.bloco h4{font-size:9px;letter-spacing:.16em;color:var(--teal);margin-bottom:5px;}
+.bloco.jp{border-color:var(--amber);background:rgba(232,163,61,.07);}
+.bloco.jp h4{color:var(--amber);}
+.bloco.dica{border-color:var(--red);background:rgba(232,93,74,.07);}
+.bloco.dica h4{color:var(--red);}
+.bloco ul{list-style:none;}
+.bloco li{font-size:10.5px;color:#DCE9E7;line-height:1.5;padding-left:14px;position:relative;margin-bottom:3px;}
+.bloco li::before{content:"▸";position:absolute;left:0;color:var(--teal);}
+.bloco.jp li::before{content:"🔩";font-size:8px;top:2px;}
+.bloco.ini li::before{content:"☐";color:var(--amber);}
+.dados{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px;}
+.dado{background:rgba(6,32,31,.6);border:1px solid rgba(31,167,154,.25);border-radius:6px;padding:6px 8px;}
+.dado b{display:block;font-size:8.5px;letter-spacing:.12em;color:var(--mute);}
+.dado span{font-size:12px;font-weight:700;color:var(--ink);font-family:ui-monospace,monospace;}
+/* planta sincronizada */
+#planta{position:fixed;right:16px;bottom:74px;z-index:10;background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);border-radius:12px;padding:10px;}
+#planta .etq{font-size:9px;letter-spacing:.16em;color:var(--mute);margin-bottom:4px;text-align:center;}
+/* controles */
+#steps{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:5px;align-items:center;background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);border-radius:12px;padding:9px 11px;max-width:92vw;overflow-x:auto;}
+.stp{min-width:30px;height:30px;border-radius:7px;border:1px solid rgba(31,167,154,.4);background:transparent;color:var(--mute);font-weight:800;font-size:11px;cursor:pointer;transition:.15s;flex:0 0 auto;}
+.stp:hover{border-color:var(--teal);color:var(--ink);}
+.stp.on{background:var(--teal);color:#04211F;}
+.stp.done{color:var(--teal);}
+.stp.fB{border-style:dashed;}
+#play,#prev,#next{padding:0 12px;background:var(--amber);color:#3a2604;border:none;border-radius:7px;height:30px;font-weight:800;cursor:pointer;font-size:11px;flex:0 0 auto;}
+#prev,#next{background:transparent;border:1px solid var(--amber);color:var(--amber);}
+#views{position:fixed;right:16px;top:56px;z-index:10;display:flex;flex-direction:column;gap:5px;}
+.vw{background:rgba(10,46,44,.94);border:1px solid rgba(31,167,154,.35);color:var(--mute);border-radius:8px;padding:7px 11px;font-size:10px;letter-spacing:.08em;cursor:pointer;text-align:right;transition:.15s;}
+.vw:hover,.vw.on{color:var(--ink);border-color:var(--teal);}
+#expl{border-color:rgba(232,163,61,.5);color:var(--amber);}
+#barra{position:fixed;bottom:0;left:0;right:0;height:4px;z-index:11;display:flex;}
+#barra div{height:100%;transition:opacity .3s;opacity:.25;}
+#barra div.done{opacity:1;}
+#hint{position:fixed;left:16px;bottom:14px;z-index:9;font-size:9.5px;color:var(--mute);letter-spacing:.05em;line-height:1.5;}
+svg .w{fill:#12403D;stroke:#2A5A56;stroke-width:1;}
+svg .w.done{fill:var(--done);stroke:var(--teal);}
+svg .w.on{fill:var(--teal);stroke:#fff;animation:pl 1s infinite alternate;}
+svg .w.todo{fill:none;stroke:#2A5A56;stroke-dasharray:3 3;}
+svg text{fill:#9FCBC7;font-size:8px;font-weight:700;font-family:ui-monospace;}
+svg text.on{fill:#04211F;}
+@keyframes pl{from{opacity:.75}to{opacity:1}}
+</style>
+</head>
+<body>
+<canvas id="c3d"></canvas>
+<header><h1>MONTEX · PLANO DE MONTAGEM INTERATIVO</h1><span>Sistema PAREDE-PRONTA R5 · storyboard V3 · cotas R4-2,60 · R13: quadro só de requadro (painel PIR autoportante) · MTX-CM-2026-001 · Romaneio R13</span></header>
+
+<div id="hud">
+  <div class="fase" id="hFase">FASE 0</div>
+  <h2 id="hTit">—</h2>
+  <div id="hSub">—</div>
+  <div id="hTxt">—</div>
+  <div class="dados" id="hDados"></div>
+  <div class="bloco ini" id="bIni"><h4>PLANO DE INÍCIO — só começa com todos ✓</h4><ul id="hIni"></ul></div>
+  <div class="bloco jp" id="bJp"><h4>JUNÇÕES / FIXAÇÃO DESTE PASSO</h4><ul id="hJp"></ul></div>
+  <div class="bloco dica"><h4>REGRA DIDÁTICA</h4><ul><li id="hDica">—</li></ul></div>
+</div>
+
+<div id="views">
+  <button class="vw on" data-v="iso">ISOMÉTRICA</button>
+  <button class="vw" data-v="top">PLANTA (TOPO)</button>
+  <button class="vw" data-v="front">FRONTAL</button>
+  <button class="vw" data-v="junta">CLOSE · JUNTA</button>
+  <button class="vw" data-v="gm">CLOSE · GM-01</button>
+  <button class="vw" id="expl">VISTA EXPLODIDA</button>
+</div>
+
+<div id="planta"><div class="etq">PLANTA SINCRONIZADA · nº = ordem</div>
+<svg id="svgP" width="280" height="200" viewBox="-7.3 -4.2 14.6 8.4"></svg></div>
+
+<div id="steps"><button id="prev">◀</button><button id="play">▶ AUTO</button><button id="next">▶</button></div>
+<div id="barra"></div>
+<div id="hint">arraste = órbita · roda = zoom<br>âmbar pulsando = parafusamento do passo</div>
+
+<script>
+// ================== DADOS (do Romaneio R13 / storyboard V3) ==================
+const H=2.85,TH=0.13,Z0=0.30,DEP=3.3,LEN=9.3,SX=1.03,SZ=1.78,QX=-1.03,QZ=-1.78;
+const T_BX=2.86,CUME=3.08,PTB=0.33,PTBJ=0.37,FOR=2.60;
+// paredes: x,z = centro; r=1 => corre no eixo Z
+const WALLS=[
+ {id:"F4-A",ord:"A-1",m:"A",L:3.30,x:SX-4.585,z:SZ,r:1,p:0.62,jp:"JP-02/JP-02",olh:"2",mep:"1 circ. tomadas",esq:"—",tipo:"ext"},
+ {id:"F1",ord:"A-2",m:"A",L:9.30,x:SX,z:SZ+1.585,r:0,p:1.45,jp:"JP-02/JP-02",olh:"4 (balancim)",mep:"2 circ. + 4 pontos",esq:"P02 · J01 · J05 · J06",tipo:"ext",vaos:[[-1.6,.95,2.16,1],[2.85,1.25,1.04,0],[-2.7,.62,.44,0],[-0.25,1.05,1.04,0]]},
+ {id:"F3-A",ord:"A-3",m:"A",L:3.30,x:SX+4.585,z:SZ,r:1,p:0.60,jp:"JP-02/JP-02",olh:"2",mep:"1 circ.",esq:"P01 · J07",tipo:"ext",vaos:[[0.3,.95,2.16,1]]},
+ {id:"F5-A",ord:"A-4",m:"A",L:2.10,x:SX-3.60,z:SZ-1.585,r:0,p:0.44,jp:"JP-02/JP-02",olh:"2",mep:"shaft cozinha (hidr.)",esq:"—",tipo:"hid"},
+ {id:"JUNTA-A",ord:"A-5",m:"A",L:7.10,x:SX+1.10,z:SZ-1.585,r:0,p:1.02,jp:"JP-02/JP-02",olh:"3",mep:"QD-01 · CXP · furação M12",esq:"—",tipo:"jun"},
+ {id:"IA1",ord:"A-6",m:"A",L:3.06,x:SX-1.20,z:SZ+0.05,r:1,p:0.58,jp:"JP-03/JP-03",olh:"2",mep:"SHAFT hidráulico (12/13 pts)",esq:"PI3",tipo:"hid"},
+ {id:"IA2",ord:"A-7",m:"A",L:3.06,x:SX+0.95,z:SZ+0.05,r:1,p:0.56,jp:"JP-03/JP-03",olh:"2",mep:"1 circ.",esq:"—",tipo:"int"},
+ {id:"IAN",ord:"A-8",m:"A",L:1.40,x:SX-2.40,z:SZ-0.55,r:0,p:0.30,jp:"JP-03/JP-01",olh:"1",mep:"—",esq:"PI4",tipo:"int",comp:1},
+ {id:"F4-B",ord:"B-1",m:"B",L:3.30,x:QX-4.585,z:QZ,r:1,p:0.62,jp:"JP-02/JP-02",olh:"2",mep:"1 circ.",esq:"— (R13: J04 é da F5-B)",tipo:"ext"},
+ {id:"F2",ord:"B-2",m:"B",L:9.30,x:QX,z:QZ-1.585,r:0,p:1.42,jp:"JP-02/JP-02",olh:"4 (balancim)",mep:"2 circ. + tomadas",esq:"J03",tipo:"ext",vaos:[[0.6,1.25,1.04,0]]},
+ {id:"F3-B",ord:"B-3",m:"B",L:3.30,x:QX+4.585,z:QZ,r:1,p:0.60,jp:"JP-02/JP-02",olh:"2",mep:"1 circ.",esq:"J02",tipo:"ext",vaos:[[0,1.05,1.04,0]]},
+ {id:"F5-B",ord:"B-4",m:"B",L:2.10,x:QX-3.60,z:QZ+1.585,r:0,p:0.42,jp:"JP-02/JP-02",olh:"2",mep:"1 circ.",esq:"J04",tipo:"ext",vaos:[[0,1.05,1.04,0]]},
+ {id:"JUNTA-B",ord:"B-5",m:"B",L:7.10,x:QX+1.10,z:QZ+1.585,r:0,p:1.00,jp:"JP-02/JP-02",olh:"3",mep:"CXP plug-in · M12",esq:"PI1",tipo:"jun"},
+ {id:"I1",ord:"B-6",m:"B",L:3.00,x:QX-1.90,z:QZ,r:1,p:0.55,jp:"JP-03/JP-03",olh:"2",mep:"1 circ.",esq:"—",tipo:"int"},
+ {id:"I2",ord:"B-7",m:"B",L:3.00,x:QX-0.80,z:QZ,r:1,p:0.55,jp:"JP-03/JP-03",olh:"2",mep:"1 circ.",esq:"—",tipo:"int"},
+ {id:"I3",ord:"B-8",m:"B",L:3.00,x:QX+1.60,z:QZ,r:1,p:0.55,jp:"JP-03/JP-01",olh:"2",mep:"—",esq:"—",tipo:"int",comp:1},
+];
+const INI_PAREDE=(w,prev)=>[
+ prev?`Parede ${prev} instalada e parafusada (PIT do passo anterior)`:"GM-01 conferida (laser) · PIT-00 assinado",
+ `Passaporte QR do SKU ${w.id} conferido: fotos, torques, teste elétrico`,
+ `Rack: puxar posição correta (carga inversa) — ${w.id} é a próxima da boca`,
+ w.p>1?"Balancim de 4 pontos travado · içamento SEMPRE vertical":"Balancim/olhais conferidos · içamento vertical",
+ "Parafusadeira AZUL (25 N·m) + kit JP do passo"];
+const STEPS=[];
+STEPS.push({fase:"FASE 0 · PREPARAÇÃO",tit:"Ponto de partida",sub:"radier executado · dois módulos, uma sequência",
+ txt:"Este plano segue EXATAMENTE o plano de fábrica: as paredes chegam PRONTAS da linha W (PIR + MEP + placas + esquadria + 1 demão) e a montagem é encaixe + parafuso. Navegue com ◀ ▶ ou AUTO.",
+ dados:{Sistema:"Parede-Pronta R5",Paredes:"16 SKUs · 11,3 t",Rotas:"A (baia) · B (campo)",Base:"Romaneio R13 — quadro só requadro; fichas R12 superadas"},
+ ini:["Caderno-Mestre R13 na equipe (com errata R13)","Racks conferidos contra romaneio de carga","Ferramentas caladas: AZUL 25 · VERMELHA 85 N·m"],
+ jp:["Nenhuma fixação neste passo — reconhecimento"],dica:"A ordem das paredes não é sugestão: cada parede parafusa numa já instalada antes de soltar do gancho."});
+STEPS.push({fase:"FASE 0 · PREPARAÇÃO",tit:"GM-01 — guia-mestre no radier",sub:"o esquadro da casa inteira mora aqui",
+ txt:"Canal U110×40×3,0 contínuo, locado a LASER uma única vez e chumbado com parabolt M10 @600. Toda parede desce e ENCAIXA nele — cota absoluta: erro não acumula de parede em parede.",
+ dados:{Perfil:"U110×40×3,0",Fixação:"parabolt M10 @600",Extensão:"54 m",Dreno:"Ø8 @1200"},
+ ini:["Radier nivelado ±2 mm/3 m (laser)","Locação conferida contra planta (2 diagonais)","PU de assentamento + drenos livres"],
+ jp:["GM × radier: parabolt M10 @600 · 45 N·m","PU contínuo sob o canal"],dica:"10 minutos a mais no laser aqui economizam horas de calço em todas as 16 paredes."});
+let prev=null;
+for(const w of WALLS){
+  const juns=[];
+  if(w.jp.includes("JP-02")) juns.push("JP-02 canto 90°: M8 @400 nas 2 direções + EPDM");
+  if(w.jp.includes("JP-03")) juns.push("JP-03 T interna: M8 @400 na chapa embutida (+ junta induzida no gesso)");
+  if(w.jp.includes("JP-01")) juns.push("JP-01 linha: M8 @400 montante×montante + EPDM");
+  juns.push("GM-01: encaixe + calços (folga 3 mm) + M8 lateral @600 · 25 N·m");
+  if(w.id.startsWith("JUNTA")) juns.push("Conferir furação Ø14 M12 no gabarito ANTES de parafusar nas vizinhas");
+  STEPS.push({fase:`FASE ${w.m==="A"?"1 · MÓDULO SOCIAL":"2 · MÓDULO QUARTOS"}`,wall:w.id,
+   tit:`Passo ${w.ord} — parede ${w.id}`,sub:`${w.L.toFixed(2).replace(".",",")}×2,85 m · ${w.p.toFixed(2).replace(".",",")} t · ${w.olh} olhais`,
+   txt:w.comp?"Parede de COMPENSAÇÃO: fecha o anel do módulo absorvendo a tolerância acumulada (folga de projeto ±10 mm). Medir o vão real antes de descer.":
+       w.tipo==="jun"?"Parede da JUNTA: carrega a furação M12 pareada de fábrica — o dry-fit embutido. Ao instalá-la o perímetro do módulo FECHA.":
+       w.tipo==="hid"?"Parede HIDRÁULICA: shaft testado a 1,5× na fábrica. Rabicho e barrilete acessíveis — nada de água em outras paredes.":
+       "Desce do gancho, encaixa na GM-01, parafusa na(s) vizinha(s) já instalada(s), confere prumo, solta o gancho.",
+   dados:{SKU:w.id,Bordas:w.jp,MEP:w.mep,Esquadrias:w.esq},
+   ini:INI_PAREDE(w,prev),jp:juns,
+   dica:prev?`Estabilidade: ${w.id} parafusa em ${prev} ANTES de soltar do gancho — escora provisória só existiu na nº 1.`:
+        "Primeira parede do módulo: a ÚNICA com escora provisória (2 escoras 45°) até a próxima chegar."});
+  prev=(w.ord==="A-8")?null:w.id;
+}
+STEPS.push({fase:"FASE 3 · FECHAMENTO",tit:"Guia-anel JP-04",sub:"a cinta que une as 16 em UMA estrutura",wallsDone:true,anel:true,
+ txt:"U120×45×2,25 contínuo sobre TODAS as guias superiores, M8 @600. Consolos das terças e gussets da PTB fixam NELE. Depois do anel, o conjunto trabalha como diafragma (verificação C1 da ART).",
+ dados:{Perfil:"U120×45×2,25",Fixação:"M8 @600 · 25 N·m",Extensão:"54 m",Função:"cinta + base COB/PTB"},
+ ini:["16 paredes instaladas · prumo geral conferido","M12 da junta interna CONFERIDOS (gabarito)","Anéis pré-cortados por trecho (kit)"],
+ jp:["JP-04: M8 @600 em toda guia superior","Emendas do anel: 2×M8 + luva interna"],dica:"Nada de forro, PTB ou cassete antes do anel completo — ele é o pré-requisito estrutural dos três."});
+STEPS.push({fase:"FASE 3 · FECHAMENTO",tit:"Juntas e bandas secas",sub:"o único acabamento pós-montagem",juntas:true,
+ txt:"12 juntas/módulo: tira de gesso na banda seca + fita + massa ELÁSTICA + retoque da demão (interno) · fundo de junta + selante PU (externo, dupla-barreira — cláusula C2). ~0,5 dia.",
+ dados:{Juntas:"12/módulo",Interno:"fita+massa elástica",Externo:"PU dupla-barreira",Tempo:"~0,5 d"},
+ ini:["Anel instalado","Kit de juntas da casa (QR)","Selante PU + fundo de junta 25 mm"],
+ jp:["Nenhum parafuso — vedação e acabamento"],dica:"Massa RÍGIDA na junta = fissura garantida. Elástica sempre. Externo nunca leva só 1 barreira."});
+STEPS.push({fase:"FASE 3 · FECHAMENTO",tit:"Forro autoportante",sub:"travessas na guia-anel · pé-direito 2,60",forro:true,
+ txt:"Travessas 50×30 na malha 1,15 apoiadas em cantoneiras no anel (PF-4 porca flangeada = desmontável). F530 + placas com juntas desencontradas e tabica com folga 8 mm.",
+ dados:{Cota:"forro 2,60",Malha:"1,15 m",Fixação:"PF-4 M8 flangeada",Regra:"independente da cobertura"},
+ ini:["MEP de teto conectado nos plug-ins e TESTADO","Kit forro (QR)","Nível laser a 2,60"],
+ jp:["PF-4: 2×M8/apoio · 25 N·m","GN25 @250 nas placas"],dica:"Forro fecha SÓ depois do teste elétrico — reabrir placa nova para achar um conector custa uma manhã."});
+STEPS.push({fase:"FASE 3 · FECHAMENTO",tit:"Platibanda PTB",sub:"painéis prontos: 0,33 fachadas · 0,37 junta",ptb:true,
+ txt:"PTB com cimentícia aplicada no chão sobem prontas: gussets no anel (PF-5, 2×M8/gusset na malha 1,15). Furo do extravasor já vem de fábrica.",
+ dados:{Altura:"0,33 / 0,37 m",Fixação:"PF-5 2×M8/gusset",Peso:"até 85 kg (PTB-A)",Extravasor:"DN40 de fábrica"},
+ ini:["Anel instalado","PTB na ordem (rack próprio)","Pórtico/munck p/ PTB-A"],
+ jp:["PF-5: 2×M8/gusset · 25 N·m","junta parede×PTB: 3 mm flexível"],dica:"Calha se testa com ÁGUA antes do cassete cobrir — depois, achar vazamento é arqueologia."});
+STEPS.push({fase:"FASE 3 · FECHAMENTO",tit:"Cassetes de cobertura",sub:"testados no chão · consolos no anel",cass:true,
+ txt:"Cada água desce pronta e com laudo de chuva (jig 30 min). Terças nos consolos (cotas 3,06/3,01/2,97/2,92), telha na crista, calha na borda baixa.",
+ dados:{Águas:"2 idênticas",Inclinação:"7% · cumeeira 3,08",Fixação:"M8 consolo · Ø5,5 crista",Teste:"chuva no chão"},
+ ini:["Laudo de chuva do cassete no QR","Consolos conferidos (PIT dimensional)","Balancim aferido (~0,40 t)"],
+ jp:["terça×consolo M8 · consolo M10 45 N·m","telha×terça Ø5,5 EPDM @300 NA CRISTA"],dica:"Parafuso na calha da onda = furo de vazamento assinado. Crista, sempre."});
+STEPS.push({fase:"FASE 4 · ACOPLAMENTO",tit:"Acoplamento A+B + cumeeira",sub:"24×M12 · 85 N·m · a casa vira UMA",acopla:true,
+ txt:"Módulo QUARTOS converge até a junta: EPDM contínuo + 24×M12 8.8 @600 (aperto alternado centro→pontas, torquímetro VERMELHO). Capuz de cumeeira — a única peça que cruza a junta — fecha com butílica dupla. Ligações: 1 esgoto, 1 água, plug-ins.",
+ dados:{Parafusos:"24×M12 8.8",Torque:"85 N·m aferido",Sequência:"alternada centro→pontas",Capuz:"butílica dupla + Ø5,5"},
+ ini:["PIT-07 dos 2 módulos","Faces da junta limpas + EPDM contínuo","Torquímetro aferido (selo)","Kit campo: capuz + PL-D + butílica"],
+ jp:["PF-J: 24×M12 · 85 N·m","capuz: butílica dupla + Ø5,5 crista","PL-D nas 4 pontas + plug-ins CXP"],dica:"Teste de mangueira na cumeeira + teste elétrico geral ANTES da vistoria — o PIT-08 é o passaporte da casa."});
+const N=STEPS.length;
+
+// ================== CENA 3D ==================
+const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('c3d'),antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x06201F,28,70);
+const cam=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,0.1,200);
+scene.add(new THREE.AmbientLight(0xbfd8d5,0.8));
+const sun=new THREE.DirectionalLight(0xfff2dd,0.85);sun.position.set(9,15,7);scene.add(sun);
+const fill=new THREE.DirectionalLight(0x1FA79A,0.22);fill.position.set(-7,5,-9);scene.add(fill);
+const grid=new THREE.GridHelper(64,64,0x1FA79A,0x0e3b38);grid.material.opacity=0.25;grid.material.transparent=true;scene.add(grid);
+const M={
+ slab:new THREE.MeshLambertMaterial({color:0x2f4f4b}),
+ gm:new THREE.MeshLambertMaterial({color:0x8FB8B2}),
+ ext:new THREE.MeshLambertMaterial({color:0xDDEBF7}),
+ int:new THREE.MeshLambertMaterial({color:0xBCD9E8}),
+ jun:new THREE.MeshLambertMaterial({color:0xE8837A}),
+ hid:new THREE.MeshLambertMaterial({color:0x9CC4E4}),
+ on:new THREE.MeshLambertMaterial({color:0x1FA79A,emissive:0x0c4a45}),
+ anel:new THREE.MeshLambertMaterial({color:0x0F5B55}),
+ forro:new THREE.MeshLambertMaterial({color:0xE9E4D8}),
+ ptb:new THREE.MeshLambertMaterial({color:0xB9C4C4}),
+ telha:new THREE.MeshLambertMaterial({color:0xcfe0ee}),
+ capuz:new THREE.MeshLambertMaterial({color:0xB08968}),
+ win:new THREE.MeshLambertMaterial({color:0x9FD4E8,transparent:true,opacity:.8}),
+ juntaSel:new THREE.MeshBasicMaterial({color:0xE8A33D,transparent:true,opacity:.65})};
+const grpB=new THREE.Group();scene.add(grpB);grpB.position.z=-1.35;
+const B=(a,b,c)=>new THREE.BoxGeometry(a,b,c);
+function mesh(geo,mat,x,y,z,grp){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);(grp||scene).add(m);return m;}
+// radier + GM
+const pieces={};
+pieces.radA=mesh(B(LEN+0.3,0.24,DEP+0.3),M.slab,SX,0.12,SZ);
+pieces.radB=mesh(B(LEN+0.3,0.24,DEP+0.3),M.slab,QX,0.12,QZ,grpB);
+pieces.gm=[];
+for(const [gx,gz,gl,gw,grp] of [[SX,SZ+1.62,LEN,0.12,null],[SX,SZ-1.62,LEN,0.12,null],[SX-4.62,SZ,0.12,DEP,null],[SX+4.62,SZ,0.12,DEP,null],
+                                 [QX,QZ+1.62,LEN,0.12,grpB],[QX,QZ-1.62,LEN,0.12,grpB],[QX-4.62,QZ,0.12,DEP,grpB],[QX+4.62,QZ,0.12,DEP,grpB]])
+  pieces.gm.push(mesh(B(gl,0.08,gw),M.gm,gx,0.28,gz,grp));
+// paredes
+const wallMeshes={};
+for(const w of WALLS){
+  const g=w.r?B(TH,H,w.L):B(w.L,H,TH);
+  const grp=(w.m==="B")?grpB:null;
+  const mm=mesh(g,M[w.tipo],w.x,Z0+H/2,w.z,grp);
+  mm.visible=false;wallMeshes[w.id]={m:mm,w,grp:!!grp,baseMat:M[w.tipo]};
+  if(w.vaos){for(const [off,vw,vh,isP] of w.vaos){
+    const wg=w.r?B(TH+0.04,vh,vw):B(vw,vh,TH+0.04);
+    const wx=w.r?w.x:w.x+off, wz=w.r?w.z+off:w.z, wy=Z0+(isP?vh/2+0.05:1.10+vh/2);
+    const wmm=mesh(wg,M.win,wx,wy,wz,grp);wmm.visible=false;
+    (wallMeshes[w.id].sub=wallMeshes[w.id].sub||[]).push(wmm);}}
+}
+// fechamento
+pieces.anel=[];
+for(const [gx,gz,gl,gw,grp] of [[SX,SZ+1.62,LEN,0.13,null],[SX,SZ-1.62,LEN,0.13,null],[SX-4.62,SZ,0.13,DEP,null],[SX+4.62,SZ,0.13,DEP,null],
+                                 [QX,QZ+1.62,LEN,0.13,grpB],[QX,QZ-1.62,LEN,0.13,grpB],[QX-4.62,QZ,0.13,DEP,grpB],[QX+4.62,QZ,0.13,DEP,grpB]]){
+  const a=mesh(B(gl,0.10,gw),M.anel,gx,Z0+H+0.06,gz,grp);a.visible=false;pieces.anel.push(a);}
+pieces.juntas=[];
+for(const w of WALLS){
+  const ends=w.r?[[w.x,w.z-w.L/2],[w.x,w.z+w.L/2]]:[[w.x-w.L/2,w.z],[w.x+w.L/2,w.z]];
+  for(const [jx,jz] of ends){const j=mesh(B(0.18,H,0.18),M.juntaSel,jx,Z0+H/2,jz,(w.m==="B")?grpB:null);j.visible=false;pieces.juntas.push(j);}}
+pieces.forro=[mesh(B(LEN-0.2,0.05,DEP-0.2),M.forro,SX,Z0+FOR,SZ),mesh(B(LEN-0.2,0.05,DEP-0.2),M.forro,QX,Z0+FOR,QZ,grpB)];
+pieces.forro.forEach(f=>f.visible=false);
+pieces.ptb=[];
+for(const [px,pz,pl,pw,grp,hh] of [[SX,SZ+1.62,LEN,0.08,null,PTB],[SX-4.62,SZ,0.08,DEP,null,PTB],[SX+4.62,SZ,0.08,DEP,null,PTB],[SX,SZ-1.62,LEN,0.08,null,PTBJ],
+                                     [QX,QZ-1.62,LEN,0.08,grpB,PTB],[QX-4.62,QZ,0.08,DEP,grpB,PTB],[QX+4.62,QZ,0.08,DEP,grpB,PTB],[QX,QZ+1.62,LEN,0.08,grpB,PTBJ]]){
+  const p=mesh(B(pl,hh,pw),M.ptb,px,Z0+H+0.12+hh/2,pz,grp);p.visible=false;pieces.ptb.push(p);}
+pieces.cass=[];
+{const gA=mesh(B(LEN,0.07,DEP+0.35),M.telha,SX,Z0+(T_BX+CUME)/2-0.24,SZ);gA.rotation.x=-Math.atan(0.22/DEP);gA.visible=false;pieces.cass.push(gA);
+ const gB=mesh(B(LEN,0.07,DEP+0.35),M.telha,QX,Z0+(T_BX+CUME)/2-0.24,QZ,grpB);gB.rotation.x=Math.atan(0.22/DEP);gB.visible=false;pieces.cass.push(gB);}
+pieces.capuz=mesh(B(LEN+0.5,0.07,0.6),M.capuz,0,Z0+CUME+0.12,0.02);pieces.capuz.visible=false;
+// bolts
+const boltGeo=new THREE.SphereGeometry(0.06,10,10),boltMat=new THREE.MeshBasicMaterial({color:0xE8A33D});
+const boltGrp=new THREE.Group();scene.add(boltGrp);
+function setBolts(list){while(boltGrp.children.length)boltGrp.remove(boltGrp.children[0]);
+ for(const p of list){const s=new THREE.Mesh(boltGeo,boltMat);s.position.set(...p);boltGrp.add(s);}}
+
+// ================== PLANTA SVG ==================
+const svg=document.getElementById('svgP');const NS="http://www.w3.org/2000/svg";
+const svgW={};
+for(const w of WALLS){
+  const r=document.createElementNS(NS,'rect');
+  const bw=w.r?0.24:w.L, bh=w.r?w.L:0.24;
+  const zz=(w.m==="B")?w.z-1.35:w.z;
+  r.setAttribute('x',w.x-bw/2);r.setAttribute('y',-(zz)-bh/2);
+  r.setAttribute('width',bw);r.setAttribute('height',bh);r.setAttribute('class','w todo');
+  svg.appendChild(r);
+  const t=document.createElementNS(NS,'text');
+  t.setAttribute('x',w.x);t.setAttribute('y',-(zz)+0.14);t.setAttribute('text-anchor','middle');
+  t.setAttribute('font-size','0.42');t.textContent=w.ord.split("-")[1];
+  svg.appendChild(t);svgW[w.id]={r,t,zz};
+}
+// barra de fases
+const barra=document.getElementById('barra');
+const cores=["#7FA9A6","#1FA79A","#48B9AE","#E8A33D","#E85D4A"];
+const faseIdx=s=>s<2?0:s<10?1:s<18?2:s<23?3:4;
+STEPS.forEach((s,i)=>{const d=document.createElement('div');d.style.flex="1";d.style.background=cores[faseIdx(i)];barra.appendChild(d);});
+
+// ================== NAVEGAÇÃO ==================
+const stepsBar=document.getElementById('steps');
+const nxt=document.getElementById('next');
+STEPS.forEach((s,i)=>{const b=document.createElement('button');
+ b.className='stp'+(s.wall&&WALLS.find(w=>w.id===s.wall).m==="B"?' fB':'');
+ b.textContent=s.wall?WALLS.find(w=>w.id===s.wall).ord:['🏁','GM','⬒','〰','▤','▭','⛺','🔗'][i<2?i:i-22+2]||i;
+ b.title=s.tit;b.onclick=()=>go(i);stepsBar.insertBefore(b,nxt);});
+const bts=[...document.querySelectorAll('.stp')];
+let cur=0,anim=[],exploded=false,playing=false,playT=null;
+function ul(id,items){document.getElementById(id).innerHTML=items.map(x=>`<li>${x}</li>`).join('');}
+function setHUD(i){const s=STEPS[i];
+ document.getElementById('hFase').textContent=s.fase+`  ·  PASSO ${i} / ${N-1}`;
+ document.getElementById('hTit').textContent=s.tit;
+ document.getElementById('hSub').textContent=s.sub;
+ document.getElementById('hTxt').textContent=s.txt;
+ document.getElementById('hDados').innerHTML=Object.entries(s.dados).map(([k,v])=>`<div class="dado"><b>${k}</b><span>${v}</span></div>`).join('');
+ ul('hIni',s.ini);ul('hJp',s.jp);document.getElementById('hDica').textContent=s.dica;
+ bts.forEach((b,k)=>b.className=b.className.replace(/ ?(on|done)/g,'')+(k===i?' on':k<i?' done':''));
+ [...barra.children].forEach((d,k)=>d.classList.toggle('done',k<=i));}
+function go(i){cur=Math.max(0,Math.min(N-1,i));const s=STEPS[cur];setHUD(cur);
+ const wallStepStart=2;
+ WALLS.forEach((w,wi)=>{
+  const stepOf=wallStepStart+wi, wm=wallMeshes[w.id];
+  const vis=cur>=stepOf;
+  if(vis&&!wm.m.visible){wm.m.visible=true;wm.m.position.y=Z0+H/2+3.8;anim.push(wm.m);(wm.sub||[]).forEach(sb=>{sb.visible=true;sb.userData.dy=sb.position.y-(Z0+H/2);sb.position.y=sb.userData.dy+Z0+H/2+3.8;anim.push(sb);});}
+  else if(!vis){wm.m.visible=false;(wm.sub||[]).forEach(sb=>sb.visible=false);}
+  wm.m.material=(cur===stepOf)?M.on:wm.baseMat;
+  const sw=svgW[w.id];
+  sw.r.setAttribute('class','w '+(cur===stepOf?'on':cur>stepOf?'done':'todo'));
+  sw.t.setAttribute('class',cur===stepOf?'on':'');
+ });
+ pieces.anel.forEach(a=>a.visible=cur>=18);
+ pieces.juntas.forEach(j=>j.visible=cur===19);
+ pieces.forro.forEach(f=>f.visible=cur>=20);
+ pieces.ptb.forEach(p=>p.visible=cur>=21);
+ pieces.cass.forEach(c=>c.visible=cur>=22);
+ pieces.capuz.visible=cur>=23;
+ grpTarget=(cur>=23)?0:-1.35;
+ // bolts do passo
+ const bl=[];
+ if(s.wall){const w=WALLS.find(x=>x.id===s.wall);const zz=(w.m==="B")?w.z+grpB.position.z:w.z;
+  const ends=w.r?[[w.x,zz-w.L/2],[w.x,zz+w.L/2]]:[[w.x-w.L/2,zz],[w.x+w.L/2,zz]];
+  for(const [ex,ez] of ends) for(let k=0;k<5;k++) bl.push([ex,Z0+0.35+k*0.55,ez]);
+  const step=w.r?[[w.x,0.30,zz-w.L/2+0.3],[w.x,0.30,zz+w.L/2-0.3]]:[[w.x-w.L/2+0.3,0.30,zz],[w.x+w.L/2-0.3,0.30,zz]];
+  bl.push(...step);}
+ if(cur===1){for(let x=-5;x<=6;x+=1.4)bl.push([x,0.30,SZ+1.62],[x,0.30,QZ-1.62-1.35]);}
+ if(s.anel){for(let x=-5;x<=6;x+=1.6)bl.push([x,Z0+H+0.06,SZ+1.62]);}
+ if(s.acopla){for(let x=-3.4;x<=3.4;x+=0.85)bl.push([x,Z0+1.0+((x*10)%3)*0.5,0]);}
+ if(s.cass){for(let x=-4;x<=5;x+=1.8)bl.push([x,Z0+T_BX+0.05,SZ+1.5]);}
+ setBolts(bl);}
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.getElementById('next').onclick=()=>go(cur+1);
+document.getElementById('play').onclick=function(){playing=!playing;this.textContent=playing?'⏸':'▶ AUTO';
+ if(playing){if(cur>=N-1)go(0);playT=setInterval(()=>{if(cur<N-1)go(cur+1);else{playing=false;this.textContent='▶ AUTO';clearInterval(playT);}},3400);}else clearInterval(playT);};
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1);});
+
+// ================== CÂMERA ==================
+let theta=0.95,phi=1.02,rad=18,tgt=new THREE.Vector3(0,1.6,0),drag=false,px=0,py=0,vAnim=null,grpTarget=-1.35;
+const VIEWS={iso:{t:0.95,p:1.02,r:18,tg:[0,1.6,0]},top:{t:0.95,p:0.12,r:20,tg:[0,0,0]},front:{t:1.5708,p:1.32,r:16,tg:[0,1.7,0]},
+ junta:{t:1.25,p:1.10,r:7.5,tg:[0.5,2.2,0]},gm:{t:0.7,p:1.30,r:5.5,tg:[SX-3.5,0.4,SZ+1.6]}};
+function camUpd(){cam.position.set(tgt.x+rad*Math.sin(phi)*Math.cos(theta),tgt.y+rad*Math.cos(phi),tgt.z+rad*Math.sin(phi)*Math.sin(theta));cam.lookAt(tgt);}
+addEventListener('pointerdown',e=>{if(e.target.tagName==='CANVAS'){drag=true;px=e.clientX;py=e.clientY;}});
+addEventListener('pointerup',()=>drag=false);
+addEventListener('pointermove',e=>{if(!drag)return;theta+=(e.clientX-px)*0.006;phi=Math.min(1.5,Math.max(0.12,phi-(e.clientY-py)*0.005));px=e.clientX;py=e.clientY;});
+addEventListener('wheel',e=>{rad=Math.min(45,Math.max(5,rad+e.deltaY*0.012));},{passive:true});
+document.querySelectorAll('.vw[data-v]').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.vw[data-v]').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+ const v=VIEWS[b.dataset.v];vAnim={t0:theta,p0:phi,r0:rad,g0:tgt.clone(),t1:v.t,p1:v.p,r1:v.r,g1:new THREE.Vector3(...v.tg),k:0};});
+document.getElementById('expl').onclick=function(){exploded=!exploded;this.classList.toggle('on',exploded);};
+
+// ================== LOOP ==================
+const clock=new THREE.Clock();
+function loop(){requestAnimationFrame(loop);
+ const dt=Math.min(clock.getDelta(),0.05);
+ anim=anim.filter(m=>{const ty=(m.userData.dy!==undefined?m.userData.dy:0)+Z0+H/2;
+  m.position.y+=(ty-m.position.y)*Math.min(1,dt*5.5);
+  if(Math.abs(m.position.y-ty)<0.01){m.position.y=ty;return false;}return true;});
+ const eo=exploded?1:0;
+ pieces.forro.forEach(f=>f.position.y+=((Z0+FOR+eo*1.0)-f.position.y)*dt*5);
+ pieces.ptb.forEach((p,i)=>{const hh=(i%4===3)?PTBJ:PTB;p.position.y+=((Z0+H+0.12+hh/2+eo*1.7)-p.position.y)*dt*5;});
+ pieces.cass.forEach(c=>c.position.y+=((Z0+(T_BX+CUME)/2-0.24+eo*2.6)-c.position.y)*dt*5);
+ pieces.capuz.position.y+=((Z0+CUME+0.12+eo*3.3)-pieces.capuz.position.y)*dt*5;
+ pieces.anel.forEach(a=>a.position.y+=((Z0+H+0.06+eo*0.6)-a.position.y)*dt*5);
+ grpB.position.z+=(grpTarget-grpB.position.z)*Math.min(1,dt*2.6);
+ const s=1+0.28*Math.sin(performance.now()*0.006);boltGrp.scale.set(1,1,1);boltGrp.children.forEach(b=>b.scale.set(s,s,s));
+ if(vAnim){vAnim.k=Math.min(1,vAnim.k+dt*2.2);const k=vAnim.k,e=k*k*(3-2*k);
+  theta=vAnim.t0+(vAnim.t1-vAnim.t0)*e;phi=vAnim.p0+(vAnim.p1-vAnim.p0)*e;rad=vAnim.r0+(vAnim.r1-vAnim.r0)*e;
+  tgt.lerpVectors(vAnim.g0,vAnim.g1,e);if(k>=1)vAnim=null;}
+ camUpd();renderer.render(scene,cam);}
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+go(0);camUpd();loop();
+</script>
+</body>
+</html>
