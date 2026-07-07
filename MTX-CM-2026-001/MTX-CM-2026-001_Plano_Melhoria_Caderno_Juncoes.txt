@@ -1,0 +1,162 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · PLANO DE MELHORIA
+Caderno de Junções (Parede-Pronta) · MTX-CM-2026-001 · 07/07/2026
+Status: PROPOSTA — nada neste documento foi aplicado ao PDF ainda
+================================================================
+
+ESCOPO DESTA ANÁLISE
+--------------------------------------------------------------
+Levantamento completo das 6 páginas de MTX-CM-2026-001_Caderno_
+Juncoes_R14.pdf (renderização visual em 150 e 170 DPI + extração de
+texto por span + varredura de sobreposição), cruzado com todo o
+resto do pacote MTX-CM-2026-001 (Caderno Mestre, ERRATA_CAMPO,
+Pacote ISO, Manual de Campo, Manual de Fabricação W, Nota de
+Consolidação) para identificar exatamente onde cada junção é citada
+fora deste caderno, e onde as vistas/cortes hoje mostrados deixam
+uma lacuna de campo.
+
+--------------------------------------------------------------
+INVENTÁRIO ATUAL (o que cada página já cobre)
+--------------------------------------------------------------
+p.1 — Capa/leitura: convenção de cores, 1 ação/quadro, "TESTE SEM
+      TEXTO", sequência-mestra da casa completa.
+p.2 — GM-01 · Parede×Radier — CORTE VERTICAL, 4 quadros (canal
+      chumbado → parede desce → calços/prumo → M8 lateral @600).
+      Só uma vista (corte). Sem planta do canal/radier.
+p.3 — JP-01 · Linha (parede×parede colineares) — PLANTA, 4 quadros
+      (alma×alma, EPDM, M8@400). Só uma vista (planta). Sem corte
+      vertical mostrando a altura de costura do painel/banda seca.
+p.4 — JP-02 · Canto 90° — PLANTA, 4 quadros (CHP-C, 2 direções).
+      Só planta. Sem corte vertical da chapa de canto.
+p.5 — JP-03 · T interna — PLANTA, 4 quadros (CHP-T, eixo, M8@400).
+      Só planta. Sem corte vertical mostrando a faixa de 7× CHP-T
+      "na altura" (ver PONTO 3 abaixo — a altura não tem cota
+      absoluta, só passo @400).
+p.6 — Junta de Módulos A+B · M12 — CORTE VERTICAL, 4 quadros
+      (EPDM, aperto alternado centro→pontas, capuz). Só corte. Sem
+      planta da junta ao longo dos 9,30 m (posição dos 24 M12).
+
+Padrão observado: TODAS as 6 pranchas mostram UMA única vista/corte
+para os 4 quadros da sequência. Nenhuma junção tem as duas vistas
+(planta + corte) juntas — é a lacuna central desta análise.
+
+--------------------------------------------------------------
+PONTO 1 — Vista complementar por junção (o pedido central: "cortes
+e vistas diferentes")
+--------------------------------------------------------------
+Cada uma das 5 junções (GM-01, JP-01, JP-02, JP-03, M12 A+B) se
+beneficiaria de uma 2ª vista pequena (inset) complementar à já
+existente, mostrando a dimensão que a vista atual não revela:
+
+  GM-01 (hoje só corte): + planta do canal chumbado no radier,
+    mostrando o espaçamento @600 dos parabolts M10 ao longo do
+    perímetro — hoje só a cota "@600" existe em texto, sem desenho.
+  JP-01 (hoje só planta): + corte vertical mostrando a extensão da
+    "banda seca 100 mm" e onde a EPDM realmente veda em altura.
+  JP-02 (hoje só planta): + corte vertical da CHP-C de canto (L
+    90×70), mostrando a 2ª direção de aperto que o quadro 4 já cita
+    em texto mas não desenha.
+  JP-03 (hoje só planta): + corte vertical mostrando as 7× CHP-T
+    @400 "na altura" com cota INICIAL a partir do piso acabado —
+    hoje essa altura de partida não existe em nenhum lugar do
+    caderno (ver Ponto 3).
+  M12 A+B (hoje só corte): + planta ao longo dos 9,30 m mostrando a
+    distribuição real dos 24 M12 "alternado centro→pontas" — hoje
+    esse padrão só está descrito em texto/no quadro-erro CERTO×
+    ERRADO com 5 pontos ilustrativos, não os 24 reais.
+
+Fonte para as nova vistas: já existem dados suficientes noutros
+documentos do pacote para não inventar cota nenhuma —
+MTX-CM-2026-001_Manual_Fabricacao_W_R14/R15.pdf (Detalhe JP 1/2,
+2/2, 2/2-B, 2/2-C, citados na própria ERRATA_CAMPO_R15 como o
+"detalhe completo") e MTX-CM-2026-001_CADERNO_MESTRE_R14.pdf
+(seção de junções, pág. 38-42, cotas de guia-anel/perímetro).
+Antes de desenhar qualquer vista nova, cada cota usada deve ser
+confirmada contra esses dois documentos — mesmo método já usado
+para corrigir p.7/21/43 do Caderno Mestre.
+
+--------------------------------------------------------------
+PONTO 2 — JP-04 (guia-anel) não tem prancha própria neste caderno
+--------------------------------------------------------------
+A sequência-mestra da própria p.1 cita "guia-anel JP-04" como etapa
+entre "16 paredes (JP-01/02/03)" e "forro/PTB/cassetes" — mas este
+caderno não tem prancha JP-04. Não é necessariamente um erro: o
+guia-anel U120×45×2,25 já tem corte vertical detalhado no Caderno
+Mestre (pág. 39, "GUIA-ANEL SUPERIOR E O QUE APOIA NELA — corte
+vertical") e no Manual de Fabricação W — ou seja, é tratado como
+tema de COBERTURA/ESTRUTURA, não de junção painel×painel, o que
+justificaria por que ele não está nas outras 5 pranchas.
+Recomendação: não criar uma prancha JP-04 nova (duplicaria conteúdo
+já existente), mas ADICIONAR uma linha de referência cruzada na p.1
+("JP-04: ver Caderno Mestre pág. 39-42 e Manual de Fabricação W —
+tratado como elemento de cobertura, não de junção de parede") para
+quem usa só este caderno em campo não procurar uma prancha que não
+existe por design, e não por omissão.
+
+--------------------------------------------------------------
+PONTO 3 — Cota de altura ausente para as CHP-T/CHP-C (achado com
+implicação de segurança/consistência)
+--------------------------------------------------------------
+JP-03 diz "CHP-T 240×90 #4,75 · 7× @400 na altura" — passo relativo,
+sem cota de origem (a partir de quê? piso acabado? face inferior da
+guia?). Isso está diretamente amarrado à pendência nº 1 da Nota de
+Consolidação R15 (pé-direito 2,85 m vs 3,60 m ainda sem confirmação
+formal do projetista): enquanto essa pendência não fecha, QUALQUER
+cota absoluta de altura neste caderno seria prematura. Recomendação:
+não adicionar cota de origem agora; adicionar uma nota explícita
+"cota de origem das 7× CHP-T pendente de confirmação do pé-direito
+(ver Nota de Consolidação R15, pendência 1)" — para o campo não
+presumir uma referência que ainda não foi decidida.
+
+--------------------------------------------------------------
+PONTO 4 — Nomenclatura IA/I não aparece na p.5 (JP-03)
+--------------------------------------------------------------
+ERRATA_CAMPO_R15 desambiguou IA1/IA2/IAN (módulo A) vs I1/I2/I3
+(módulo B) para o Pacote ISO e o Manual de Campo A5 — mas a própria
+prancha JP-03 (que é exatamente sobre "parede interna", o objeto
+dessa ambiguidade) não tem a nota. Recomendação: replicar o mesmo
+quadro de desambiguação (ou uma referência a ele) na p.5, já que é
+a prancha tecnicamente mais próxima do problema.
+
+--------------------------------------------------------------
+PONTO 5 — Consistência de "torque aferido"
+--------------------------------------------------------------
+Só a Junta de Módulos A+B (p.6) marca o torque como "85 N·m
+AFERIDO" (torquímetro com selo de aferição, conforme o próprio PIT
+da página). As demais (GM-01 45/25 N·m, JP-01/02/03 25 N·m) não
+dizem se exigem torquímetro aferido ou se uma chave comum serve.
+Recomendação: confirmar com QA (MTX-QA-2026-001_Caderno_QA_Fichas)
+se a exigência de aferição é só da junta de módulo (união estrutural
+crítica) ou se deveria valer para todos os torques — e uniformizar
+o texto conforme a resposta, sem presumir.
+
+--------------------------------------------------------------
+PONTO 6 — Reconciliação de kit (gap de ~825 un) não é referenciada
+--------------------------------------------------------------
+Cada PIT de fixação (p.2-6) lista quantidades por junção (7×CHP-T,
+24×M12 etc.) mas nenhuma menciona a pendência nº 3 da Nota de
+Consolidação (gap de ~825 un no kit de fixadores declarado vs
+discriminado). Recomendação: adicionar uma linha ao PIT-geral (p.1)
+"conferir contador × kit ANTES de iniciar o lote — gap de fixadores
+em aberto, ver Nota de Consolidação R15 pendência 3" — mantém o
+campo avisado sem fechar a pendência por conta própria.
+
+--------------------------------------------------------------
+PRIORIZAÇÃO SUGERIDA
+--------------------------------------------------------------
+1. Ponto 4 (nomenclatura IA/I na p.5) — baixo risco, alta clareza,
+   dado já validado (ERRATA_CAMPO_R15), só replicar.
+2. Ponto 2 (referência cruzada JP-04 na p.1) — baixo risco, 1 linha.
+3. Ponto 6 (nota de reconciliação de kit) — baixo risco, 1 linha por
+   PIT.
+4. Ponto 5 (uniformizar "aferido") — requer confirmação de QA antes
+   de escrever; não decidir sozinho.
+5. Ponto 1 (vistas complementares) — maior esforço; cada vista nova
+   precisa ser desenhada a partir das cotas do Manual de Fabricação
+   W/Caderno Mestre, conferida página a página antes de publicar.
+6. Ponto 3 (cota de altura CHP) — travado até a decisão de
+   pé-direito; não fazer sozinho.
+
+Nenhum destes pontos foi aplicado ao PDF. Aguardando decisão sobre
+quais implementar e em que ordem.
+================================================================
