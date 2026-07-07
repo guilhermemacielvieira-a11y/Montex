@@ -194,4 +194,33 @@ RESOLVIDAS/ATUALIZADAS APÓS O RELATÓRIO INICIAL (mesma sessão,
      chapas CHP-C de canto (planta com escalonamento entre módulos A
      e B torna arriscado identificar automaticamente os cantos reais
      de 90°).
+
+--------------------------------------------------------------
+NOVO DOCUMENTO RECEBIDO E CORREÇÃO CRUZADA (07/07/2026)
+--------------------------------------------------------------
+MTX-CM-2026-001_Caderno_Juncoes_Fixacao_R15.3.docx  [RECEBIDO/SALVO]
+  Caderno de engenharia muito mais completo que o Caderno de Junções
+  original: consolida GM-01/JP-01/JP-02/JP-03, reconstitui JP-04 e o
+  processo de cobertura PF-5, adiciona Apêndice A (torques), Apêndice
+  B (tolerâncias/PIT) e Apêndice C (10 pendências rastreadas com
+  pergunta formal pronta para cada responsável externo). Passa a ser
+  o rastreador mestre de pendências técnicas do projeto — mais
+  completo que a seção de pendências da Nota de Consolidação R15.
+
+MTX-CM-2026-001_Caderno_Juncoes_R14.pdf  [CORRIGIDO — 2ª rodada]
+  p.6 — a vista complementar da Junta M12 (adicionada nesta mesma
+  sessão) apresentava "24× M12" como contagem confirmada. Corrigida
+  após o R15.3 apontar essa contagem como [A CONFIRMAR] (pode ser 12
+  parafusos passantes, não 24 físicos) — a prancha agora trata a
+  REGRA de alternância centro→pontas como o dado sólido, e a
+  contagem de 24 como pendente de confirmação do projetista.
+
+MTX-CM-2026-001_Nota_Consolidacao_R15.txt  [ATUALIZADO — 2ª rodada]
+  Registra a chegada do R15.3, a correção da p.6 acima, e uma
+  ressalva: o R15.3 cita repetidamente um documento "Auditoria
+  Técnica (Errata R14.1)" como já tendo fechado formalmente 3 itens
+  de torque (PF-2, PF-4/PF-5, classe do parafuso M8) — esse documento
+  NÃO está presente no pacote e não pôde ser localizado/verificado.
+  Até ser encontrado, esses 3 itens continuam tratados como
+  recomendados, não como formalmente definidos.
 ================================================================

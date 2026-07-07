@@ -175,3 +175,43 @@ para uma correção seria (o gap do kit de fixadores, o preço unitário
 pro-rata dos parafusos), isso está marcado explicitamente como
 provisório/pendência, não apresentado como fechado.
 ================================================================
+
+--------------------------------------------------------------
+NOVO DOCUMENTO RECEBIDO EM 07/07/2026 — CADERNO DE JUNÇÕES E
+FIXAÇÃO R15.3 (substitui o papel narrativo do Caderno de Junções)
+--------------------------------------------------------------
+Recebido MTX-CM-2026-001_Caderno_Juncoes_Fixacao_R15.3.docx — um
+caderno de engenharia MUITO mais completo que o Caderno de Junções
+R14.pdf: consolida GM-01/JP-01/JP-02/JP-03 (já existentes), adiciona
+prancha JP-04 (reconstituída, com pergunta formal pronta para a
+engenharia), reconstitui o processo de cobertura PF-5, adiciona
+tabelas mestras de fixação/torque e de tolerâncias/PIT, incorpora a
+referência Perfilor/Termilor (mesma extraída em
+MTX-CM-2026-001_Referencia_Tecnica_Perfilor_Termilor.txt) e fecha com
+um Apêndice C de 10 pendências rastreadas com pergunta formal pronta
+para envio — mais completo que a lista de 5 pendências desta Nota.
+
+A PARTIR DESTA REVISÃO, o Apêndice C do Caderno de Junções e Fixação
+R15.3 é o rastreador mestre de pendências técnicas do projeto; esta
+Nota de Consolidação R15 continua valendo para o que já fechou aqui
+(pé-direito, kit de fixadores) mas não deve ser lida como lista
+completa de pendências — usar o Apêndice C R15.3 para isso.
+
+ACHADO IMPORTANTE — corrigido no Caderno de Junções R14.pdf em
+07/07/2026: a vista complementar da Junta M12 (p.6, adicionada nesta
+mesma sessão) apresentava "24× M12" como contagem confirmada. O
+Caderno de Junções e Fixação R15.3 (seção 8, Apêndice C item 2)
+marca essa contagem como [A CONFIRMAR] — pode ser 12 parafusos
+passantes, não 24 unidades físicas. A prancha foi corrigida para
+tratar a REGRA de alternância (centro→pontas) como o dado sólido, e
+a contagem de 24 como não confirmada.
+
+RESSALVA — documento "Auditoria Técnica (Errata R14.1)": o Caderno
+de Junções e Fixação R15.3 cita repetidamente esse documento como
+já tendo fechado formalmente 3 itens (torque PF-2, PF-4/PF-5,
+classe do parafuso M8 8.8) — mas esse documento NÃO está presente no
+pacote entregue até 07/07/2026 e não foi possível localizá-lo ou
+verificá-lo. Até que ele seja localizado ou confirmado, tratar esses
+3 itens como RECOMENDADOS (não como formalmente definidos), apesar
+do que o R15.3 declara.
+================================================================
