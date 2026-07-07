@@ -223,4 +223,45 @@ MTX-CM-2026-001_Nota_Consolidacao_R15.txt  [ATUALIZADO — 2ª rodada]
   NÃO está presente no pacote e não pôde ser localizado/verificado.
   Até ser encontrado, esses 3 itens continuam tratados como
   recomendados, não como formalmente definidos.
+
+--------------------------------------------------------------
+EDIÇÃO PROFISSIONAL R16 (07/07/2026) — NOVO DOCUMENTO CONSOLIDADO
+--------------------------------------------------------------
+MTX-CM-2026-001_Caderno_Juncoes_Fixacao_R16_Profissional.pdf  [CRIADO]
+  Reformulação profissional completa, 23 páginas, a pedido do
+  usuário ("melhora geral... vistas isométricas e tridimensionais...
+  reformule de forma profissional"). Consolida num único PDF:
+  - Capa e índice mestre (13 fixações do sistema, com selo de status).
+  - Os 6 quadros em planta/corte já validados (GM-01, JP-01, JP-02,
+    JP-03, Junta M12) do Caderno_Juncoes_R14.pdf, cada um seguido de
+    uma NOVA vista isométrica 3D complementar (matplotlib, projeção
+    ortográfica isométrica, estilo CAD com a paleta de cores do
+    projeto) — GM-01 em corte explodido, JP-01/02/03 em planta 3D,
+    Junta M12 com a ordem real de aperto ilustrada.
+  - JP-04 (guia-anel) reconstituída como página própria de texto +
+    vista isométrica, com a pergunta formal ao projetista (Apêndice C
+    item 1) reproduzida.
+  - PF-4 (forro) e PF-5 (cobertura) — páginas novas de texto + vista
+    isométrica, com dados extraídos de
+    MTX-CM-2026-001_Plano_Cobertura_Forro_R2.pdf (não usado nas
+    versões anteriores desta sessão).
+  - Apêndices A (torques), B (tolerâncias/PIT) e C (10 pendências)
+    trazidos do R15.3/R15.4, com a ressalva sobre a "Auditoria
+    Técnica" não localizada mantida.
+  - Referência de mercado Perfilor/Termilor condensada.
+  - Registro de revisão (R13.2 → R16), incluindo a correção da
+    contagem 24×M12 (ver abaixo).
+
+  Correção feita durante a montagem: a vista isométrica da Junta M12
+  que eu mesmo tinha desenhado antes nesta sessão apresentava "24×
+  M12" como contagem confirmada — corrigida para tratar só a REGRA
+  de alternância (centro→pontas) como dado sólido, com a contagem
+  marcada [A CONFIRMAR], consistente com o que já havia sido
+  corrigido no Caderno_Juncoes_R14.pdf.
+
+  Limitação conhecida: o texto autoral deste PDF (capa, tabelas,
+  páginas de texto) foi escrito sem acentuação (ex.: "JUNCOES" em vez
+  de "JUNÇÕES") para evitar um bug de codificação de fonte que
+  corrompia travessões — os quadros e vistas isométricas originais
+  (imagens) mantêm a acentuação normal.
 ================================================================
