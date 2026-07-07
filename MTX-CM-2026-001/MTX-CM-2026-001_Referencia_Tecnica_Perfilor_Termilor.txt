@@ -1,0 +1,124 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · REFERÊNCIA TÉCNICA EXTERNA
+Fabricante ArcelorMittal Perfilor · MTX-CM-2026-001 · 07/07/2026
+================================================================
+
+O QUE É ESTE DOCUMENTO
+--------------------------------------------------------------
+Extração e organização de dados de 3 documentos REAIS do fabricante
+ArcelorMittal Perfilor, recebidos em 07/07/2026, para servir de
+referência/lastro técnico ao projeto MTX-CM-2026-001:
+
+  1. DET.ILUSTRATIVOS_TW50_VERT._01.pdf — desenho técnico (AMCF,
+     06/10/2021), "Detalhes Ilustrativos — Fechamento TW50-MN
+     Vertical", obra SP20, desenho 0000/0000/22.
+  2. DET.ILUSTRATIVOS_TW50_HORIZ_02.pdf — idem, versão horizontal.
+  3. Catalogo_TERMILOR_COLD_TC_Resumido.pdf — catálogo comercial
+     "Soluções Termoisolantes Termilor®" (págs. 26-33 do catálogo
+     completo), linha Termilor Cold®-TC (painéis para câmaras
+     frigoríficas/ambientes controlados).
+
+Cópias dos 3 arquivos foram salvas nesta pasta para rastreabilidade
+(prefixo REF_EXTERNA_).
+
+--------------------------------------------------------------
+IMPORTANTE — NÃO CONFUNDIR COM O SISTEMA DE JUNÇÕES DO MONTEX
+--------------------------------------------------------------
+Os 2 desenhos TW50 mostram um sistema de FECHAMENTO EM PAINEL
+NERVURADO PARAFUSADO (telha/painel TW50-MN aparafusado direto em
+apoio metálico/terça, com mata-junta e requadros de acabamento) —
+uma tecnologia de revestimento leve, DIFERENTE do sistema estrutural
+de paredes do Montex (painel PIR com quadro de aço + chapas de
+espera CHP-T/CHP-C embutidas de fábrica + parafusos M8/M12 em
+porca-rebite, ver Caderno de Junções). Não são o mesmo produto nem a
+mesma junção — os dados abaixo NÃO foram usados para alterar nenhuma
+cota do Caderno de Junções, Caderno Mestre ou Manual de Fabricação W.
+Servem como validação de contexto (o núcleo PIR e os princípios
+gerais de fixação — apoio mínimo, vão entre apoios, mata-junta — são
+do mesmo fabricante e da mesma família de produto).
+
+--------------------------------------------------------------
+1. PAINÉIS PIR TERMILOR — DADOS DE MATERIAL (aplicável de forma
+   geral ao "painel PIR 70" citado em todo o pacote MTX-CM-2026-001)
+--------------------------------------------------------------
+Núcleo: poliisocianurato (PIR) — não propicia fungos, não tóxico,
+não afeta a camada de ozônio, resiste a insetos/roedores, bom
+comportamento ao fogo (não produz gotas inflamadas nem fumaça).
+Condutividade térmica: 0,022 W/m.K.
+
+Coeficiente Global de Transmissão de Calor (U) por espessura de PIR:
+  20 mm — 0,77 W/m².K        100 mm — 0,21 W/m².K
+  30 mm — 0,65 W/m².K        120 mm — 0,18 W/m².K
+  40 mm — 0,52 W/m².K        150 mm — 0,14 W/m².K
+  50 mm — 0,40 W/m².K        200 mm — 0,11 W/m².K
+  70 mm — 0,29 W/m².K
+(70 mm é a espessura mais próxima do "núcleo PIR 60/70" citado nos
+documentos do Montex — nenhum dos catálogos lista exatamente 60mm.)
+
+Chapa de aço: Galvalume AZ150 (sem pintura) ou Galvanizado Z225/
+Galvalume AZ150 pré-pintado (Poliéster, PVDF ou Poliuretano
+alifático). Espessuras de chapa: face externa 0,43/0,50/0,65 mm;
+face interna 0,38/0,43/0,50/0,65 mm.
+
+Normas correlacionadas (citáveis como referência de conformidade,
+já que o Termo de Emissão R14 e a Nota de Consolidação R15 citam
+NBR 15575-4 sem detalhar a família completa de normas do material):
+  - NBR 15366 — Painéis industrializados com espumas rígidas de PU/PIR
+  - IT10/2019 (Corpo de Bombeiros SP) — Controle de Materiais de
+    Acabamento; painel PIR classificado II-A
+  - NBR 15575 item 8 (15575-3 e 15575-5) — Segurança contra incêndio
+  - Regulamentação INMETRO para isolamento térmico/acústico
+
+Linha específica Termilor Cold-TC (painel frigorífico, largura útil
+1150 mm) traz também tabela de VÃO MÁXIMO ENTRE APOIOS por espessura
+(painel bi-apoiado, flecha máx. L/120, carga 75 kg/m²) — ex.: 70 mm
+PIR → vão máximo 4400 mm. Referência de ordem de grandeza apenas;
+o painel de parede do Montex tem função estrutural diferente (o
+quadro de aço é que resiste às cargas, o PIR é só núcleo/isolamento),
+então este vão não se aplica diretamente ao dimensionamento das
+paredes — citado aqui só como contexto do material.
+
+--------------------------------------------------------------
+2. SISTEMA TW50-MN — PRINCÍPIOS DE FIXAÇÃO (fechamento parafusado,
+   NÃO é o sistema de junção do Montex — ver aviso acima)
+--------------------------------------------------------------
+Painel TW50-MN: núcleo PIR 50 mm, densidade 38 kg/m³, largura útil
+1030 mm, comprimento mínimo de fabricação 3000 mm.
+
+Apoio mínimo (vão de apoio metálico sob o painel):
+  - Fixação de 1 painel: 50 mm mínimo de apoio, FIX 2 3/8".
+  - Fixação de 2 painéis (encontro/chegada de topo): 100 mm mínimo
+    de apoio, FIX 2 3/8" (alternativa: FIX AP.8-18 x 1/2" ou rebites,
+    N.F.P.).
+  - Fixação nos apoios (geral): FIX 12-14 x 2 3/8".
+
+Mata-junta (cobre a junção entre painéis):
+  - Vertical: MJVe, D=80 mm.
+  - Horizontal/topo: MJe, D=150 mm (encontro de topo).
+  - Junta vertical típica: JVe50, D=200 mm.
+
+Requadros de acabamento: RQAe50 D=200mm (acabamento), RQPe D=100mm
+(linha de piso), RQLe50 D=230mm (lateral), CIe D=240mm (canto
+interno), CEe (canto externo).
+
+Notas gerais do fabricante (aplicáveis a qualquer obra com este
+produto, úteis como lembrete de boas práticas mesmo fora do TW50):
+dimensões em milímetros; recortes necessários são feitos em obra;
+o cliente deve confirmar geometria dos arremates ou adquirir chapa
+lisa (1,2×3,0 m) para fabricação local; respeitar os limites de vão
+do guia de especificação do produto para evitar flecha excessiva.
+
+--------------------------------------------------------------
+COMO USAR ESTA REFERÊNCIA
+--------------------------------------------------------------
+- Para citar normas/conformidade do núcleo PIR em memoriais técnicos
+  (ex.: Memorial_ART_Icamento, Caderno Mestre): usar a lista de
+  normas da seção 1 acima.
+- Para justificar por que "apoio mínimo" e "vão entre apoios" importam
+  em qualquer painel PIR (princípio geral, não cota específica do
+  Montex): seção 2.
+- NÃO usar as cotas de mata-junta/requadro do TW50 (80/100/150/200/
+  230/240 mm) como se fossem as cotas das chapas CHP-T/CHP-C do
+  Montex — são produtos e junções diferentes, mesmo sendo do mesmo
+  fabricante.
+================================================================
