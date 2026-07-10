@@ -297,3 +297,59 @@ IfcSpace, bbox do Corredor confirmada X[2,85-6,60] Y[3,35-4,42].
 ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R28.ifc [CORRIGIDO] — substitui
 o R27 como versão corrente do BIM.
 ================================================================
+
+================================================================
+ADENDO R29 (10/07/2026) — LAVANDERIA↔VARANDA TROCADAS + HALL REMOVIDO
+================================================================
+Terceira anotação do cliente na mesma planta (replot do R27): seta
+vermelha da Lavanderia até atrás do Banheiro, estrela laranja sobre o
+Hall com a legenda "hall em estrela não existe". Pergunta direta ao
+cliente sobre qual dos dois recuos ("ao lado" ou "atrás" do Banheiro)
+confirmou: atrás, atravessando a parede de fundo do Banheiro.
+
+(1) LAVANDERIA ↔ VARANDA COBERTA (ACESSO): os dois espaços têm
+footprint idêntico (2,10×3,30×3,58 m) em cantos diagonalmente opostos
+— um par simétrico. Evidências de que estavam trocados: o forro do
+recuo posterior-direito (atrás do Banheiro, X9,30-11,40 Y3,30-6,60)
+já se chamava "SOF-LAVANDERIA" (nome remanescente de revisão
+anterior, nunca corrigido); o recuo frontal-esquerdo (X0-2,10
+Y0-3,30) tem a porta principal P01-Entrada, a janela J07-Sala e um
+rufo com descrição "recuo do pórtico" (RUF-B) — ou seja, é ele que
+faz sentido como acesso/pórtico, e o posterior-direito que faz
+sentido como Lavanderia. Corrigido trocando só a Location dos dois
+IfcLocalPlacement (mesma rotação identidade e mesma Position de
+perfil nos dois — troca direta de coordenadas, sem alterar dimensão
+de nenhum). Nenhum piso/telha/rufo/esquadria físico foi movido, só o
+rótulo/volume administrativo IfcSpace de cada um.
+
+(2) HALL REMOVIDO: a antecâmara do Banheiro (Hall, X9,87-11,17
+Y0,05-0,75) foi removida junto com a parede que a separava do
+Banheiro (IAN-P01), os revestimentos dessa parede (IAN-GESI,
+IAN-GESE) e os acabamentos próprios do Hall (FORRO-Hall, PISO-Hall),
+e a porta PI4-BWC (hospedada nessa parede) + sua abertura
+REC-PI4-IAN-P01 — remoção um elemento por vez com salvamento entre
+cada uma (mesmo procedimento anti-segfault do R26). O Banheiro foi
+estendido para absorver a área liberada: YDim 2,30m → 3,10m,
+Position.Location.Y do perfil 1,15 → 1,55 (face de fundo mantida fixa
+em Y=3,15, face da frente estendida até Y=0,05 — mesmo método de
+"crescer só um lado" do R28). FORRO-Banheiro e PISO-Banheiro
+estendidos de forma idêntica.
+
+PENDÊNCIA SEM CONFIRMAÇÃO: com a remoção da PI4-BWC (única porta que
+dava acesso a essa área), o Banheiro ampliado ficou sem nenhuma porta
+própria no modelo atual — não criei uma porta nova (em Y=0,05 ou pela
+Cozinha) por decisão própria, já que a posição/lado de abertura é
+decisão de projeto, não só correção de dado.
+
+CONFIRMADO SEM ALTERAÇÃO: os retângulos amarelo (Quarto 2) e verde
+(Corredor) na mesma anotação eram apenas identificação das áreas já
+coloridas no plot de diagnóstico, não pediam mudança — conferido que
+ambos batem com o estado atual do R28 (Corredor X2,85-6,60, Quarto 2
+X2,85-5,80).
+
+Verificado: 0 erros de geometria (554 IfcProduct com representação),
+0 sobreposições entre os 9 IfcSpace remanescentes.
+
+ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R29.ifc [CORRIGIDO] — substitui
+o R28 como versão corrente do BIM.
+================================================================
