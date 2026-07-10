@@ -1,0 +1,141 @@
+================================================================
+MONTEX — CASA POPULAR BICAS 70 · RELATÓRIO DE COMPARAÇÃO
+PDF OFICIAL (Apresentação Casa Montex, Nov/2025) × MODELO BIM
+MTX-CM-2026-001 · 10/07/2026
+================================================================
+
+DOCUMENTOS COMPARADOS
+--------------------------------------------------------------
+- MTX-CM-2026-001_Apresentacao_Casa_Montex_Nov2025.pdf (14 páginas,
+  não 104 — o contador inicial do upload estava incorreto; o PDF
+  real tem 14 páginas: capa, 5 renders externos, 7 renders internos
+  ilustrativos, 1 prancha de elevações, 1 planta baixa cotada
+  (pág.13, "ÁREA CONSTRUÍDA: 68,73M²", data 12/11/2025), 1 slide de
+  agradecimento).
+- MTX-CM-2026-001_Modelo_BIM_R23.ifc (recebido) → corrigido nesta
+  sessão para MTX-CM-2026-001_Modelo_BIM_R24.ifc.
+
+O IfcProject.Description do próprio R23 já documentava um histórico
+detalhado de reconciliação contra esta mesma planta oficial (10
+revisões, R14→R23, ver arquivo IFC para o texto completo) — este
+relatório continua esse trabalho a partir de onde o R23 parou,
+usando a mesma leitura de planta em alta resolução (400dpi) para
+tentar avançar nos itens que o R23 deixou em aberto.
+
+--------------------------------------------------------------
+CORRIGIDO NESTA REVISÃO (R24) — erro de layout confirmado e removido
+--------------------------------------------------------------
+GEOMETRIA ÓRFÃ NO QUARTO 2: dois painéis (I2-P02, I2-P03) e uma
+abertura (REC-PI2-I2-P02) eram remanescentes da antiga parede
+vertical I2 (configuração anterior ao R22, quando Corredor e Quarto
+2 eram lado-a-lado em vez de empilhados). O R22 já tinha identificado
+isso como "RESIDUAL CONHECIDO" e recomendado avaliação para remoção
+manual, mas não havia removido.
+
+Verificação antes de remover: os 2 painéis tinham sua caixa
+delimitadora inteiramente DENTRO do IfcSpace "Quarto 2" (não tocando
+nenhuma de suas 4 arestas) — ou seja, não formam fronteira de
+nenhum cômodo, são fragmentos flutuantes sem função estrutural ou
+espacial. A abertura associada (REC-PI2-I2-P02) não tinha nenhuma
+porta associada (IfcRelFillsElement ausente) — confirma que é vão
+remanescente de porta antiga, não uma porta em uso.
+
+Ação: removidos via ifcopenshell.api.root.remove_product (remoção
+segura, limpa relações de propriedade/material/grupo/contenção
+espacial automaticamente). Verificado depois:
+  - 0 erros de geometria (ifcopenshell.geom, 577 IfcElement)
+  - 0 sobreposições entre os 10 IfcSpace
+  - nenhum outro painel interno (IA1/IAN/I1/I2/I3) flutuando dentro
+    de um espaço sem tocar sua fronteira (varredura sistemática)
+
+--------------------------------------------------------------
+ANÁLISE DIMENSIONAL FEITA NESTA REVISÃO (não foi possível fechar —
+ver pendências abaixo)
+--------------------------------------------------------------
+Reli a Planta Baixa oficial (pág.13) a 400dpi para extrair as cotas
+encadeadas com precisão (o R23 tinha usado só as ÁREAS declaradas,
+não as cotas em mm da prancha):
+
+CORPO FRONTAL (Banheiro/Cozinha/Sala):
+  - 9000mm = largura parede-a-parede → BATE com o modelo atual
+    (~9,0m, do canto do Banheiro à parede da Sala). Não mexi aqui.
+  - 1200mm (nos dois lados) = beiral/projeção de cobertura, FORA da
+    parede (confirmado: a mesma cota de 1200mm aparece idêntica dos
+    dois lados, fora do intervalo dos 9000mm) — não é jog de parede.
+  - 2800mm / 3250mm (par de cotas encadeadas na profundidade) =
+    leitura mais provável: 2800mm profundidade interna (parede a
+    parede), 3250mm até a borda do beiral traseiro (+450mm).
+
+  Teste: se a profundidade oficial é 2800mm (hoje modelada em
+  3095mm, 295mm a mais), e as LARGURAS ficam como estão hoje
+  (Cozinha 2,2m / Sala 5,3m): áreas resultantes seriam 6,16m² e
+  14,84m² — ainda NÃO batem com o oficial (5,65m² / 13,50m²).
+  Recalculando as larguras a partir da profundidade 2800mm e das
+  áreas oficiais (Banheiro 1,10 + Cozinha 2,02 + Sala 4,82 = 7,94m
+  de vão livre), a soma ainda fica curta dos 9000mm mesmo somando
+  espessuras de parede plausíveis (~8,3-8,4m) — sobram ~0,6 a 0,9m
+  sem explicação nas duas hipóteses testadas.
+
+CORPO TRASEIRO (Quarto 3/Corredor+Quarto 2/Quarto 1):
+  - Par de cotas 3200mm/3350mm, mesmo padrão do corpo frontal.
+  - Testando 3200mm como profundidade do Quarto 1 (8,17m² oficial):
+    largura = 8,17/3,20 = 2,55m, contra 2,50m hoje modelado —
+    diferença de só 5cm, perfeitamente compatível com espessura de
+    parede/acabamento. Esta é a hipótese mais limpa encontrada em
+    toda a análise.
+  - MAS isso não resolve sozinho a faixa X=5,80–6,65 (0,85m) que
+    ficou sem atribuição desde o R23 (limite novo do Corredor/
+    Quarto 2 vs. início do Quarto 1): dar a faixa toda ao Quarto 1
+    sobra largura demais; dar só os 5-14cm da hipótese acima ainda
+    deixa ~0,71m sem dono.
+
+--------------------------------------------------------------
+PENDÊNCIAS — REQUEREM DECISÃO DO PROJETISTA (não fechadas nesta
+revisão, por quê)
+--------------------------------------------------------------
+1. COZINHA (5,65m² oficial / 6,82m² modelo) e SALA (13,50m² oficial
+   / 16,43m² modelo): a divergência de ~4,1m² combinados não se
+   resolve com uma única hipótese de parede testada nesta sessão.
+   Pergunta em aberto para o projetista: a profundidade de
+   Cozinha/Sala muda (2800mm em vez de 3095mm), e se sim, o Hall se
+   estende para trás dessa faixa para compensar a diferença de
+   largura, ou existe uma parede/reentrância não representada nas
+   cotas que eu consegui ler? Não arrisquei redesenhar sem essa
+   confirmação — mesma cautela do R23.
+
+2. QUARTO 1 (8,17m² oficial / 7,74m² modelo): divergência pequena
+   (~0,43m²) e com uma hipótese limpa disponível (profundidade
+   3200mm em vez de 3095mm, ~5cm de diferença de largura) — mas como
+   está amarrada à pendência da faixa X=5,80-6,65m abaixo, não apliquei
+   isoladamente para não criar uma nova inconsistência geométrica.
+
+3. FAIXA X=5,80–6,65 (0,85m × profundidade do corpo traseiro) SEM
+   ATRIBUIÇÃO: aberta desde o R23 (limite novo de Corredor/Quarto 2
+   não alcança o início atual do Quarto 1). Não fechou com nenhuma
+   das hipóteses testadas nesta revisão (nem "tudo para o Quarto 1",
+   nem "só a diferença de 8,17m²"). Pode ser: (a) circulação/reforço
+   de parede não rotulado na planta oficial, (b) Quarto 1 deveria
+   se estender até X=5,80 com uma profundidade diferente da testada,
+   ou (c) um erro de desenho na própria planta oficial. Precisa de
+   confirmação do projetista antes de qualquer redesenho.
+
+Nenhum destes 3 itens foi alterado nesta revisão — permanecem
+exatamente como o R23 deixou, agora com a análise dimensional
+completa (cotas em mm, não só áreas) anexada para acelerar a decisão.
+
+--------------------------------------------------------------
+ARQUIVOS DESTA REVISÃO
+--------------------------------------------------------------
+MTX-CM-2026-001_Apresentacao_Casa_Montex_Nov2025.pdf  [ARQUIVADO]
+  Cópia do PDF oficial recebido — fonte de referência desta e das
+  revisões R14-R23 anteriores do BIM.
+
+MTX-CM-2026-001_Modelo_BIM_R24.ifc  [CORRIGIDO]
+  Remove I2-P02, I2-P03 e a abertura órfã REC-PI2-I2-P02. Changelog
+  completo (R24) anexado ao IfcProject.Description, na sequência dos
+  R14-R23 já existentes. 0 erros de geometria, 0 sobreposições de
+  espaço verificados após a remoção.
+
+MTX-CM-2026-001_Relatorio_Comparacao_PDF_BIM_R24.txt
+  Este documento.
+================================================================
