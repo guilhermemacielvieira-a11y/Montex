@@ -228,3 +228,43 @@ entre os 10 IfcSpace (inalterado).
 ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R26.ifc [CORRIGIDO] — substitui
 o R25 como versão corrente do BIM.
 ================================================================
+
+================================================================
+ADENDO R27 (10/07/2026) — GIRO DE 180° DO MÓDULO A
+================================================================
+O cliente anotou a planta (vista de cima) com uma seta curva sobre o
+Módulo A (frente: Sala/Cozinha/Banheiro) e pediu "inverter módulo".
+Confirmado que significa GIRO DE 180° (não espelhamento): a fachada
+frontal passa a ficar na linha da junta com o Módulo B, e vice-versa.
+Fotos arquivadas em fotos_obra_referencia/Foto13 e Foto14.
+
+MÉTODO: pivô no centro geométrico do módulo (X=6,71, Y=1,65),
+calculado do footprint real 9,30×3,30 (medido via GM-01-2 e F1-P01/
+P09). Girados: os 273 membros do grupo "MODULO A" (excluídos 2
+elementos — TST-DIR e SOF-LAT-DIR, testeira/sofito lateral direito
+que são contínuos ao longo de toda a lateral da casa, compartilhados
+com o Módulo B; identificados durante uma varredura de outliers de
+posição ANTES de girar, para não corromper geometria compartilhada),
+mais 29 vãos de portas/janelas hospedados nesses elementos, mais os 4
+IfcSpace do módulo (Cozinha, Banheiro, Hall, Sala Estar/Jantar) — 306
+elementos no total. Cada elemento teve sua matriz de mundo refletida
+pelo pivô (reflexão de ponto = rotação de 180° em Z) e reescrita como
+novo placement absoluto.
+
+RESULTADO: ordem dos ambientes invertida — antes Banheiro/Cozinha/
+Sala (esquerda→direita), agora Sala/Cozinha/Banheiro. Fachada frontal
+(F1) agora na linha da junta (Y≈3,2-3,3); parede da junta (JUNTA-A)
+agora na nova frente (Y≈0,02-0,09).
+
+Verificado: 0 erros de geometria (561 IfcElement), 0 sobreposições
+entre os 10 IfcSpace, planta 2D replotada e conferida visualmente
+(sem geometria estranha ou desalinhada com o Módulo B).
+
+NÃO MOVIDOS (fora do grupo MODULO A, não mencionados no pedido):
+Lavanderia externa (coberta) e Varanda coberta (acesso) mantiveram a
+posição original — verificar numa próxima revisão se devem acompanhar
+o giro.
+
+ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R27.ifc [CORRIGIDO] — substitui
+o R26 como versão corrente do BIM.
+================================================================
