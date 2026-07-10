@@ -268,3 +268,32 @@ o giro.
 ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R27.ifc [CORRIGIDO] — substitui
 o R26 como versão corrente do BIM.
 ================================================================
+
+================================================================
+ADENDO R28 (10/07/2026) — CORREDOR ESTENDIDO ATÉ O QUARTO 1
+================================================================
+Segunda anotação do cliente na mesma planta: retângulo azul marcando
+a faixa entre o Corredor e o Quarto 1 ("Corredor em azul"). Resolve a
+pendência aberta desde o R23: a faixa X=5,80-6,65 (0,85m) que ficou
+sem atribuição após o ajuste de largura do R23, e que só ganhou
+sentido de circulação no R25 (porta do Quarto 1 recolocada na parede
+real do corredor, I3).
+
+O volume do Corredor (IfcSpace) e seus acabamentos (FORRO-Corredor,
+PISO-Corredor) foram estendidos de XDim=2,95m para XDim=3,75m,
+alcançando X=6,60 (face da parede I3, onde fica a porta PI1-Q1).
+
+NOTA DE MÉTODO: o IfcRectangleProfileDef é centrado na sua própria
+Position (não ancorado na origem do objeto) — mudar só o XDim faz o
+retângulo crescer simetricamente para os dois lados, deslocando
+também a face esquerda (já correta, encostada no Quarto 2). Corrigido
+deslocando a Position de X=1,475 para X=1,875 (metade do novo XDim)
+antes de salvar, para manter a face esquerda fixa e crescer só para a
+direita.
+
+Verificado: 0 erros de geometria, 0 sobreposições entre os 10
+IfcSpace, bbox do Corredor confirmada X[2,85-6,60] Y[3,35-4,42].
+
+ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R28.ifc [CORRIGIDO] — substitui
+o R27 como versão corrente do BIM.
+================================================================
