@@ -139,3 +139,53 @@ MTX-CM-2026-001_Modelo_BIM_R24.ifc  [CORRIGIDO]
 MTX-CM-2026-001_Relatorio_Comparacao_PDF_BIM_R24.txt
   Este documento.
 ================================================================
+
+================================================================
+ADENDO R25 (10/07/2026) — CORREÇÃO CONFIRMADA PELO CLIENTE
+================================================================
+O cliente abriu o MTX-CM-2026-001_Modelo_BIM_R24.ifc no usBIM.browser
+e anotou diretamente sobre o modelo 3D: uma parede amarela destacada
+"não tem" (não deveria existir) na linha da JUNTA A+B, e o corredor
+real (traçado em azul) alcança o Quarto 1 — ou seja, o Quarto 1
+deveria ter acesso pelo corredor, não pela junta dos módulos. Foto
+arquivada em fotos_obra_referencia/Foto8_Anotacao_Cliente_usBIM_
+Corredor_Quarto1.jpeg.
+
+DIAGNÓSTICO CONFIRMADO NA GEOMETRIA REAL DO MODELO (usando
+ifcopenshell.geom com coordenadas de mundo, não só a translação do
+placement — correção de método importante: um levantamento anterior
+nesta mesma sessão, feito só com a translação, tinha invertido X/Y de
+algumas paredes por não aplicar a rotação do placement; refeito aqui
+com a geometria real para eliminar esse risco):
+
+A porta PI1-Q1 (única porta do Quarto 1) estava recortada na parede
+da JUNTA A+B (frente do módulo, X=6,9-7,7, Y=3,3-3,4) — ou seja, o
+Quarto 1 só tinha acesso pela linha de junta dos módulos, nunca pelo
+corredor interno. Isso quebrava o padrão simétrico do Quarto 3 (porta
+PI3-Q3 recortada na parede real Corredor|Quarto 3, chamada I1) e
+explica por que a faixa X=5,80-6,65 (pendência aberta desde o R23)
+parecia "sem dono": ela não tinha porta nenhuma te dando acesso a
+partir do corredor, porque a única porta do cômodo estava em outro
+lugar.
+
+CORREÇÃO (R25): removida a porta PI1-Q1 antiga (+ 2 vãos na parede da
+junta + 2 vãos de gesso + 8 peças de requadro). Criada uma nova porta
+PI1-Q1, replicando EXATAMENTE a montagem de PI3-Q3/I1 (mesma largura
+0,8m, altura 2,1m, mesmo padrão de vão e de vãos de gesso), espelhada
+em X (deslocamento +3,8m) e hospedada na parede real Corredor|Quarto 1
+(I3-P01) — mesmo material, mesmos grupos (SIS-Esquadrias, MODULO B)
+da porta-modelo. JUNTA-A-P05/JUNTA-B-P05 voltaram a ser painéis
+sólidos (sem vão), coerentes com o resto da parede da junta.
+
+Verificação: 0 erros de geometria (570 IfcElement), 0 sobreposições
+de espaço, contagem de vértices de I3-P01/I3-GESI/I3-GESE idêntica a
+I1-P01/I1-GESI/I1-GESE (16 cada — confirma vão simétrico e aplicado
+corretamente), JUNTA-A-P05/JUNTA-B-P05 de volta a 8 vértices (sólidos).
+
+PENDÊNCIA NÃO TOCADA NESTA REVISÃO: a divergência de área em Cozinha/
+Sala (~4,1m² combinados) continua em aberto — ver seção acima. A
+correção do Quarto 1 não altera essa análise.
+
+ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R25.ifc [CORRIGIDO] — substitui
+o R24 como versão corrente do BIM.
+================================================================
