@@ -189,3 +189,42 @@ correção do Quarto 1 não altera essa análise.
 ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R25.ifc [CORRIGIDO] — substitui
 o R24 como versão corrente do BIM.
 ================================================================
+
+================================================================
+ADENDO R26 (10/07/2026) — REMOÇÃO DE PAREDE CONFIRMADA PELO CLIENTE
+================================================================
+O cliente identificou a parede I2-P01 (fronteira Corredor|Quarto 2,
+reaproveitada no R22 e redimensionada no R23) clicando diretamente no
+elemento no usBIM.browser e confirmando via aba de Atributos
+(GlobalId 3U2Ertczb4dRRcVCpa7BZ3, Name "I2-P01"). Pediu a remoção.
+Fotos do processo de identificação arquivadas em
+fotos_obra_referencia/Foto9 a Foto12 (seleção do IfcCovering, do
+IfcPlate confirmado por atributos, do IfcDoor, e do IfcCovering
+"I2-GESE" confirmado por atributos).
+
+REMOVIDO: parede I2-P01; porta PI2-Q2 (confirmada pelo cliente como
+a porta desta mesma parede — sem parede-hospedeira, não tinha mais
+razão de existir); as 2 camadas de gesso I2-GESI/I2-GESE (confirmada
+por clique, Description "Drywall I2"); e os vãos associados —
+REC-PI2-I2-P01, VAO-PI2-GESI, VAO-PI2-GESE, mais 2 vãos que já eram
+sobra de revisões anteriores não limpas (REC-PI2-I2-P01-R22,
+REC-PI2-I2-P01-R23 — mesmo padrão do I2-P02/P03 corrigido no R24).
+
+NOTA DE MÉTODO: a remoção em lote (todos os elementos numa só
+chamada) causou um segmentation fault no ifcopenshell — refeita
+removendo um elemento por vez, com o arquivo salvo entre cada
+remoção, sem erro.
+
+EFEITO: Corredor e Quarto 2 deixam de ter separação física. Os 2
+IfcSpace "Corredor" e "Quarto 2" foram MANTIDOS como estavam (rótulos/
+volumes administrativos) — o pedido foi eliminar a parede, não fundir
+os espaços. FICA COMO PENDÊNCIA EM ABERTO se os 2 IfcSpace devem ser
+unidos num só, e se FORRO-Corredor/FORRO-Quarto 2 e PISO-Corredor/
+PISO-Quarto 2 (não alterados) devem acompanhar.
+
+Verificado: 0 erros de geometria (561 IfcElement), 0 sobreposições
+entre os 10 IfcSpace (inalterado).
+
+ARQUIVOS: MTX-CM-2026-001_Modelo_BIM_R26.ifc [CORRIGIDO] — substitui
+o R25 como versão corrente do BIM.
+================================================================
